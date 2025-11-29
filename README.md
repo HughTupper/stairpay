@@ -63,7 +63,7 @@ This application demonstrates a production-ready multi-tenant SaaS architecture 
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd stair-play
+cd stairpay
 ```
 
 2. Install dependencies:
@@ -150,7 +150,7 @@ The CDK stack provisions:
 ## 📁 Project Structure
 
 ```
-stair-play/
+stairpay/
 ├── actions/              # Server Actions
 │   ├── auth.ts          # Authentication actions
 │   └── properties.ts    # Property CRUD actions
