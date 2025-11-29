@@ -1,41 +1,43 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Organisation = {
-  id: string
-  name: string
-  role: 'admin' | 'viewer'
-}
+  id: string;
+  name: string;
+  role: "admin" | "viewer";
+};
 
 type OrganisationSwitcherProps = {
-  organisations: Organisation[]
-  currentOrganisationId: string | null
-}
+  organisations: Organisation[];
+  currentOrganisationId: string | null;
+};
 
 export function OrganisationSwitcher({
   organisations,
   currentOrganisationId,
 }: OrganisationSwitcherProps) {
-  const router = useRouter()
-  const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const currentOrg = organisations.find((org) => org.id === currentOrganisationId)
+  const currentOrg = organisations.find(
+    (org) => org.id === currentOrganisationId
+  );
 
   const handleSwitch = async (orgId: string) => {
     // Set cookie with selected organisation
-    await fetch('/api/organisation/switch', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    await fetch("/api/organisation/switch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ organisationId: orgId }),
-    })
-    setIsOpen(false)
-    router.refresh()
-  }
+    });
+    setIsOpen(false);
+    router.refresh();
+  };
 
   if (organisations.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -45,10 +47,12 @@ export function OrganisationSwitcher({
         className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       >
         <span className="truncate max-w-[200px]">
-          {currentOrg?.name || 'Select organisation'}
+          {currentOrg?.name || "Select organisation"}
         </span>
         <svg
-          className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -76,8 +80,8 @@ export function OrganisationSwitcher({
                   onClick={() => handleSwitch(org.id)}
                   className={`w-full flex items-center justify-between px-4 py-2 text-sm text-left hover:bg-gray-100 dark:hover:bg-gray-800 ${
                     org.id === currentOrganisationId
-                      ? 'bg-gray-50 dark:bg-gray-800 text-blue-600 dark:text-blue-400'
-                      : 'text-gray-700 dark:text-gray-300'
+                      ? "bg-gray-50 dark:bg-gray-800 text-blue-600 dark:text-blue-400"
+                      : "text-gray-700 dark:text-gray-300"
                   }`}
                 >
                   <span className="truncate">{org.name}</span>
@@ -101,5 +105,5 @@ export function OrganisationSwitcher({
         </>
       )}
     </div>
-  )
+  );
 }

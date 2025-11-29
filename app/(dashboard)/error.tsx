@@ -1,17 +1,17 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
+import { useEffect } from "react";
 
 export default function DashboardError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error)
-  }, [error])
+    console.error(error);
+  }, [error]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
@@ -20,7 +20,7 @@ export default function DashboardError({
           Something went wrong
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-8">
-          {error.message || 'An unexpected error occurred'}
+          {error.message || "An unexpected error occurred"}
         </p>
         <button
           onClick={reset}
@@ -30,5 +30,5 @@ export default function DashboardError({
         </button>
       </div>
     </div>
-  )
+  );
 }

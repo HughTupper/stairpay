@@ -1,30 +1,30 @@
-import { createClient } from '@/utils/supabase/server'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import { Suspense } from 'react'
-import { PropertyForm, PropertyList } from '@/components/property-form'
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import { PropertyForm, PropertyList } from "@/components/property-form";
 
 async function getProperties() {
-  const supabase = await createClient()
-  const cookieStore = await cookies()
-  const organisationId = cookieStore.get('current_organisation_id')?.value
+  const supabase = await createClient();
+  const cookieStore = await cookies();
+  const organisationId = cookieStore.get("current_organisation_id")?.value;
 
   if (!organisationId) {
-    return []
+    return [];
   }
 
   const { data, error } = await supabase
-    .from('properties')
-    .select('*')
-    .eq('organisation_id', organisationId)
-    .order('created_at', { ascending: false })
+    .from("properties")
+    .select("*")
+    .eq("organisation_id", organisationId)
+    .order("created_at", { ascending: false });
 
   if (error) {
-    console.error('Error fetching properties:', error)
-    return []
+    console.error("Error fetching properties:", error);
+    return [];
   }
 
-  return data || []
+  return data || [];
 }
 
 function PropertiesLoading() {
@@ -42,28 +42,28 @@ function PropertiesLoading() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 async function PropertiesContent() {
-  const properties = await getProperties()
+  const properties = await getProperties();
 
-  return <PropertyList initialProperties={properties} />
+  return <PropertyList initialProperties={properties} />;
 }
 
 export default async function PropertiesPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login')
+    redirect("/login");
   }
 
-  const cookieStore = await cookies()
-  const currentOrgId = cookieStore.get('current_organisation_id')?.value
+  const cookieStore = await cookies();
+  const currentOrgId = cookieStore.get("current_organisation_id")?.value;
 
   if (!currentOrgId) {
     return (
@@ -75,7 +75,7 @@ export default async function PropertiesPage() {
           Please select an organisation to view properties.
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -91,5 +91,5 @@ export default async function PropertiesPage() {
         <PropertiesContent />
       </Suspense>
     </div>
-  )
+  );
 }

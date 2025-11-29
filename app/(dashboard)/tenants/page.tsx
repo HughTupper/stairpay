@@ -1,21 +1,21 @@
-import { createClient } from '@/utils/supabase/server'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function TenantsPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login')
+    redirect("/login");
   }
 
-  const cookieStore = await cookies()
-  const currentOrgId = cookieStore.get('current_organisation_id')?.value
+  const cookieStore = await cookies();
+  const currentOrgId = cookieStore.get("current_organisation_id")?.value;
 
   if (!currentOrgId) {
     return (
@@ -27,14 +27,14 @@ export default async function TenantsPage() {
           Please select an organisation to view tenants.
         </p>
       </div>
-    )
+    );
   }
 
   const { data: tenants } = await supabase
-    .from('tenants')
-    .select('*, properties(address, postcode)')
-    .eq('organisation_id', currentOrgId)
-    .order('created_at', { ascending: false })
+    .from("tenants")
+    .select("*, properties(address, postcode)")
+    .eq("organisation_id", currentOrgId)
+    .order("created_at", { ascending: false });
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
@@ -91,7 +91,7 @@ export default async function TenantsPage() {
                 const monthlyTotal =
                   parseFloat(tenant.monthly_rent) +
                   parseFloat(tenant.monthly_mortgage) +
-                  parseFloat(tenant.monthly_service_charge)
+                  parseFloat(tenant.monthly_service_charge);
 
                 return (
                   <tr key={tenant.id}>
@@ -128,12 +128,12 @@ export default async function TenantsPage() {
                       </Link>
                     </td>
                   </tr>
-                )
+                );
               })}
             </tbody>
           </table>
         </div>
       )}
     </div>
-  )
+  );
 }

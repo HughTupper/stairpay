@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import { useActionState } from 'react'
-import { signIn } from '@/actions/auth'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useActionState } from "react";
+import { signIn } from "@/actions/auth";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [state, formAction, isPending] = useActionState(signIn, {})
+  const router = useRouter();
+  const [state, formAction, isPending] = useActionState(signIn, {});
 
   useEffect(() => {
     if (state.success) {
-      router.push('/dashboard')
+      router.push("/dashboard");
     }
-  }, [state.success, router])
+  }, [state.success, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-950 px-4">
@@ -23,7 +23,7 @@ export default function LoginPage() {
             Sign in to your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-            Or{' '}
+            Or{" "}
             <a
               href="/signup"
               className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
@@ -66,7 +66,9 @@ export default function LoginPage() {
 
           {state.error && (
             <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
-              <p className="text-sm text-red-800 dark:text-red-200">{state.error}</p>
+              <p className="text-sm text-red-800 dark:text-red-200">
+                {state.error}
+              </p>
             </div>
           )}
 
@@ -75,10 +77,10 @@ export default function LoginPage() {
             disabled={isPending}
             className="group relative flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isPending ? 'Signing in...' : 'Sign in'}
+            {isPending ? "Signing in..." : "Sign in"}
           </button>
         </form>
       </div>
     </div>
-  )
+  );
 }

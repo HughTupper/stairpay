@@ -1,20 +1,20 @@
-import { createClient } from '@/utils/supabase/server'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login')
+    redirect("/login");
   }
 
-  const cookieStore = await cookies()
-  const currentOrgId = cookieStore.get('current_organisation_id')?.value
+  const cookieStore = await cookies();
+  const currentOrgId = cookieStore.get("current_organisation_id")?.value;
 
   if (!currentOrgId) {
     return (
@@ -26,7 +26,7 @@ export default async function DashboardPage() {
           Please select an organisation to get started.
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -159,5 +159,5 @@ export default async function DashboardPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

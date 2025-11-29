@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import { useActionState, useOptimistic, useState } from 'react'
-import { createProperty } from '@/actions/properties'
+import { useActionState, useOptimistic, useState } from "react";
+import { createProperty } from "@/actions/properties";
 
 type Property = {
-  id: string
-  address: string
-  postcode: string
-  property_value: number
-  created_at: string
-}
+  id: string;
+  address: string;
+  postcode: string;
+  property_value: number;
+  created_at: string;
+};
 
 export function PropertyForm() {
-  const [state, formAction, isPending] = useActionState(createProperty, {})
-  const [showForm, setShowForm] = useState(false)
+  const [state, formAction, isPending] = useActionState(createProperty, {});
+  const [showForm, setShowForm] = useState(false);
 
   return (
     <div>
@@ -85,7 +85,9 @@ export function PropertyForm() {
 
             {state.error && (
               <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
-                <p className="text-sm text-red-800 dark:text-red-200">{state.error}</p>
+                <p className="text-sm text-red-800 dark:text-red-200">
+                  {state.error}
+                </p>
               </div>
             )}
 
@@ -95,7 +97,7 @@ export function PropertyForm() {
                 disabled={isPending}
                 className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isPending ? 'Creating...' : 'Create Property'}
+                {isPending ? "Creating..." : "Create Property"}
               </button>
               <button
                 type="button"
@@ -109,18 +111,18 @@ export function PropertyForm() {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 type PropertyListProps = {
-  initialProperties: Property[]
-}
+  initialProperties: Property[];
+};
 
 export function PropertyList({ initialProperties }: PropertyListProps) {
   const [optimisticProperties] = useOptimistic(
     initialProperties,
     (state: Property[], newProperty: Property) => [...state, newProperty]
-  )
+  );
 
   return (
     <div className="mt-8">
@@ -173,5 +175,5 @@ export function PropertyList({ initialProperties }: PropertyListProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

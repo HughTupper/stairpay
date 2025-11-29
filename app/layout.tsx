@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "StairProperty - Shared Ownership Management",
-  description: "Multi-tenant property management platform for housing associations",
+  description:
+    "Multi-tenant property management platform for housing associations",
 };
 
 export default function RootLayout({

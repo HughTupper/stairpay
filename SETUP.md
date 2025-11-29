@@ -3,18 +3,22 @@
 ## 1. Supabase Setup
 
 ### Create Project
+
 1. Go to [supabase.com](https://supabase.com) and create a new project
 2. Wait for the database to provision
 
 ### Run Migrations
+
 1. Open the SQL Editor in your Supabase dashboard
 2. Copy and paste the contents of `supabase/schema.sql` and run it
 3. Copy and paste the contents of `supabase/rls-policies.sql` and run it
 
 ### Get Credentials
+
 1. Go to Project Settings → API
 2. Copy the Project URL and publishable key (starts with `sb_publishable_`)
 3. Add to `.env.local`:
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=your-url-here
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-key-here

@@ -1,64 +1,68 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system')
-  const [mounted, setMounted] = useState(false)
+  const [theme, setTheme] = useState<"light" | "dark" | "system">("system");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-    const stored = localStorage.getItem('theme') as 'light' | 'dark' | null
+    setMounted(true);
+    const stored = localStorage.getItem("theme") as "light" | "dark" | null;
     if (stored) {
-      setTheme(stored)
+      setTheme(stored);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (!mounted) return
+    if (!mounted) return;
 
-    const root = document.documentElement
+    const root = document.documentElement;
     const applyTheme = () => {
-      if (theme === 'dark') {
-        root.classList.add('dark')
-      } else if (theme === 'light') {
-        root.classList.remove('dark')
+      if (theme === "dark") {
+        root.classList.add("dark");
+      } else if (theme === "light") {
+        root.classList.remove("dark");
       } else {
         // System preference
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
         if (prefersDark) {
-          root.classList.add('dark')
+          root.classList.add("dark");
         } else {
-          root.classList.remove('dark')
+          root.classList.remove("dark");
         }
       }
-    }
+    };
 
-    applyTheme()
+    applyTheme();
 
-    if (theme === 'system') {
-      localStorage.removeItem('theme')
+    if (theme === "system") {
+      localStorage.removeItem("theme");
     } else {
-      localStorage.setItem('theme', theme)
+      localStorage.setItem("theme", theme);
     }
-  }, [theme, mounted])
+  }, [theme, mounted]);
 
   if (!mounted) {
-    return <div className="w-9 h-9" /> // Placeholder to prevent layout shift
+    return <div className="w-9 h-9" />; // Placeholder to prevent layout shift
   }
 
   return (
     <button
       onClick={() => {
-        if (theme === 'light') setTheme('dark')
-        else if (theme === 'dark') setTheme('system')
-        else setTheme('light')
+        if (theme === "light") setTheme("dark");
+        else if (theme === "dark") setTheme("system");
+        else setTheme("light");
       }}
       className="rounded-lg p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       aria-label="Toggle theme"
-      title={`Current: ${theme === 'system' ? 'System' : theme === 'dark' ? 'Dark' : 'Light'}`}
+      title={`Current: ${
+        theme === "system" ? "System" : theme === "dark" ? "Dark" : "Light"
+      }`}
     >
-      {theme === 'light' && (
+      {theme === "light" && (
         <svg
           className="w-5 h-5"
           fill="none"
@@ -73,7 +77,7 @@ export function ThemeToggle() {
           />
         </svg>
       )}
-      {theme === 'dark' && (
+      {theme === "dark" && (
         <svg
           className="w-5 h-5"
           fill="none"
@@ -88,7 +92,7 @@ export function ThemeToggle() {
           />
         </svg>
       )}
-      {theme === 'system' && (
+      {theme === "system" && (
         <svg
           className="w-5 h-5"
           fill="none"
@@ -104,5 +108,5 @@ export function ThemeToggle() {
         </svg>
       )}
     </button>
-  )
+  );
 }

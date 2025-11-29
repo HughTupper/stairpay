@@ -16,5 +16,5 @@ export default function PropertiesLoading() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,15 +1,15 @@
-import { createClient } from '@/utils/supabase/server'
-import { redirect } from 'next/navigation'
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   if (user) {
-    redirect('/dashboard')
+    redirect("/dashboard");
   }
 
   return (
@@ -122,13 +122,12 @@ export default async function Home() {
             <p className="text-sm text-gray-700 dark:text-gray-300">
               <strong>Technical Demo:</strong> Built with Next.js 15, Supabase,
               Tailwind CSS, and deployed on AWS Amplify. Features multi-tenant
-              architecture with Row Level Security, Server Actions, and optimistic
-              UI updates.
+              architecture with Row Level Security, Server Actions, and
+              optimistic UI updates.
             </p>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

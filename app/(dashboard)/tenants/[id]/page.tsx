@@ -1,53 +1,53 @@
-import { createClient } from '@/utils/supabase/server'
-import { cookies } from 'next/headers'
-import { redirect, notFound } from 'next/navigation'
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
+import { redirect, notFound } from "next/navigation";
 
 type PageProps = {
-  params: Promise<{ id: string }>
-}
+  params: Promise<{ id: string }>;
+};
 
 export default async function TenantDetailPage({ params }: PageProps) {
-  const { id } = await params
-  const supabase = await createClient()
+  const { id } = await params;
+  const supabase = await createClient();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login')
+    redirect("/login");
   }
 
-  const cookieStore = await cookies()
-  const currentOrgId = cookieStore.get('current_organisation_id')?.value
+  const cookieStore = await cookies();
+  const currentOrgId = cookieStore.get("current_organisation_id")?.value;
 
   if (!currentOrgId) {
-    redirect('/dashboard')
+    redirect("/dashboard");
   }
 
   // Fetch tenant details
   const { data: tenant } = await supabase
-    .from('tenants')
-    .select('*, properties(id, address, postcode, property_value)')
-    .eq('id', id)
-    .eq('organisation_id', currentOrgId)
-    .single()
+    .from("tenants")
+    .select("*, properties(id, address, postcode, property_value)")
+    .eq("id", id)
+    .eq("organisation_id", currentOrgId)
+    .single();
 
   if (!tenant) {
-    notFound()
+    notFound();
   }
 
   // Fetch staircasing applications
   const { data: applications } = await supabase
-    .from('staircasing_applications')
-    .select('*')
-    .eq('tenant_id', id)
-    .order('application_date', { ascending: false })
+    .from("staircasing_applications")
+    .select("*")
+    .eq("tenant_id", id)
+    .order("application_date", { ascending: false });
 
   const monthlyTotal =
     parseFloat(tenant.monthly_rent) +
     parseFloat(tenant.monthly_mortgage) +
-    parseFloat(tenant.monthly_service_charge)
+    parseFloat(tenant.monthly_service_charge);
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
@@ -69,19 +69,25 @@ export default async function TenantDetailPage({ params }: PageProps) {
             </h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Email</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Email
+                </p>
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
                   {tenant.email}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Phone</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Phone
+                </p>
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  {tenant.phone || 'N/A'}
+                  {tenant.phone || "N/A"}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Property</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Property
+                </p>
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
                   {tenant.properties.address}
                 </p>
@@ -90,7 +96,9 @@ export default async function TenantDetailPage({ params }: PageProps) {
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Move-in Date</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Move-in Date
+                </p>
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
                   {new Date(tenant.move_in_date).toLocaleDateString()}
                 </p>
@@ -125,7 +133,9 @@ export default async function TenantDetailPage({ params }: PageProps) {
             </div>
             <div className="mt-4 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Your Share</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Your Share
+                </p>
                 <p className="text-lg font-semibold text-gray-900 dark:text-white">
                   £
                   {(
@@ -156,7 +166,9 @@ export default async function TenantDetailPage({ params }: PageProps) {
             </h3>
             <div className="space-y-3">
               <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Rent</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  Rent
+                </span>
                 <span className="text-sm font-semibold text-gray-900 dark:text-white">
                   £{parseFloat(tenant.monthly_rent).toFixed(2)}
                 </span>
@@ -213,7 +225,8 @@ export default async function TenantDetailPage({ params }: PageProps) {
                       <StatusBadge status={app.status} />
                     </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                      Applied {new Date(app.application_date).toLocaleDateString()}
+                      Applied{" "}
+                      {new Date(app.application_date).toLocaleDateString()}
                     </p>
                     <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
                       £{parseFloat(app.estimated_cost).toLocaleString()}
@@ -226,16 +239,19 @@ export default async function TenantDetailPage({ params }: PageProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function StatusBadge({ status }: { status: string }) {
   const colors = {
-    pending: 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300',
-    approved: 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300',
-    completed: 'bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300',
-    rejected: 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300',
-  }
+    pending:
+      "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300",
+    approved:
+      "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300",
+    completed:
+      "bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300",
+    rejected: "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300",
+  };
 
   return (
     <span
@@ -245,5 +261,5 @@ function StatusBadge({ status }: { status: string }) {
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
-  )
+  );
 }

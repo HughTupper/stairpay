@@ -27,23 +27,27 @@ This application demonstrates a production-ready multi-tenant SaaS architecture 
 ## 🎯 Key Features
 
 ### Multi-Tenancy
+
 - Organisation-scoped data isolation enforced at database level
 - Users can belong to multiple organisations with different roles
 - Secure organisation context switching via encrypted cookies
 
 ### Property Management
+
 - Create, view, and manage shared ownership properties
 - Optimistic UI updates with `useOptimistic` hook
 - Server Actions for type-safe mutations
 - Real-time validation with Zod schemas
 
 ### Tenant Equity Tracking
+
 - Visual equity ownership timeline
 - Monthly payment breakdown (rent/mortgage/service charge)
 - Staircasing application history with status tracking
 - Affordability calculations
 
 ### Modern UI/UX
+
 - Dark mode toggle (light/dark/system)
 - Progressive loading with Suspense boundaries
 - Error boundaries with retry functionality
@@ -53,7 +57,7 @@ This application demonstrates a production-ready multi-tenant SaaS architecture 
 
 ### Prerequisites
 
-- Node.js 20+ 
+- Node.js 20+
 - npm or yarn
 - Supabase account
 - AWS account (for deployment)
@@ -61,22 +65,26 @@ This application demonstrates a production-ready multi-tenant SaaS architecture 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd stairpay
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env.local
 ```
 
 Edit `.env.local` with your Supabase credentials:
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
@@ -87,23 +95,27 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
 1. Create a new Supabase project at [supabase.com](https://supabase.com)
 
 2. Run the schema migration:
+
 ```sql
 -- In Supabase SQL Editor, run:
 supabase/schema.sql
 ```
 
 3. Apply Row Level Security policies:
+
 ```sql
 -- In Supabase SQL Editor, run:
 supabase/rls-policies.sql
 ```
 
 4. (Optional) Seed demo data:
+
 ```bash
 npm run seed
 ```
 
 This creates 3 housing associations with realistic data:
+
 - Thames Valley Housing
 - London & Quadrant
 - Clarion Housing
@@ -111,6 +123,7 @@ This creates 3 housing associations with realistic data:
 ### Development
 
 Run the development server:
+
 ```bash
 npm run dev
 ```
@@ -141,6 +154,7 @@ cdk deploy
 ```
 
 The CDK stack provisions:
+
 - AWS Amplify application
 - Environment variables for Supabase
 - Custom domain configuration
@@ -214,6 +228,7 @@ User Sign Up → Create User (Supabase Auth)
 - **Viewer**: Read-only access to organisation data
 
 Enforced via:
+
 - RLS policies checking `user_organisations.role`
 - Server Action validation before mutations
 - UI-level conditional rendering
@@ -225,7 +240,7 @@ Enforced via:
 ```typescript
 // Class-based strategy with system preference fallback
 localStorage.theme === 'dark'    → Force dark
-localStorage.theme === 'light'   → Force light  
+localStorage.theme === 'light'   → Force light
 localStorage.theme === undefined → System preference
 ```
 
@@ -237,7 +252,7 @@ Properties created via Server Actions show instantly in the UI:
 const [optimisticProps, addOptimistic] = useOptimistic(
   properties,
   (state, newProp) => [...state, newProp]
-)
+);
 ```
 
 ### Progressive Loading
@@ -265,6 +280,7 @@ Suspense boundaries stream HTML for fast perceived performance:
 **Staircasing**: The process where shared ownership tenants purchase additional equity in their property, increasing ownership percentage from the initial share (typically 25-75%) toward 100% ownership.
 
 **Monthly Payments**:
+
 - **Rent**: Paid on the portion not owned (decreases as equity increases)
 - **Mortgage**: Paid on the owned portion
 - **Service Charge**: Building maintenance (fixed regardless of equity)
@@ -294,6 +310,7 @@ npm start
 ### AWS Amplify Deployment
 
 The CDK stack automatically:
+
 1. Connects to your Git repository
 2. Triggers builds on push to main
 3. Creates preview environments for feature branches
@@ -303,6 +320,7 @@ The CDK stack automatically:
 ### Environment Variables
 
 Required in Amplify:
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 
@@ -313,8 +331,8 @@ Required in Amplify:
 All request APIs (`cookies()`, `headers()`, `params`) are now async:
 
 ```typescript
-const cookieStore = await cookies()  // Next.js 15
-const cookieStore = cookies()        // Next.js 14 (deprecated)
+const cookieStore = await cookies(); // Next.js 15
+const cookieStore = cookies(); // Next.js 14 (deprecated)
 ```
 
 ### Server Actions Return Types
@@ -323,13 +341,14 @@ Structured error handling:
 
 ```typescript
 type ActionState<T> = {
-  error?: string
-  success?: boolean  
-  data?: T
-}
+  error?: string;
+  success?: boolean;
+  data?: T;
+};
 ```
 
 Benefits:
+
 - Type-safe error handling
 - No try/catch in client components
 - Easy to display inline errors
@@ -337,6 +356,7 @@ Benefits:
 ### Supabase SSR Package
 
 Using `@supabase/ssr` instead of `@supabase/auth-helpers-nextjs`:
+
 - Better Next.js 15 compatibility
 - Simplified cookie management
 - Works with App Router middleware
