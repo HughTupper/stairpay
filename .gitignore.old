@@ -9,7 +9,6 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-**/node_modules/
 
 # testing
 /coverage
@@ -17,12 +16,9 @@
 # next.js
 /.next/
 /out/
-**/.next/
-**/out/
 
 # production
 /build
-**/dist/
 
 # misc
 .DS_Store
@@ -32,7 +28,6 @@
 .env
 .env.local
 .env*.local
-**/.env.local
 
 # debug
 npm-debug.log*
@@ -49,15 +44,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# turborepo
-.turbo
-
-# cdk
-**/cdk.out/
-
-# supabase
-.branches
-.temp
-**/supabase/.branches
-**/supabase/.temp

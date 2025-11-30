@@ -3,7 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import type { ActionState } from "@/types";
+import type { ActionState } from "@stairpay/shared-types";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),

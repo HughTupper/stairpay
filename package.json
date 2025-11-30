@@ -2,31 +2,38 @@
   "name": "stairpay",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start",
-    "lint": "eslint",
-    "seed": "tsx lib/seed.ts"
-  },
-  "dependencies": {
-    "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.86.0",
-    "next": "15.5.6",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "zod": "^4.1.13"
+    "dev": "turbo run dev",
+    "dev:crm": "turbo run dev --filter=@stairpay/housing-association-crm",
+    "build": "turbo run build",
+    "build:crm": "turbo run build --filter=@stairpay/housing-association-crm",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "db:start": "turbo run db:start --filter=@stairpay/database",
+    "db:stop": "turbo run db:stop --filter=@stairpay/database",
+    "db:reset": "turbo run db:reset --filter=@stairpay/database",
+    "db:push": "turbo run db:push --filter=@stairpay/database",
+    "db:pull": "turbo run db:pull --filter=@stairpay/database",
+    "db:migration": "turbo run db:migration --filter=@stairpay/database",
+    "db:types": "turbo run db:types --filter=@stairpay/database",
+    "db:seed": "turbo run db:seed --filter=@stairpay/database",
+    "deploy:crm": "turbo run deploy --filter=@stairpay/housing-association-crm",
+    "deploy:infra": "turbo run deploy --filter=@stairpay/infrastructure"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.5.6",
-    "tailwindcss": "^4",
-    "tsx": "^4.19.2",
+    "supabase": "^1.200.3",
+    "turbo": "^2.3.3",
     "typescript": "^5"
+  },
+  "packageManager": "npm@10.9.2",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   }
 }

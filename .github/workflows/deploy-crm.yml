@@ -1,0 +1,106 @@
+name: Deploy Housing Association CRM
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/housing-association-crm/**'
+      - 'packages/**'
+      - '.github/workflows/deploy-crm.yml'
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to AWS Amplify
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build shared packages
+        run: npm run build --filter=@stairpay/shared-types
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION || 'eu-west-2' }}
+
+      - name: Deploy CDK stack
+        working-directory: apps/housing-association-crm
+        run: npm run deploy
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+
+      - name: Get Amplify App URL
+        id: amplify-url
+        run: |
+          APP_ID=$(aws cloudformation describe-stacks --stack-name AmplifyStack --query 'Stacks[0].Outputs[?OutputKey==`AmplifyAppId`].OutputValue' --output text)
+          echo "app-id=$APP_ID" >> $GITHUB_OUTPUT
+
+      - name: Deployment Summary
+        run: |
+          echo "### ✅ Deployment Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**App**: Housing Association CRM" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment**: Production" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[View in Amplify Console](https://console.aws.amazon.com/amplify/home#/${{ steps.amplify-url.outputs.app-id }})" >> $GITHUB_STEP_SUMMARY
+
+  rollback:
+    name: Rollback on Failure
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: failure()
+    
+    steps:
+      - name: Checkout previous commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.before }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION || 'eu-west-2' }}
+
+      - name: Rollback deployment
+        working-directory: apps/housing-association-crm
+        run: npm run deploy
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+
+      - name: Notify rollback
+        run: |
+          echo "### ⚠️ Deployment Failed - Rolled Back" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Deployment failed and was automatically rolled back to previous version." >> $GITHUB_STEP_SUMMARY
+          echo "**Failed Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Rolled back to**: ${{ github.event.before }}" >> $GITHUB_STEP_SUMMARY

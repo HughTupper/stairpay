@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import type { ActionState } from "@/types";
+import type { ActionState } from "@stairpay/shared-types";
 
 const propertySchema = z.object({
   address: z.string().min(5, "Address must be at least 5 characters"),
