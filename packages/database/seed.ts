@@ -2,9 +2,19 @@ import { createClient } from "@supabase/supabase-js";
 
 // This script should be run manually to seed the database
 // Usage: npm run seed
+// Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error("❌ Error: Missing environment variables");
+  console.error("Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY");
+  console.error("\nFor local development, create packages/database/.env.local with:");
+  console.error("  SUPABASE_URL=http://127.0.0.1:54321");
+  console.error("  SUPABASE_SERVICE_ROLE_KEY=<get from 'supabase status'>");
+  process.exit(1);
+}
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 

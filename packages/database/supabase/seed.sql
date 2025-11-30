@@ -1,5 +1,5 @@
-# Supabase seed data (optional)
-# This file is run after migrations when you run `supabase db reset`
+-- Supabase seed data (optional)
+-- This file is run after migrations when you run `supabase db reset`
 
 -- You can add seed data here or use the TypeScript seed script
 -- Example:
