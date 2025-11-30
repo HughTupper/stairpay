@@ -27,22 +27,36 @@ stairpay/
 
 ### Prerequisites
 
-- Node.js 20+ ([nvm](https://github.com/nvm-sh/nvm) recommended)
+- Node.js 22+ ([nvm](https://github.com/nvm-sh/nvm) recommended)
 - Docker Desktop (for local Supabase)
-- AWS CLI configured (for deployment)
 
-### Installation
+### Get Running Locally
 
 ```bash
-# Clone repository
+# 1. Clone repository
 git clone https://github.com/HughTupper/stairpay.git
 cd stairpay
 
-# Install dependencies
+# 2. Use correct Node version (if using nvm)
+nvm use
+
+# 3. Install all dependencies (installs for all workspaces)
 npm install
+
+# 4. Start local Supabase (PostgreSQL + Auth + Studio)
+npm run db:start
+
+# 5. Apply database migrations and seed demo data
+npm run db:reset
+npm run db:seed
+
+# 6. Start the CRM development server
+npm run dev:crm
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3000](http://localhost:3000) to view the CRM application.
+
+Access Supabase Studio at [http://localhost:54323](http://localhost:54323) to manage the database.
 
 ## 🏗️ Architecture
 

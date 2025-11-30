@@ -26,7 +26,7 @@
     "deploy:infra": "turbo run deploy --filter=@stairpay/infrastructure"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^22",
     "supabase": "^1.200.3",
     "turbo": "^2.3.3",
     "typescript": "^5"
