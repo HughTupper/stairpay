@@ -85,7 +85,6 @@ npm run db:push
 packages/database/
 ├── supabase/
 │   ├── config.toml              # Supabase project config
-│   ├── seed.sql                 # SQL seed data (optional)
 │   └── migrations/              # Timestamped migration files
 │       ├── 20231129_001_initial_schema.sql
 │       ├── 20231129_002_rls_policies.sql
