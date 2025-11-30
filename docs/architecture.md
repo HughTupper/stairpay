@@ -412,3 +412,23 @@ This architecture balances:
 - **Cost** - Efficient, pay-per-use model
 
 Built for a technical assessment but designed for production use at scale.
+
+---
+
+Notes
+
+Why?
+
+- Note using publishable keys instead of anon keys
+- Using CDK instead of Terraform
+- The Expand-Migrate-Contract Pattern - DB updates without downtime
+-
+- Supabase migrations, staging environments, pipelines
+- Ops as code look at supabase CLI.
+- Not prisma, use Postgress directly with RLS. Supabase gen types for typescript. Looks like SQL.
+-
+
+- Supabase auth. Cloudflare turnstile - https://supabase.com/docs/guides/auth/auth-captcha. cloudflare.com/application-services/products/turnstile/
+- Client side Supabase
+- Implement env - theo
+- Centralising routes

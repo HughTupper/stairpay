@@ -1,61 +1,29 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark" | "system">("system");
   const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem("theme") as "light" | "dark" | null;
-    if (stored) {
-      setTheme(stored);
-    }
   }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-
-    const root = document.documentElement;
-    const applyTheme = () => {
-      if (theme === "dark") {
-        root.classList.add("dark");
-      } else if (theme === "light") {
-        root.classList.remove("dark");
-      } else {
-        // System preference
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
-        if (prefersDark) {
-          root.classList.add("dark");
-        } else {
-          root.classList.remove("dark");
-        }
-      }
-    };
-
-    applyTheme();
-
-    if (theme === "system") {
-      localStorage.removeItem("theme");
-    } else {
-      localStorage.setItem("theme", theme);
-    }
-  }, [theme, mounted]);
 
   if (!mounted) {
     return <div className="w-9 h-9" />; // Placeholder to prevent layout shift
   }
 
+  const cycleTheme = () => {
+    if (theme === "light") setTheme("dark");
+    else if (theme === "dark") setTheme("system");
+    else setTheme("light");
+  };
+
   return (
     <button
-      onClick={() => {
-        if (theme === "light") setTheme("dark");
-        else if (theme === "dark") setTheme("system");
-        else setTheme("light");
-      }}
+      onClick={cycleTheme}
       className="rounded-lg p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       aria-label="Toggle theme"
       title={`Current: ${
