@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { routes } from "@/lib/routes";
 
 type Organisation = {
   id: string;
@@ -27,7 +28,7 @@ export function OrganisationSwitcher({
 
   const handleSwitch = async (orgId: string) => {
     // Set cookie with selected organisation
-    await fetch("/api/organisation/switch", {
+    await fetch(routes.api.organisationSwitch, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ organisationId: orgId }),

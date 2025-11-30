@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { routes } from "@/lib/routes";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -10,7 +11,7 @@ export default async function Home() {
 
   // If user is logged in, redirect to dashboard
   if (user) {
-    redirect("/dashboard");
+    redirect(routes.dashboard.root);
   }
 
   // If not logged in, show landing page
@@ -33,13 +34,13 @@ export default async function Home() {
 
           <div className="flex gap-4 justify-center mb-16">
             <a
-              href="/signup"
+              href={routes.signup}
               className="rounded-lg bg-blue-600 px-6 py-3 text-base font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
             >
               Get Started
             </a>
             <a
-              href="/login"
+              href={routes.login}
               className="rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 py-3 text-base font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               Sign In

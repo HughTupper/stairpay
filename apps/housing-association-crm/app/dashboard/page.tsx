@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { routes } from "@/lib/routes";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -10,7 +11,7 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(routes.login);
   }
 
   const cookieStore = await cookies();
@@ -68,7 +69,7 @@ export default async function DashboardPage() {
           <div className="bg-gray-50 dark:bg-gray-800 px-5 py-3">
             <div className="text-sm">
               <a
-                href="/properties"
+                href={routes.dashboard.properties}
                 className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
               >
                 View all properties
@@ -110,7 +111,7 @@ export default async function DashboardPage() {
           <div className="bg-gray-50 dark:bg-gray-800 px-5 py-3">
             <div className="text-sm">
               <a
-                href="/tenants"
+                href={routes.dashboard.tenants}
                 className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
               >
                 View all tenants

@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { routes } from "@/lib/routes";
 
 export default async function TenantsPage() {
   const supabase = await createClient();
@@ -11,7 +12,7 @@ export default async function TenantsPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(routes.login);
   }
 
   const cookieStore = await cookies();
@@ -121,7 +122,7 @@ export default async function TenantsPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <Link
-                        href={`/dashboard/tenants/${tenant.id}`}
+                        href={routes.dashboard.tenant(tenant.id)}
                         className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
                       >
                         View Details

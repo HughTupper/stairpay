@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import type { ActionState } from "@stairpay/shared-types";
+import { routes } from "@/lib/routes";
 
 const propertySchema = z.object({
   address: z.string().min(5, "Address must be at least 5 characters"),
@@ -51,7 +52,8 @@ export async function createProperty(
       return { error: error.message };
     }
 
-    revalidatePath("/properties"); revalidatePath("/");
+    revalidatePath("/properties");
+    revalidatePath("/");
 
     return { success: true, data };
   } catch (error) {
@@ -96,7 +98,8 @@ export async function updateProperty(
       return { error: error.message };
     }
 
-    revalidatePath("/properties"); revalidatePath("/");
+    revalidatePath(routes.dashboard.properties);
+    revalidatePath(routes.dashboard.root);
 
     return { success: true, data };
   } catch (error) {
@@ -120,7 +123,8 @@ export async function deleteProperty(propertyId: string): Promise<ActionState> {
       return { error: error.message };
     }
 
-    revalidatePath("/properties"); revalidatePath("/");
+    revalidatePath(routes.dashboard.properties);
+    revalidatePath(routes.dashboard.root);
 
     return { success: true };
   } catch {

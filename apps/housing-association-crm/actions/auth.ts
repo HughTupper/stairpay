@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { ActionState } from "@stairpay/shared-types";
+import { routes } from "@/lib/routes";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -153,5 +154,5 @@ export async function inviteUserToOrganisation(
 export async function signOut(): Promise<void> {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/login");
+  redirect(routes.login);
 }

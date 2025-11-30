@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { PropertyForm, PropertyList } from "@/components/property-form";
+import { routes } from "@/lib/routes";
 
 async function getProperties() {
   const supabase = await createClient();
@@ -59,7 +60,7 @@ export default async function PropertiesPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(routes.login);
   }
 
   const cookieStore = await cookies();

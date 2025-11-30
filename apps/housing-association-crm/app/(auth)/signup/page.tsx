@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { signUp } from "@/actions/auth";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { routes } from "@/lib/routes";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -11,7 +12,7 @@ export default function SignUpPage() {
 
   useEffect(() => {
     if (state.success) {
-      router.push("/dashboard");
+      router.push(routes.dashboard.root);
     }
   }, [state.success, router]);
 
@@ -25,7 +26,7 @@ export default function SignUpPage() {
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Or{" "}
             <a
-              href="/login"
+              href={routes.login}
               className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
             >
               sign in to existing account

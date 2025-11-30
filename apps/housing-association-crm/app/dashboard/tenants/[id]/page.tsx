@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect, notFound } from "next/navigation";
+import { routes } from "@/lib/routes";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -15,14 +16,14 @@ export default async function TenantDetailPage({ params }: PageProps) {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(routes.login);
   }
 
   const cookieStore = await cookies();
   const currentOrgId = cookieStore.get("current_organisation_id")?.value;
 
   if (!currentOrgId) {
-    redirect("/dashboard");
+    redirect(routes.dashboard.root);
   }
 
   // Fetch tenant details
@@ -53,7 +54,7 @@ export default async function TenantDetailPage({ params }: PageProps) {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-6">
         <a
-          href="/dashboard/tenants"
+          href={routes.dashboard.tenants}
           className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
         >
           ← Back to Tenants

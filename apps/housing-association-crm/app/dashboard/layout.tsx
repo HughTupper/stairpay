@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { OrganisationSwitcher } from "@/components/organisation-switcher";
 import { signOut } from "@/actions/auth";
+import { routes } from "@/lib/routes";
 
 async function getUserOrganisations() {
   const supabase = await createClient();
@@ -13,7 +14,7 @@ async function getUserOrganisations() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(routes.login);
   }
 
   const { data: orgs, error } = await supabase
@@ -50,7 +51,7 @@ export default async function DashboardLayout({
   // If no current org is set but user has orgs, redirect to set it via API route
   if (!currentOrganisationId && organisations.length > 0) {
     redirect(
-      `/api/organisation/switch?organisationId=${organisations[0].id}&returnUrl=/dashboard`
+      `${routes.api.organisationSwitch}?organisationId=${organisations[0].id}&returnUrl=${routes.dashboard.root}`
     );
   }
 
@@ -67,19 +68,19 @@ export default async function DashboardLayout({
               </div>
               <div className="hidden md:flex md:gap-4">
                 <a
-                  href="/dashboard"
+                  href={routes.dashboard.root}
                   className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   Dashboard
                 </a>
                 <a
-                  href="/dashboard/properties"
+                  href={routes.dashboard.properties}
                   className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   Properties
                 </a>
                 <a
-                  href="/dashboard/tenants"
+                  href={routes.dashboard.tenants}
                   className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   Tenants
