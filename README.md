@@ -317,8 +317,7 @@ USING (
 
 - [`apps/housing-association-crm/README.md`](apps/housing-association-crm/README.md) - CRM app details
 - [`packages/database/README.md`](packages/database/README.md) - Database management
-- [`docs/architecture.md`](docs/architecture.md) - System architecture
-- [`docs/deployment.md`](docs/deployment.md) - Deployment guide
+- [`docs/architecture.md`](docs/architecture.md) - Architecture decisions and system design
 
 ## 🤝 Contributing
 
