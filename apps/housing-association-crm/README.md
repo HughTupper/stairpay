@@ -33,6 +33,16 @@ npm run dev:crm
 open http://localhost:3000
 ```
 
+### Test Accounts
+
+If you've run the database seed (`npm run db:seed`), you can log in with:
+
+- Thames Valley Housing: `admin@thamesvalley.com` / `password123`
+- London & Quadrant: `admin@londonquadrant.com` / `password123`
+- Clarion Housing: `admin@clarion.com` / `password123`
+
+Each account is an admin for their respective organisation.
+
 ## Environment Variables
 
 Create `.env.local`:

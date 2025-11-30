@@ -49,6 +49,20 @@ npm run db:types
 npm run db:seed
 ```
 
+This creates:
+
+- 3 test users with admin access to each organisation
+- 3 housing associations (Thames Valley Housing, London & Quadrant, Clarion Housing)
+- ~30 properties across all organisations
+- ~60 tenants with shared ownership details
+- ~20 staircasing applications with various statuses
+
+**Test Credentials:**
+
+- Thames Valley Housing: `admin@thamesvalley.com` / `password123`
+- London & Quadrant: `admin@londonquadrant.com` / `password123`
+- Clarion Housing: `admin@clarion.com` / `password123`
+
 ## Creating Migrations
 
 ```bash

@@ -8,9 +8,8 @@ export default async function Home() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (user) {
-    redirect("/dashboard");
-  }
+  // If user is logged in, they'll see the dashboard at / via (dashboard) route group
+  // If not logged in, show landing page
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">

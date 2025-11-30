@@ -1,4 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
+import { config } from "dotenv";
+import { resolve } from "path";
+
+// Load environment variables from .env.local
+config({ path: resolve(__dirname, ".env.local") });
 
 // This script should be run manually to seed the database
 // Usage: npm run seed
@@ -10,7 +15,9 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!supabaseUrl || !supabaseKey) {
   console.error("❌ Error: Missing environment variables");
   console.error("Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY");
-  console.error("\nFor local development, create packages/database/.env.local with:");
+  console.error(
+    "\nFor local development, create packages/database/.env.local with:"
+  );
   console.error("  SUPABASE_URL=http://127.0.0.1:54321");
   console.error("  SUPABASE_SERVICE_ROLE_KEY=<get from 'supabase status'>");
   process.exit(1);
@@ -124,6 +131,59 @@ async function seedDatabase() {
   console.log("🌱 Starting database seed...\n");
 
   try {
+    // Create test users for each organisation
+    console.log("Creating test users...");
+    const testUsers = [
+      {
+        email: "admin@thamesvalley.com",
+        password: "password123",
+        org: "Thames Valley Housing",
+        role: "admin",
+      },
+      {
+        email: "admin@londonquadrant.com",
+        password: "password123",
+        org: "London & Quadrant",
+        role: "admin",
+      },
+      {
+        email: "admin@clarion.com",
+        password: "password123",
+        org: "Clarion Housing",
+        role: "admin",
+      },
+    ];
+
+    const userOrgs = new Map<
+      string,
+      { userId: string; orgName: string; role: string }
+    >();
+
+    for (const testUser of testUsers) {
+      const { data: authData, error: authError } =
+        await supabase.auth.admin.createUser({
+          email: testUser.email,
+          password: testUser.password,
+          email_confirm: true,
+        });
+
+      if (authError) {
+        console.error(`Error creating user ${testUser.email}:`, authError);
+        continue;
+      }
+
+      if (authData.user) {
+        userOrgs.set(testUser.email, {
+          userId: authData.user.id,
+          orgName: testUser.org,
+          role: testUser.role,
+        });
+        console.log(`✓ Created user ${testUser.email}`);
+      }
+    }
+
+    console.log(`\n✓ Created ${userOrgs.size} test users\n`);
+
     // Create organisations
     console.log("Creating organisations...");
     const createdOrgs = [];
@@ -141,6 +201,18 @@ async function seedDatabase() {
 
       createdOrgs.push(data);
       console.log(`✓ Created ${org.name}`);
+
+      // Link test user to organisation
+      for (const [email, userData] of userOrgs.entries()) {
+        if (userData.orgName === org.name) {
+          await supabase.from("user_organisations").insert({
+            user_id: userData.userId,
+            organisation_id: data.id,
+            role: userData.role,
+          });
+          console.log(`  ✓ Linked ${email} to ${org.name} as ${userData.role}`);
+        }
+      }
     }
 
     console.log(`\n✓ Created ${createdOrgs.length} organisations\n`);
@@ -268,10 +340,16 @@ async function seedDatabase() {
 
     console.log("\n🎉 Database seeding completed successfully!");
     console.log("\n📊 Summary:");
+    console.log(`   - ${userOrgs.size} test users`);
     console.log(`   - ${createdOrgs.length} organisations`);
     console.log(`   - ~${createdOrgs.length * 10} properties`);
     console.log(`   - ~${createdOrgs.length * 20} tenants`);
     console.log(`   - ~${createdOrgs.length * 7} staircasing applications`);
+
+    console.log("\n🔑 Test User Credentials:");
+    console.log("   Email: admin@thamesvalley.com | Password: password123");
+    console.log("   Email: admin@londonquadrant.com | Password: password123");
+    console.log("   Email: admin@clarion.com | Password: password123");
   } catch (error) {
     console.error("❌ Error seeding database:", error);
     process.exit(1);

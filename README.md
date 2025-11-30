@@ -58,6 +58,16 @@ Open [http://localhost:3000](http://localhost:3000) to view the CRM application.
 
 Access Supabase Studio at [http://localhost:54323](http://localhost:54323) to manage the database.
 
+### Test Credentials
+
+After seeding, you can log in with these test accounts:
+
+- **Thames Valley Housing**: `admin@thamesvalley.com` / `password123`
+- **London & Quadrant**: `admin@londonquadrant.com` / `password123`
+- **Clarion Housing**: `admin@clarion.com` / `password123`
+
+Each account has admin access to their respective organisation's data.
+
 ## 🏗️ Architecture
 
 ### Multi-App Monorepo

@@ -68,7 +68,7 @@ export default async function DashboardPage() {
           <div className="bg-gray-50 dark:bg-gray-800 px-5 py-3">
             <div className="text-sm">
               <a
-                href="/dashboard/properties"
+                href="/properties"
                 className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
               >
                 View all properties
@@ -110,7 +110,7 @@ export default async function DashboardPage() {
           <div className="bg-gray-50 dark:bg-gray-800 px-5 py-3">
             <div className="text-sm">
               <a
-                href="/dashboard/tenants"
+                href="/tenants"
                 className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
               >
                 View all tenants

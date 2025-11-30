@@ -51,7 +51,7 @@ export async function createProperty(
       return { error: error.message };
     }
 
-    revalidatePath("/dashboard/properties");
+    revalidatePath("/properties"); revalidatePath("/");
 
     return { success: true, data };
   } catch (error) {
@@ -96,7 +96,7 @@ export async function updateProperty(
       return { error: error.message };
     }
 
-    revalidatePath("/dashboard/properties");
+    revalidatePath("/properties"); revalidatePath("/");
 
     return { success: true, data };
   } catch (error) {
@@ -120,7 +120,7 @@ export async function deleteProperty(propertyId: string): Promise<ActionState> {
       return { error: error.message };
     }
 
-    revalidatePath("/dashboard/properties");
+    revalidatePath("/properties"); revalidatePath("/");
 
     return { success: true };
   } catch {
