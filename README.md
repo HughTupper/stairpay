@@ -8,7 +8,6 @@ Enterprise-grade multi-tenant platform for shared ownership property management.
 stairpay/
 ├── apps/
 │   ├── housing-association-crm/    # Next.js CRM application
-│   └── infrastructure/              # Global AWS infrastructure (CDK)
 ├── packages/
 │   ├── database/                    # Supabase migrations & types
 │   └── shared-types/                # Shared TypeScript types
@@ -18,6 +17,12 @@ stairpay/
 └── package.json                     # Workspace root
 ```
 
+## 📚 Documentation
+
+- [`apps/housing-association-crm/README.md`](apps/housing-association-crm/README.md) - CRM app details
+- [`packages/database/README.md`](packages/database/README.md) - Database management
+- [`docs/architecture.md`](docs/architecture.md) - Architecture decisions and system design
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -25,7 +30,6 @@ stairpay/
 - Node.js 20+ ([nvm](https://github.com/nvm-sh/nvm) recommended)
 - Docker Desktop (for local Supabase)
 - AWS CLI configured (for deployment)
-- GitHub account (for CI/CD)
 
 ### Installation
 
@@ -34,23 +38,8 @@ stairpay/
 git clone https://github.com/HughTupper/stairpay.git
 cd stairpay
 
-# Use correct Node version
-nvm use
-
 # Install dependencies
 npm install
-
-# Start local Supabase
-npm run db:start
-
-# Apply migrations
-npm run db:reset
-
-# Seed demo data
-npm run db:seed
-
-# Start development server
-npm run dev:crm
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
@@ -59,11 +48,11 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ### Multi-App Monorepo
 
-This repository uses **npm workspaces + Turborepo** for:
+This repository uses **[npm workspaces](https://docs.npmjs.com/cli/v10/using-npm/workspaces) + [Turborepo](https://turbo.build/repo/docs)** for:
 
 - **Independent deployment** - Deploy apps separately
 - **Code sharing** - Shared types, database schema
-- **Efficient builds** - Turborepo caching and parallelization
+- **Efficient builds** - Turborepo caching and parallelisation
 - **Type safety** - End-to-end TypeScript across apps
 
 ### Apps
@@ -76,14 +65,6 @@ Next.js 15 application for housing association property management.
 - **Features**: Multi-tenancy, auth, property/tenant management
 - **Infrastructure**: Colocated AWS CDK stack (Amplify)
 - **Deployment**: AWS Amplify (SSR)
-
-#### `apps/infrastructure`
-
-Global AWS infrastructure shared across all applications.
-
-- **Purpose**: VPCs, monitoring, shared IAM roles
-- **Tech**: AWS CDK (TypeScript)
-- **Status**: Placeholder for future expansion
 
 ### Packages
 
@@ -108,34 +89,17 @@ TypeScript types shared across applications.
 
 ### Available Scripts
 
-```bash
-# Development
-npm run dev                    # Start all apps
-npm run dev:crm                # Start CRM only
+See [`package.json`](package.json) for all available scripts. Common commands include:
 
-# Building
-npm run build                  # Build all apps & packages
-npm run build:crm              # Build CRM only
-
-# Database
-npm run db:start               # Start local Supabase
-npm run db:stop                # Stop local Supabase
-npm run db:reset               # Reset and apply migrations
-npm run db:push                # Deploy migrations to production
-npm run db:types               # Generate TypeScript types
-npm run db:seed                # Seed demo data
-
-# Code Quality
-npm run lint                   # Lint all packages
-npm run typecheck              # Type check all packages
-npm run clean                  # Clean build artifacts
-
-# Deployment
-npm run deploy:crm             # Deploy CRM to AWS
-npm run deploy:infra           # Deploy global infrastructure
-```
+- `npm run dev:crm` - Start CRM development server
+- `npm run build` - Build all apps & packages
+- `npm run db:start` - Start local Supabase
+- `npm run lint` - Lint all packages
+- `npm run typecheck` - Type check all packages
 
 ### Adding Dependencies
+
+See [npm workspaces documentation](https://docs.npmjs.com/cli/v10/using-npm/workspaces) for details.
 
 ```bash
 # To a specific app
@@ -222,28 +186,6 @@ Automated deployments via GitHub Actions:
 - **CRM** - Auto-deploy to AWS Amplify
 - **Rollback** - Automatic rollback on failure
 
-### Manual Deployment
-
-#### CRM Application
-
-```bash
-# Configure AWS credentials
-export AWS_PROFILE=your-profile
-
-# Deploy
-npm run deploy:crm
-```
-
-#### Database Migrations
-
-```bash
-# Set Supabase credentials
-export SUPABASE_ACCESS_TOKEN=your-token
-
-# Deploy
-npm run db:push
-```
-
 ### Environment Variables
 
 #### GitHub Secrets Required
@@ -256,19 +198,19 @@ npm run db:push
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 
-## 📊 Monitoring
-
 ### Build Performance
 
-Turborepo tracks build performance:
+[Turborepo](https://turbo.build/repo/docs/core-concepts/monitoring) tracks build performance:
 
-```bash
+````bash
 # View task timings
 turbo run build --summarize
 
 # Generate trace
 turbo run build --graph
-```
+```enerate trace
+turbo run build --graph
+````
 
 ### Database Monitoring
 
@@ -277,47 +219,6 @@ Via Supabase Dashboard:
 - Query performance
 - Connection pooling
 - Real-time metrics
-
-## 🏢 Multi-Tenancy
-
-### Architecture
-
-Session-based organization context:
-
-1. User authenticates (Supabase Auth)
-2. Selects organization (if member of multiple)
-3. Organization ID stored in HTTP-only cookie
-4. All queries automatically filtered via RLS
-
-### Row Level Security
-
-PostgreSQL RLS enforces data isolation:
-
-```sql
--- Example: Properties table policy
-CREATE POLICY "Users can only see their org's properties"
-ON properties
-USING (
-  organisation_id IN (
-    SELECT organisation_id
-    FROM get_user_organisations(auth.uid())
-  )
-);
-```
-
-## 🔐 Security
-
-- **Authentication**: Supabase Auth (JWT tokens)
-- **Authorization**: Role-based (admin/viewer)
-- **Data Isolation**: PostgreSQL RLS
-- **Secrets**: Environment variables (never committed)
-- **API Keys**: Supabase publishable keys (client-safe)
-
-## 📚 Documentation
-
-- [`apps/housing-association-crm/README.md`](apps/housing-association-crm/README.md) - CRM app details
-- [`packages/database/README.md`](packages/database/README.md) - Database management
-- [`docs/architecture.md`](docs/architecture.md) - Architecture decisions and system design
 
 ## 🤝 Contributing
 
@@ -339,32 +240,6 @@ fix: resolve authentication redirect
 chore: update dependencies
 docs: improve setup instructions
 ```
-
-## 📦 Technology Stack
-
-- **Monorepo**: npm workspaces + Turborepo
-- **Frontend**: Next.js 15, React 19, Tailwind CSS 4
-- **Backend**: Supabase (PostgreSQL + Auth)
-- **Infrastructure**: AWS CDK (Amplify, CloudFormation)
-- **CI/CD**: GitHub Actions
-- **Type Safety**: TypeScript 5
-- **Validation**: Zod
-
-## 🎯 Roadmap
-
-### Current
-
-- ✅ Housing Association CRM
-- ✅ Multi-tenant database
-- ✅ Local development setup
-- ✅ CI/CD pipeline
-
-### Next
-
-- [ ] Mobile app (`apps/mobile`)
-- [ ] Admin portal (`apps/admin`)
-- [ ] API service (`apps/api`)
-- [ ] Global infrastructure (VPCs, monitoring)
 
 ## 📄 License
 

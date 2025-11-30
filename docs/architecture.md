@@ -1,3 +1,5 @@
+<!-- TODO review  -->
+
 # StairPay Architecture
 
 ## Overview

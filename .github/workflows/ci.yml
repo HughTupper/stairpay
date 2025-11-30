@@ -1,3 +1,5 @@
+# TODO review all CI/CD
+
 name: CI
 
 on:
