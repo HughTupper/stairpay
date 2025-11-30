@@ -47,15 +47,11 @@ export default async function DashboardLayout({
   const organisations = await getUserOrganisations();
   const currentOrganisationId = await getCurrentOrganisationId();
 
-  // If no current org is set but user has orgs, set the first one
+  // If no current org is set but user has orgs, redirect to set it via API route
   if (!currentOrganisationId && organisations.length > 0) {
-    const cookieStore = await cookies();
-    cookieStore.set("current_organisation_id", organisations[0].id, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 30,
-    });
+    redirect(
+      `/api/organisation/switch?organisationId=${organisations[0].id}&returnUrl=/dashboard`
+    );
   }
 
   return (
@@ -71,19 +67,19 @@ export default async function DashboardLayout({
               </div>
               <div className="hidden md:flex md:gap-4">
                 <a
-                  href="/"
+                  href="/dashboard"
                   className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   Dashboard
                 </a>
                 <a
-                  href="/properties"
+                  href="/dashboard/properties"
                   className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   Properties
                 </a>
                 <a
-                  href="/tenants"
+                  href="/dashboard/tenants"
                   className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   Tenants
