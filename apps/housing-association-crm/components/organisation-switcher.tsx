@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { routes } from "@/lib/routes";
+import { ChevronDown, Check } from "lucide-react";
 
 type Organisation = {
   id: string;
@@ -50,21 +51,11 @@ export function OrganisationSwitcher({
         <span className="truncate max-w-[200px]">
           {currentOrg?.name || "Select organisation"}
         </span>
-        <svg
+        <ChevronDown
           className={`w-4 h-4 transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        />
       </button>
 
       {isOpen && (
@@ -87,17 +78,7 @@ export function OrganisationSwitcher({
                 >
                   <span className="truncate">{org.name}</span>
                   {org.id === currentOrganisationId && (
-                    <svg
-                      className="w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <Check className="w-4 h-4" />
                   )}
                 </button>
               ))}
