@@ -5,6 +5,7 @@ This guide walks through completing the monorepo migration for StairPay.
 ## Overview
 
 We're transforming the current single-app structure into a monorepo with:
+
 - `apps/housing-association-crm/` - Next.js CRM application
 - `packages/database/` - Supabase schema & migrations
 - `packages/shared-types/` - Shared TypeScript types
@@ -30,6 +31,7 @@ chmod +x migrate-to-monorepo.sh
 ```
 
 This script will:
+
 - Move all Next.js files to `apps/housing-association-crm/`
 - Move Supabase files to `packages/database/`
 - Update package.json and .gitignore
@@ -72,6 +74,7 @@ grep -r "from '@/types'" .
 ```
 
 Files to update:
+
 - `actions/auth.ts`
 - `actions/properties.ts`
 - `app/(auth)/login/page.tsx`
@@ -86,6 +89,7 @@ npm run build
 ```
 
 This compiles:
+
 - `@stairpay/shared-types` → distributable package
 - `@stairpay/database` → TypeScript types
 
@@ -180,6 +184,7 @@ git push origin main
 ```
 
 Verify workflows run:
+
 - `.github/workflows/ci.yml` - Lint, type check, build
 - `.github/workflows/deploy-crm.yml` - Deploy CRM (if on main)
 - `.github/workflows/deploy-database.yml` - Deploy migrations (if migrations changed)
@@ -292,18 +297,22 @@ After migration, verify:
 After successful migration:
 
 1. **Update Documentation**
+
    - Update any additional docs referring to old structure
    - Add team onboarding guide
 
 2. **Set Up Staging Environment**
+
    - Create separate Supabase project for staging
    - Add staging deployment workflow
 
 3. **Add E2E Tests**
+
    - Playwright for critical user flows
    - Run in CI pipeline
 
 4. **Optimize Build Performance**
+
    - Configure Turborepo remote caching
    - Set up build analytics
 
@@ -327,6 +336,7 @@ If you encounter issues:
 Once all verification steps pass, you have successfully migrated to a production-ready monorepo structure! 🎉
 
 Your codebase is now ready to scale with:
+
 - Multiple applications
 - Shared packages
 - Type-safe database access

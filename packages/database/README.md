@@ -121,10 +121,10 @@ All queries automatically filter by user's organisation via RLS policies.
 Generated types are available at `@stairpay/database/types`:
 
 ```typescript
-import type { Database } from '@stairpay/database/types'
+import type { Database } from "@stairpay/database/types";
 
-type Property = Database['public']['Tables']['properties']['Row']
-type Tenant = Database['public']['Tables']['tenants']['Insert']
+type Property = Database["public"]["Tables"]["properties"]["Row"];
+type Tenant = Database["public"]["Tables"]["tenants"]["Insert"];
 ```
 
 ## Production Deployment

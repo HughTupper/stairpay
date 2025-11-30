@@ -58,24 +58,28 @@ stairpay/
 ### 📦 Packages Configuration
 
 #### Root Workspace (`package.json.new`)
+
 - npm workspaces configured (`apps/*`, `packages/*`)
 - Turborepo installed and configured
 - All monorepo scripts defined
 - Node 20+ required
 
 #### Housing Association CRM
+
 - Next.js 15.5.6 configuration
 - Workspace dependency on `@stairpay/shared-types`
 - Build, dev, deploy scripts
 - CDK deployment script
 
 #### Database Package
+
 - Supabase CLI integration
 - Migration scripts
 - Type generation scripts
 - Seed script placeholder
 
 #### Shared Types Package
+
 - TypeScript compilation configured
 - Distributable package setup
 - Types exported properly
@@ -83,6 +87,7 @@ stairpay/
 ### 🔄 CI/CD Workflows
 
 #### CI Pipeline (`.github/workflows/ci.yml`)
+
 - Runs on PRs and main branch
 - Lint all packages
 - Type check all packages
@@ -90,6 +95,7 @@ stairpay/
 - Turborepo caching
 
 #### CRM Deployment (`.github/workflows/deploy-crm.yml`)
+
 - Triggers on changes to CRM or packages
 - Builds shared packages first
 - Deploys CDK stack to AWS Amplify
@@ -97,6 +103,7 @@ stairpay/
 - Deployment summaries
 
 #### Database Deployment (`.github/workflows/deploy-database.yml`)
+
 - Triggers on migration changes
 - Links to Supabase project
 - Pushes migrations
@@ -106,6 +113,7 @@ stairpay/
 ### 📚 Documentation
 
 #### README.md (new)
+
 - Complete monorepo overview
 - Quick start guide
 - Architecture explanation
@@ -114,6 +122,7 @@ stairpay/
 - Technology stack details
 
 #### docs/architecture.md
+
 - Detailed architecture decisions
 - System diagrams
 - Data flow explanations
@@ -123,6 +132,7 @@ stairpay/
 - Trade-offs discussion
 
 #### MIGRATION.md
+
 - Step-by-step migration guide
 - Troubleshooting section
 - Verification checklist
@@ -163,6 +173,7 @@ chmod +x update-imports.sh
 ```
 
 This will:
+
 1. Backup old `package.json` and `.gitignore`
 2. Install new versions
 3. Move all Next.js files to `apps/housing-association-crm/`
@@ -180,7 +191,7 @@ cd packages/database
 npm run db:migration -- initial_schema
 # Copy supabase/schema.sql content into the new migration file
 
-npm run db:migration -- rls_policies  
+npm run db:migration -- rls_policies
 # Copy supabase/rls-policies.sql content into the new migration file
 ```
 
@@ -235,6 +246,7 @@ git push origin main
 ## 🎯 Key Features Implemented
 
 ### Monorepo Benefits
+
 ✅ **Code Sharing** - Shared types and database package
 ✅ **Type Safety** - End-to-end TypeScript
 ✅ **Build Optimization** - Turborepo caching
@@ -242,37 +254,40 @@ git push origin main
 ✅ **Unified Tooling** - Single lint/type/build commands
 
 ### Database Management
+
 ✅ **Version-Controlled Migrations** - All schema changes in Git
 ✅ **Local Development** - Docker-based Supabase
 ✅ **Type Generation** - Auto-generate TypeScript types
 ✅ **Colocated Infrastructure** - Supabase CDK stack in database package
 
 ### CI/CD
+
 ✅ **Automated Checks** - Lint, type, build on PRs
 ✅ **Auto-Deploy** - Merge to main deploys automatically
 ✅ **Rollback Capability** - Auto-rollback on deployment failure
 ✅ **Turborepo Integration** - Only build changed packages
 
 ### Infrastructure as Code
+
 ✅ **App-Specific** - Amplify CDK in CRM app folder
 ✅ **Global Resources** - Separate infrastructure app
 ✅ **Type-Safe** - TypeScript CDK stacks
 
 ## 📋 Files Overview
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `package.json.new` | Workspace root config | ✅ Ready to use |
-| `turbo.json` | Build orchestration | ✅ Ready to use |
-| `tsconfig.base.json` | Shared TS config | ✅ Ready to use |
-| `.nvmrc` | Node version lock | ✅ Ready to use |
-| `.gitignore.new` | Monorepo git ignore | ✅ Ready to use |
-| `README.md.new` | Monorepo documentation | ✅ Ready to use |
-| `migrate-to-monorepo.sh` | Migration automation | ✅ Ready to run |
-| `update-imports.sh` | Import path updater | ✅ Ready to run |
-| `MIGRATION.md` | Migration guide | ✅ Ready to follow |
-| `.github/workflows/*.yml` | CI/CD pipelines | ✅ Ready to use |
-| `docs/architecture.md` | Architecture docs | ✅ Ready to read |
+| File                      | Purpose                | Status             |
+| ------------------------- | ---------------------- | ------------------ |
+| `package.json.new`        | Workspace root config  | ✅ Ready to use    |
+| `turbo.json`              | Build orchestration    | ✅ Ready to use    |
+| `tsconfig.base.json`      | Shared TS config       | ✅ Ready to use    |
+| `.nvmrc`                  | Node version lock      | ✅ Ready to use    |
+| `.gitignore.new`          | Monorepo git ignore    | ✅ Ready to use    |
+| `README.md.new`           | Monorepo documentation | ✅ Ready to use    |
+| `migrate-to-monorepo.sh`  | Migration automation   | ✅ Ready to run    |
+| `update-imports.sh`       | Import path updater    | ✅ Ready to run    |
+| `MIGRATION.md`            | Migration guide        | ✅ Ready to follow |
+| `.github/workflows/*.yml` | CI/CD pipelines        | ✅ Ready to use    |
+| `docs/architecture.md`    | Architecture docs      | ✅ Ready to read   |
 
 ## 🎓 What You'll Demonstrate
 

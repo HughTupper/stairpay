@@ -21,16 +21,19 @@ This package manages global/shared AWS resources:
 ## Stacks
 
 ### NetworkingStack (Future)
+
 - VPC with public/private subnets
 - NAT gateways
 - VPC endpoints for AWS services
 
 ### MonitoringStack (Future)
+
 - CloudWatch dashboard
 - SNS topics for alerts
 - Log aggregation
 
 ### SecurityStack (Future)
+
 - Shared IAM roles
 - KMS keys
 - Secrets Manager

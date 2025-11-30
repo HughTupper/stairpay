@@ -11,6 +11,7 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 **Decision**: Use npm workspaces + Turborepo instead of polyrepo.
 
 **Rationale**:
+
 - **Code Sharing**: Database schema, types shared across apps
 - **Atomic Changes**: Update schema + apps in single PR
 - **Build Efficiency**: Turborepo caches and parallelizes builds
@@ -18,6 +19,7 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 - **Developer Experience**: Single `npm install`, unified tooling
 
 **Tradeoffs**:
+
 - ✅ Easier refactoring across apps
 - ✅ Consistent tooling and versions
 - ❌ Larger repo size (not an issue yet)
@@ -28,12 +30,14 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 **Decision**: AWS CDK (TypeScript) for infrastructure.
 
 **Rationale**:
+
 - **Type Safety**: Same language as application code
 - **IDE Support**: Auto-complete, inline docs
 - **Amplify Constructs**: Built-in Next.js SSR support
 - **Familiarity**: Team already uses TypeScript
 
 **Alternative Considered**: Terraform
+
 - ✅ More mature, industry standard
 - ❌ HCL learning curve
 - ❌ Less type-safe
@@ -42,6 +46,7 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 **Decision**: Colocate app-specific infrastructure with apps.
 
 **Rationale**:
+
 - Amplify deployment lives in `apps/housing-association-crm/infrastructure/`
 - Keeps deployment context close to code
 - Changes to app infrastructure don't affect other apps
@@ -52,6 +57,7 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 **Decision**: Supabase with CLI-managed migrations.
 
 **Rationale**:
+
 - **Version Control**: All schema changes in Git
 - **Local Development**: Docker-based Supabase instance
 - **Type Generation**: Auto-generate TypeScript types
@@ -59,6 +65,7 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 - **Auth**: Integrated authentication system
 
 **Alternative Considered**: Prisma
+
 - ✅ Better TypeScript integration
 - ✅ Migrations as code
 - ❌ No built-in auth
@@ -68,6 +75,7 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 **Decision**: Database lives in `packages/database/`.
 
 **Rationale**:
+
 - Shared by all apps (CRM, mobile, admin)
 - Migrations independent of app deployments
 - Type generation published as package
@@ -78,12 +86,14 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 **Decision**: Session-based organization context + PostgreSQL RLS.
 
 **Rationale**:
+
 - **Security**: Database-level isolation
 - **Performance**: Queries auto-filtered by DB
 - **Simplicity**: No app-level filtering logic
 - **Audit**: All access logged by DB
 
 **Flow**:
+
 1. User logs in (Supabase Auth)
 2. User belongs to N organizations (junction table)
 3. User selects organization → stored in HTTP-only cookie
@@ -91,6 +101,7 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 5. Database enforces access automatically
 
 **Alternative Considered**: App-level filtering
+
 - ✅ More flexible
 - ❌ Error-prone (easy to miss filter)
 - ❌ No DB-level guarantees
@@ -101,12 +112,14 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 **Decision**: Auto-deploy with rollback capabilities.
 
 **Rationale**:
+
 - **Speed**: Deploy on merge to main
 - **Confidence**: Comprehensive CI checks before merge
 - **Safety**: Auto-rollback on failure
 - **Audit Trail**: Every deployment logged in GitHub
 
 **Pipeline**:
+
 ```
 PR → Lint/Type/Build → Review → Merge
       ↓
@@ -114,6 +127,7 @@ Main → Deploy → Health Check → Success/Rollback
 ```
 
 **Rollback Strategy**:
+
 - **App Deployment**: Redeploy previous commit
 - **Database Migrations**: Create reverse migration
 - **Monitoring**: CloudWatch alarms trigger alerts
@@ -123,16 +137,19 @@ Main → Deploy → Health Check → Success/Rollback
 **Decision**: Three package types - apps, packages, infrastructure.
 
 **`apps/`** - Independently deployable applications
+
 - `housing-association-crm/` - Next.js CRM
 - `infrastructure/` - Global AWS resources
 - Future: `mobile/`, `admin/`, `api/`
 
 **`packages/`** - Reusable code libraries
+
 - `database/` - Supabase schema, migrations, types
 - `shared-types/` - Common TypeScript types
 - Future: `ui/`, `utils/`, `config/`
 
 **Rationale**:
+
 - Clear separation between deployable vs shared code
 - Apps can evolve independently
 - Packages enable code reuse without duplication
@@ -230,18 +247,19 @@ Main → Deploy → Health Check → Success/Rollback
 
 ### Threat Model
 
-| Threat | Mitigation |
-|--------|------------|
-| Unauthorized access | Supabase Auth + JWT |
-| Cross-tenant data leak | PostgreSQL RLS policies |
-| SQL injection | Supabase client (parameterized) |
-| XSS | Next.js auto-escaping |
-| CSRF | HTTP-only cookies |
-| Secrets exposure | Env vars, AWS Secrets Manager |
+| Threat                 | Mitigation                      |
+| ---------------------- | ------------------------------- |
+| Unauthorized access    | Supabase Auth + JWT             |
+| Cross-tenant data leak | PostgreSQL RLS policies         |
+| SQL injection          | Supabase client (parameterized) |
+| XSS                    | Next.js auto-escaping           |
+| CSRF                   | HTTP-only cookies               |
+| Secrets exposure       | Env vars, AWS Secrets Manager   |
 
 ## Scalability
 
 ### Current Scale
+
 - **Users**: <1000
 - **Orgs**: <100
 - **Properties**: <10,000
@@ -250,18 +268,21 @@ Main → Deploy → Health Check → Success/Rollback
 ### Scaling Strategy
 
 **Database**:
+
 - Supabase auto-scales (managed PostgreSQL)
 - Connection pooling enabled
 - Indexes on foreign keys
 - RLS optimized with security definer functions
 
 **Application**:
+
 - Amplify auto-scales (CloudFront CDN)
 - SSR for SEO, client-side for interactivity
 - React Suspense for progressive loading
 - Optimistic UI for perceived performance
 
 **Future Optimizations** (if needed):
+
 - Database read replicas
 - Redis caching layer
 - CDN for static assets
@@ -270,18 +291,21 @@ Main → Deploy → Health Check → Success/Rollback
 ## Monitoring
 
 ### Application Metrics
+
 - CloudWatch (via Amplify)
 - Request counts, error rates
 - Response times
 - Build failures
 
 ### Database Metrics
+
 - Supabase Dashboard
 - Query performance
 - Connection pool usage
 - RLS policy execution time
 
 ### Alerts
+
 - Build failures → GitHub notifications
 - Error rate spikes → CloudWatch alarms
 - Database slow queries → Supabase alerts
@@ -290,13 +314,13 @@ Main → Deploy → Health Check → Success/Rollback
 
 ### Current Infrastructure
 
-| Service | Monthly Cost (estimate) |
-|---------|-------------------------|
-| Supabase (Pro) | $25 |
-| AWS Amplify | ~$15 (low traffic) |
-| CloudFormation | Free |
-| GitHub Actions | Free (public repo) |
-| **Total** | **~$40/month** |
+| Service        | Monthly Cost (estimate) |
+| -------------- | ----------------------- |
+| Supabase (Pro) | $25                     |
+| AWS Amplify    | ~$15 (low traffic)      |
+| CloudFormation | Free                    |
+| GitHub Actions | Free (public repo)      |
+| **Total**      | **~$40/month**          |
 
 ### Scaling Costs
 
@@ -307,6 +331,7 @@ Main → Deploy → Health Check → Success/Rollback
 ## Trade-offs
 
 ### What We Optimized For
+
 ✅ **Developer Experience** - Fast iteration, type safety
 ✅ **Type Safety** - End-to-end TypeScript
 ✅ **Security** - Multi-tenant isolation, RLS
@@ -314,6 +339,7 @@ Main → Deploy → Health Check → Success/Rollback
 ✅ **Cost** - Serverless, pay-per-use
 
 ### What We Sacrificed
+
 ❌ **Vendor Lock-in** - Tied to AWS + Supabase
 ❌ **Self-hosting** - No on-premise option
 ❌ **Complex Queries** - RLS adds overhead
@@ -322,6 +348,7 @@ Main → Deploy → Health Check → Success/Rollback
 ## Future Architecture
 
 ### Phase 2: Mobile App
+
 ```
 apps/mobile/
 ├── React Native app
@@ -329,6 +356,7 @@ apps/mobile/
 ```
 
 ### Phase 3: Admin Portal
+
 ```
 apps/admin/
 ├── Super-admin dashboard
@@ -337,6 +365,7 @@ apps/admin/
 ```
 
 ### Phase 4: API Service
+
 ```
 apps/api/
 ├── GraphQL API
@@ -345,6 +374,7 @@ apps/api/
 ```
 
 ### Phase 5: Shared Infrastructure
+
 ```
 apps/infrastructure/
 ├── Shared VPC
@@ -356,6 +386,7 @@ apps/infrastructure/
 ## Lessons Learned
 
 ### What Worked Well
+
 - ✅ Monorepo enabled rapid iteration
 - ✅ Supabase RLS eliminated tenant leak bugs
 - ✅ CDK provided type-safe infrastructure
@@ -363,6 +394,7 @@ apps/infrastructure/
 - ✅ Auto-deploy with rollback gave confidence
 
 ### What We'd Do Differently
+
 - Consider Prisma for better type generation
 - Add E2E tests earlier in project
 - Set up staging environment from day 1
@@ -371,6 +403,7 @@ apps/infrastructure/
 ## Conclusion
 
 This architecture balances:
+
 - **Speed** - Fast development, quick deployments
 - **Safety** - Type safety, data isolation, rollbacks
 - **Scale** - Managed services, auto-scaling
