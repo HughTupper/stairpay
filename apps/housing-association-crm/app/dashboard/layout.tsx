@@ -3,7 +3,11 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 
 async function getUserOrganisations() {

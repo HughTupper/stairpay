@@ -1,6 +1,14 @@
 "use client";
 
-import { Building2, ChevronsUpDown, LogOut, Moon, Sun, Monitor, Check } from "lucide-react";
+import {
+  Building2,
+  ChevronsUpDown,
+  LogOut,
+  Moon,
+  Sun,
+  Monitor,
+  Check,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import { signOut } from "@/actions/auth";
 import { useRouter } from "next/navigation";
