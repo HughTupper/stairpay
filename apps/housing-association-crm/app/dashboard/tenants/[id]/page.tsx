@@ -3,12 +3,7 @@ import { cookies } from "next/headers";
 import { redirect, notFound } from "next/navigation";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
@@ -182,9 +177,7 @@ export default async function TenantDetailPage({ params }: PageProps) {
                 </div>
                 <Separator />
                 <div className="flex justify-between items-center pt-3">
-                  <span className="text-base font-semibold">
-                    Total Monthly
-                  </span>
+                  <span className="text-base font-semibold">Total Monthly</span>
                   <span className="text-lg font-bold text-primary">
                     £{monthlyTotal.toFixed(2)}
                   </span>

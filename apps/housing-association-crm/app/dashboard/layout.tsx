@@ -1,12 +1,10 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { OrganisationSwitcher } from "@/components/organisation-switcher";
-import { signOut } from "@/actions/auth";
 import { routes } from "@/lib/routes";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 
 async function getUserOrganisations() {
   const supabase = await createClient();
@@ -58,42 +56,20 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="border-b">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 justify-between items-center">
-            <div className="flex items-center gap-8">
-              <div className="flex-shrink-0">
-                <h1 className="text-xl font-bold">StairProperty</h1>
-              </div>
-              <div className="hidden md:flex md:gap-2">
-                <Button variant="ghost" asChild>
-                  <Link href={routes.dashboard.root}>Dashboard</Link>
-                </Button>
-                <Button variant="ghost" asChild>
-                  <Link href={routes.dashboard.properties}>Properties</Link>
-                </Button>
-                <Button variant="ghost" asChild>
-                  <Link href={routes.dashboard.tenants}>Tenants</Link>
-                </Button>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <OrganisationSwitcher
-                organisations={organisations}
-                currentOrganisationId={currentOrganisationId}
-              />
-              <ThemeToggle />
-              <form action={signOut}>
-                <Button type="submit" variant="ghost">
-                  Sign out
-                </Button>
-              </form>
-            </div>
+    <SidebarProvider>
+      <AppSidebar
+        organisations={organisations}
+        currentOrganisationId={currentOrganisationId}
+      />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
-        </div>
-      </nav>
-      <main>{children}</main>
-    </div>
+        </header>
+        <main className="flex-1">{children}</main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
