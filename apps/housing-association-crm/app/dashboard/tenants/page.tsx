@@ -4,6 +4,16 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
 import { Users } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default async function TenantsPage() {
   const supabase = await createClient();
@@ -22,10 +32,8 @@ export default async function TenantsPage() {
   if (!currentOrgId) {
     return (
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Tenants
-        </h1>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">
+        <h1 className="text-3xl font-bold mb-4">Tenants</h1>
+        <p className="text-muted-foreground">
           Please select an organisation to view tenants.
         </p>
       </div>
@@ -40,43 +48,31 @@ export default async function TenantsPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
-        Tenants
-      </h1>
+      <h1 className="text-3xl font-bold mb-8">Tenants</h1>
 
       {!tenants || tenants.length === 0 ? (
-        <div className="text-center py-12 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
-          <Users className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-semibold text-gray-900 dark:text-white">
-            No tenants
-          </h3>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Run the seed script to add demo data.
-          </p>
-        </div>
+        <Card>
+          <CardContent className="text-center py-12">
+            <Users className="mx-auto size-12 text-muted-foreground" />
+            <h3 className="mt-2 text-sm font-semibold">No tenants</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Run the seed script to add demo data.
+            </p>
+          </CardContent>
+        </Card>
       ) : (
-        <div className="bg-white dark:bg-gray-900 shadow overflow-hidden sm:rounded-lg border border-gray-200 dark:border-gray-800">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
-            <thead className="bg-gray-50 dark:bg-gray-800">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Property
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Equity %
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Monthly Total
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
+        <Card>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Property</TableHead>
+                <TableHead>Equity %</TableHead>
+                <TableHead>Monthly Total</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {tenants.map((tenant) => {
                 const monthlyTotal =
                   parseFloat(tenant.monthly_rent) +
@@ -84,45 +80,40 @@ export default async function TenantsPage() {
                   parseFloat(tenant.monthly_service_charge);
 
                 return (
-                  <tr key={tenant.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                  <TableRow key={tenant.id}>
+                    <TableCell>
+                      <div className="font-medium">
                         {tenant.first_name} {tenant.last_name}
                       </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                      <div className="text-sm text-muted-foreground">
                         {tenant.email}
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {tenant.properties?.address}
-                      </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                    </TableCell>
+                    <TableCell>
+                      <div>{tenant.properties?.address}</div>
+                      <div className="text-sm text-muted-foreground">
                         {tenant.properties?.postcode}
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                    </TableCell>
+                    <TableCell>
+                      <span className="font-semibold text-primary">
                         {tenant.current_equity_percentage}%
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                      £{monthlyTotal.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <Link
-                        href={routes.dashboard.tenant(tenant.id)}
-                        className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
-                      >
-                        View Details
-                      </Link>
-                    </td>
-                  </tr>
+                    </TableCell>
+                    <TableCell>£{monthlyTotal.toFixed(2)}</TableCell>
+                    <TableCell>
+                      <Button variant="link" asChild className="p-0">
+                        <Link href={routes.dashboard.tenant(tenant.id)}>
+                          View Details
+                        </Link>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
                 );
               })}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </Card>
       )}
     </div>
   );

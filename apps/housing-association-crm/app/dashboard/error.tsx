@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardError({
   error,
@@ -15,20 +17,13 @@ export default function DashboardError({
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-          Something went wrong
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-8">
+      <Alert variant="destructive">
+        <AlertTitle>Something went wrong</AlertTitle>
+        <AlertDescription className="mb-4">
           {error.message || "An unexpected error occurred"}
-        </p>
-        <button
-          onClick={reset}
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-        >
-          Try again
-        </button>
-      </div>
+        </AlertDescription>
+        <Button onClick={reset}>Try again</Button>
+      </Alert>
     </div>
   );
 }

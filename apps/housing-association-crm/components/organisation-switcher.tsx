@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { routes } from "@/lib/routes";
-import { ChevronDown, Check } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type Organisation = {
   id: string;
@@ -21,7 +27,6 @@ export function OrganisationSwitcher({
   currentOrganisationId,
 }: OrganisationSwitcherProps) {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
 
   const currentOrg = organisations.find(
     (org) => org.id === currentOrganisationId
@@ -34,7 +39,6 @@ export function OrganisationSwitcher({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ organisationId: orgId }),
     });
-    setIsOpen(false);
     router.refresh();
   };
 
@@ -43,49 +47,27 @@ export function OrganisationSwitcher({
   }
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-      >
-        <span className="truncate max-w-[200px]">
-          {currentOrg?.name || "Select organisation"}
-        </span>
-        <ChevronDown
-          className={`w-4 h-4 transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {isOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setIsOpen(false)}
-          />
-          <div className="absolute right-0 z-20 mt-2 w-56 rounded-lg bg-white dark:bg-gray-900 shadow-lg ring-1 ring-black ring-opacity-5">
-            <div className="py-1">
-              {organisations.map((org) => (
-                <button
-                  key={org.id}
-                  onClick={() => handleSwitch(org.id)}
-                  className={`w-full flex items-center justify-between px-4 py-2 text-sm text-left hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                    org.id === currentOrganisationId
-                      ? "bg-gray-50 dark:bg-gray-800 text-blue-600 dark:text-blue-400"
-                      : "text-gray-700 dark:text-gray-300"
-                  }`}
-                >
-                  <span className="truncate">{org.name}</span>
-                  {org.id === currentOrganisationId && (
-                    <Check className="w-4 h-4" />
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="gap-2">
+          <span className="truncate max-w-[200px]">
+            {currentOrg?.name || "Select organisation"}
+          </span>
+          <ChevronsUpDown className="size-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        {organisations.map((org) => (
+          <DropdownMenuItem
+            key={org.id}
+            onClick={() => handleSwitch(org.id)}
+            className="flex items-center justify-between"
+          >
+            <span className="truncate">{org.name}</span>
+            {org.id === currentOrganisationId && <Check className="size-4" />}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

@@ -3,6 +3,11 @@
 import { useActionState, useOptimistic, useState } from "react";
 import { createProperty } from "@/actions/properties";
 import { Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type Property = {
   id: string;
@@ -19,97 +24,70 @@ export function PropertyForm() {
   return (
     <div>
       {!showForm ? (
-        <button
-          onClick={() => setShowForm(true)}
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-        >
-          Add Property
-        </button>
+        <Button onClick={() => setShowForm(true)}>Add Property</Button>
       ) : (
-        <div className="bg-white dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-800">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Add New Property
-          </h3>
-          <form action={formAction} className="space-y-4">
-            <div>
-              <label
-                htmlFor="address"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                Address
-              </label>
-              <input
-                type="text"
-                name="address"
-                id="address"
-                required
-                className="block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                placeholder="123 High Street, London"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="postcode"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                Postcode
-              </label>
-              <input
-                type="text"
-                name="postcode"
-                id="postcode"
-                required
-                className="block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                placeholder="SW1A 1AA"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="propertyValue"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                Property Value (£)
-              </label>
-              <input
-                type="number"
-                name="propertyValue"
-                id="propertyValue"
-                required
-                step="0.01"
-                min="0"
-                className="block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                placeholder="250000"
-              />
-            </div>
-
-            {state.error && (
-              <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
-                <p className="text-sm text-red-800 dark:text-red-200">
-                  {state.error}
-                </p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Add New Property</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form action={formAction} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="address">Address</Label>
+                <Input
+                  type="text"
+                  name="address"
+                  id="address"
+                  required
+                  placeholder="123 High Street, London"
+                />
               </div>
-            )}
 
-            <div className="flex gap-3">
-              <button
-                type="submit"
-                disabled={isPending}
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isPending ? "Creating..." : "Create Property"}
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowForm(false)}
-                className="rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
+              <div className="space-y-2">
+                <Label htmlFor="postcode">Postcode</Label>
+                <Input
+                  type="text"
+                  name="postcode"
+                  id="postcode"
+                  required
+                  placeholder="SW1A 1AA"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="propertyValue">Property Value (£)</Label>
+                <Input
+                  type="number"
+                  name="propertyValue"
+                  id="propertyValue"
+                  required
+                  step="0.01"
+                  min="0"
+                  placeholder="250000"
+                />
+              </div>
+
+              {state.error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{state.error}</AlertDescription>
+                </Alert>
+              )}
+
+              <div className="flex gap-3">
+                <Button type="submit" disabled={isPending}>
+                  {isPending ? "Creating..." : "Create Property"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowForm(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
@@ -127,39 +105,36 @@ export function PropertyList({ initialProperties }: PropertyListProps) {
 
   return (
     <div className="mt-8">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-        Properties
-      </h2>
+      <h2 className="text-lg font-semibold mb-4">Properties</h2>
       {optimisticProperties.length === 0 ? (
-        <div className="text-center py-12 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
-          <Home className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-semibold text-gray-900 dark:text-white">
-            No properties
-          </h3>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Get started by creating a new property.
-          </p>
-        </div>
+        <Card>
+          <CardContent className="text-center py-12">
+            <Home className="mx-auto size-12 text-muted-foreground" />
+            <h3 className="mt-2 text-sm font-semibold">No properties</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Get started by creating a new property.
+            </p>
+          </CardContent>
+        </Card>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {optimisticProperties.map((property) => (
-            <div
-              key={property.id}
-              className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6"
-            >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {property.address}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                {property.postcode}
-              </p>
-              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-4">
-                £{property.property_value.toLocaleString()}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
-                Added {new Date(property.created_at).toLocaleDateString()}
-              </p>
-            </div>
+            <Card key={property.id}>
+              <CardHeader>
+                <CardTitle>{property.address}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {property.postcode}
+                </p>
+                <p className="text-2xl font-bold text-primary">
+                  £{property.property_value.toLocaleString()}
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Added {new Date(property.created_at).toLocaleDateString()}
+                </p>
+              </CardContent>
+            </Card>
           ))}
         </div>
       )}

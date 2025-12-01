@@ -432,3 +432,5 @@ Why?
 - Client side Supabase
 - Implement env - theo
 - Centralising routes
+- Read into npm workspaces more
+- create an account that can access all orgs to show org switching

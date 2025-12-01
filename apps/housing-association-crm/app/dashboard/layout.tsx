@@ -5,6 +5,8 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { OrganisationSwitcher } from "@/components/organisation-switcher";
 import { signOut } from "@/actions/auth";
 import { routes } from "@/lib/routes";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 async function getUserOrganisations() {
   const supabase = await createClient();
@@ -56,35 +58,24 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+    <div className="min-h-screen bg-background">
+      <nav className="border-b">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between items-center">
             <div className="flex items-center gap-8">
               <div className="flex-shrink-0">
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                  StairProperty
-                </h1>
+                <h1 className="text-xl font-bold">StairProperty</h1>
               </div>
-              <div className="hidden md:flex md:gap-4">
-                <a
-                  href={routes.dashboard.root}
-                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  Dashboard
-                </a>
-                <a
-                  href={routes.dashboard.properties}
-                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  Properties
-                </a>
-                <a
-                  href={routes.dashboard.tenants}
-                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  Tenants
-                </a>
+              <div className="hidden md:flex md:gap-2">
+                <Button variant="ghost" asChild>
+                  <Link href={routes.dashboard.root}>Dashboard</Link>
+                </Button>
+                <Button variant="ghost" asChild>
+                  <Link href={routes.dashboard.properties}>Properties</Link>
+                </Button>
+                <Button variant="ghost" asChild>
+                  <Link href={routes.dashboard.tenants}>Tenants</Link>
+                </Button>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -94,12 +85,9 @@ export default async function DashboardLayout({
               />
               <ThemeToggle />
               <form action={signOut}>
-                <button
-                  type="submit"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
+                <Button type="submit" variant="ghost">
                   Sign out
-                </button>
+                </Button>
               </form>
             </div>
           </div>
