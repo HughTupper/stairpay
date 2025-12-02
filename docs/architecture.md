@@ -502,18 +502,9 @@ Notes
 
 Why?
 
-- Note using publishable keys instead of anon keys
-- Using CDK instead of Terraform
-- The Expand-Migrate-Contract Pattern - DB updates without downtime
--
 - Supabase migrations, staging environments, pipelines
 - Ops as code look at supabase CLI.
-- Not prisma, use Postgress directly with RLS. Supabase gen types for typescript. Looks like SQL.
--
 
-- Supabase auth. Cloudflare turnstile - https://supabase.com/docs/guides/auth/auth-captcha. cloudflare.com/application-services/products/turnstile/
-- Client side Supabase
-- Implement env - theo
 - Read into npm workspaces more
 - create an account that can access all orgs to show org switching
 
@@ -525,13 +516,6 @@ Why?
 - understand the Expand-Migrate-Contract pattern for zero-downtime deployments
 - is it better to do commands like `npx supabase stop` or should we install supabase locally?
 - How should rollback migrations be handled?
-- Implement colocation
-- check for any 'any' types
-- playwright tests
-
-- Use optimistic
-- Server action forms
-- Error handling
 
 - Used AI to scan your site for:
   - colours schemes (used your business pages)
@@ -546,4 +530,7 @@ Why?
   - Integration tests with Playwright (larger user centric user tests and mocked apis)
   - E2E with Playwright (larger user centric user tests)
 - Code Colocation (components, page components, infrastructure)
-- Relook at typing generated from DB
+- Relook at typing generated from DB. I dont like how its currently abstracted
+- Supabase auth. Cloudflare turnstile - https://supabase.com/docs/guides/auth/auth-captcha. cloudflare.com/application-services/products/turnstile/
+- Using CDK instead of Terraform
+- The Expand-Migrate-Contract Pattern - DB updates without downtime

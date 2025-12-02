@@ -21,7 +21,7 @@ export default async function Home() {
   // If not logged in, show landing page
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl font-bold mb-6">StairProperty</h1>
@@ -87,17 +87,6 @@ export default async function Home() {
               </CardContent>
             </Card>
           </div>
-
-          <Card className="mt-16 bg-primary/5 border-primary/20">
-            <CardContent className="pt-6">
-              <p className="text-sm text-muted-foreground">
-                <strong>Technical Demo:</strong> Built with Next.js 15,
-                Supabase, Tailwind CSS, and deployed on AWS Amplify. Features
-                multi-tenant architecture with Row Level Security, Server
-                Actions, and optimistic UI updates.
-              </p>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
