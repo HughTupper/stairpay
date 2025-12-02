@@ -11,9 +11,7 @@ import {
 } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Briefcase, Star, Mail, Phone, Globe, TrendingUp } from "lucide-react";
-import type { Database } from "@stairpay/database/types/database";
-
-type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
+import type { ServiceProvider } from "@/lib/types";
 
 async function getServiceProviders(orgId: string) {
   const supabase = await createClient();

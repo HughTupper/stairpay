@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import type { ActionState } from "@stairpay/shared-types";
+import type { Property, PropertyInsert, PropertyUpdate } from "@/lib/types";
 import { routes } from "@/lib/routes";
 
 const propertySchema = z.object({
@@ -20,7 +21,7 @@ const propertySchema = z.object({
 export async function createProperty(
   prevState: ActionState,
   formData: FormData
-): Promise<ActionState> {
+): Promise<ActionState<Property>> {
   try {
     const cookieStore = await cookies();
     const organisationId = cookieStore.get("current_organisation_id")?.value;
@@ -37,14 +38,16 @@ export async function createProperty(
 
     const supabase = await createClient();
 
+    const propertyInsert: PropertyInsert = {
+      organisation_id: organisationId,
+      address: validatedData.address,
+      postcode: validatedData.postcode,
+      property_value: parseFloat(validatedData.propertyValue),
+    };
+
     const { data, error } = await supabase
       .from("properties")
-      .insert({
-        organisation_id: organisationId,
-        address: validatedData.address,
-        postcode: validatedData.postcode,
-        property_value: parseFloat(validatedData.propertyValue),
-      })
+      .insert(propertyInsert)
       .select()
       .single();
 
@@ -67,7 +70,7 @@ export async function createProperty(
 export async function updateProperty(
   prevState: ActionState,
   formData: FormData
-): Promise<ActionState> {
+): Promise<ActionState<Property>> {
   try {
     const propertyId = formData.get("id") as string;
 
@@ -83,13 +86,15 @@ export async function updateProperty(
 
     const supabase = await createClient();
 
+    const propertyUpdate: PropertyUpdate = {
+      address: validatedData.address,
+      postcode: validatedData.postcode,
+      property_value: parseFloat(validatedData.propertyValue),
+    };
+
     const { data, error } = await supabase
       .from("properties")
-      .update({
-        address: validatedData.address,
-        postcode: validatedData.postcode,
-        property_value: parseFloat(validatedData.propertyValue),
-      })
+      .update(propertyUpdate)
       .eq("id", propertyId)
       .select()
       .single();

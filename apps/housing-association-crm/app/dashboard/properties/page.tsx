@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { PropertyForm } from "@/app/dashboard/properties/_components/property-form";
 import { routes } from "@/lib/routes";
+import type { PropertyWithValuationSummary } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import {
   Table,
@@ -17,7 +18,9 @@ import { Badge } from "@/components/ui/Badge";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import Link from "next/link";
 
-async function getPropertiesWithValuations(orgId: string) {
+async function getPropertiesWithValuations(
+  orgId: string
+): Promise<PropertyWithValuationSummary[]> {
   const supabase = await createClient();
 
   const { data: properties } = await supabase
@@ -40,41 +43,44 @@ async function getPropertiesWithValuations(orgId: string) {
     .eq("organisation_id", orgId)
     .order("address");
 
-  return properties?.map((property) => {
-    const valuations = property.property_valuations || [];
-    const sortedValuations = valuations.sort(
-      (a, b) =>
-        new Date(b.valuation_date).getTime() -
-        new Date(a.valuation_date).getTime()
-    );
-    const latestValuation = sortedValuations[0];
+  return (
+    properties?.map((property): PropertyWithValuationSummary => {
+      const valuations = property.property_valuations || [];
+      const sortedValuations = valuations.sort(
+        (a, b) =>
+          new Date(b.valuation_date).getTime() -
+          new Date(a.valuation_date).getTime()
+      );
+      const latestValuation = sortedValuations[0];
 
-    // Calculate 12-month trend
-    const oldestValuation = valuations.sort(
-      (a, b) =>
-        new Date(a.valuation_date).getTime() -
-        new Date(b.valuation_date).getTime()
-    )[0];
-    const yearChange = oldestValuation
-      ? (
-          ((latestValuation?.estimated_value -
-            oldestValuation.estimated_value) /
-            oldestValuation.estimated_value) *
-          100
-        ).toFixed(2)
-      : "0";
+      // Calculate 12-month trend
+      const oldestValuation = valuations.sort(
+        (a, b) =>
+          new Date(a.valuation_date).getTime() -
+          new Date(b.valuation_date).getTime()
+      )[0];
+      const yearChange = oldestValuation
+        ? (
+            ((latestValuation?.estimated_value -
+              oldestValuation.estimated_value) /
+              oldestValuation.estimated_value) *
+            100
+          ).toFixed(2)
+        : "0";
 
-    return {
-      id: property.id,
-      address: property.address,
-      postcode: property.postcode,
-      originalValue: property.property_value,
-      currentValue: latestValuation?.estimated_value || property.property_value,
-      valuationDate: latestValuation?.valuation_date,
-      monthlyChange: latestValuation?.value_change_percent || 0,
-      yearlyChange: yearChange,
-    };
-  });
+      return {
+        id: property.id,
+        address: property.address,
+        postcode: property.postcode,
+        originalValue: property.property_value,
+        currentValue:
+          latestValuation?.estimated_value || property.property_value,
+        valuationDate: latestValuation?.valuation_date ?? null,
+        monthlyChange: latestValuation?.value_change_percent || 0,
+        yearlyChange: yearChange,
+      };
+    }) ?? []
+  );
 }
 
 function PropertiesLoading() {
@@ -110,10 +116,7 @@ async function PropertiesContent({ orgId }: { orgId: string }) {
     );
   }
 
-  const totalValue = properties.reduce(
-    (sum, p) => sum + parseFloat(p.currentValue),
-    0
-  );
+  const totalValue = properties.reduce((sum, p) => sum + p.currentValue, 0);
   const averageValue = totalValue / properties.length;
   const averageGrowth =
     properties.reduce((sum, p) => sum + parseFloat(p.yearlyChange), 0) /
@@ -209,20 +212,20 @@ async function PropertiesContent({ orgId }: { orgId: string }) {
                 </TableCell>
                 <TableCell className="font-semibold">
                   £
-                  {parseFloat(property.currentValue).toLocaleString("en-GB", {
+                  {property.currentValue.toLocaleString("en-GB", {
                     maximumFractionDigits: 0,
                   })}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-1">
-                    {parseFloat(property.monthlyChange) >= 0 ? (
+                    {property.monthlyChange >= 0 ? (
                       <TrendingUp className="size-4 text-green-600 dark:text-green-400" />
                     ) : (
                       <TrendingDown className="size-4 text-red-600 dark:text-red-400" />
                     )}
                     <span
                       className={
-                        parseFloat(property.monthlyChange) >= 0
+                        property.monthlyChange >= 0
                           ? "text-green-600 dark:text-green-400"
                           : "text-red-600 dark:text-red-400"
                       }

@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
+import type { FeedbackWithTenant } from "@/lib/types";
 import {
   Card,
   CardContent,
@@ -19,21 +20,6 @@ import {
 } from "@/components/ui/Table";
 import { Badge } from "@/components/ui/Badge";
 import { Star, MessageSquare, ThumbsUp, ThumbsDown, Minus } from "lucide-react";
-
-type FeedbackWithTenant = {
-  id: string;
-  nps_score: number | null;
-  satisfaction_score: number | null;
-  feedback_text: string | null;
-  category: string | null;
-  sentiment: string | null;
-  submitted_at: string | null;
-  tenants: {
-    first_name: string | null;
-    last_name: string | null;
-    email: string | null;
-  } | null;
-};
 
 async function getFeedback(orgId: string) {
   const supabase = await createClient();

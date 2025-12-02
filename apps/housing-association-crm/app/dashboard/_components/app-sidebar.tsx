@@ -26,15 +26,10 @@ import {
   SidebarRail,
 } from "@/components/ui/Sidebar";
 import { NavUser } from "@/app/dashboard/_components/nav-user";
-
-type Organisation = {
-  id: string;
-  name: string;
-  role: "admin" | "viewer";
-};
+import type { OrganisationWithRole } from "@/lib/types";
 
 type AppSidebarProps = {
-  organisations: Organisation[];
+  organisations: OrganisationWithRole[];
   currentOrganisationId: string | null;
 };
 

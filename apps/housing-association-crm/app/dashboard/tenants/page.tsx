@@ -3,9 +3,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
+import type { TenantWithProperty } from "@/lib/types";
 import { Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
 import {
   Table,
   TableBody,
@@ -46,11 +46,14 @@ export default async function TenantsPage() {
     .eq("organisation_id", currentOrgId)
     .order("created_at", { ascending: false });
 
+  // Type assertion for joined query
+  const typedTenants = tenants as TenantWithProperty[] | null;
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       <h1 className="text-3xl font-bold mb-8">Tenants</h1>
 
-      {!tenants || tenants.length === 0 ? (
+      {!typedTenants || typedTenants.length === 0 ? (
         <Card>
           <CardContent className="text-center py-12">
             <Users className="mx-auto size-12 text-muted-foreground" />
@@ -72,11 +75,11 @@ export default async function TenantsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {tenants.map((tenant) => {
+              {typedTenants.map((tenant) => {
                 const monthlyTotal =
-                  parseFloat(tenant.monthly_rent) +
-                  parseFloat(tenant.monthly_mortgage) +
-                  parseFloat(tenant.monthly_service_charge);
+                  tenant.monthly_rent +
+                  tenant.monthly_mortgage +
+                  tenant.monthly_service_charge;
 
                 return (
                   <TableRow key={tenant.id}>

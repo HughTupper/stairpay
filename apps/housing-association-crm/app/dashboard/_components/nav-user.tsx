@@ -31,18 +31,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/Sidebar";
-
-type Organisation = {
-  id: string;
-  name: string;
-  role: "admin" | "viewer";
-};
+import type { OrganisationWithRole } from "@/lib/types";
 
 export function NavUser({
   organisations,
   currentOrganisationId,
 }: {
-  organisations: Organisation[];
+  organisations: OrganisationWithRole[];
   currentOrganisationId: string | null;
 }) {
   const { isMobile } = useSidebar();
