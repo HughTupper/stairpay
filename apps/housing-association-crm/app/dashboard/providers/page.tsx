@@ -175,119 +175,123 @@ export default async function ProvidersPage() {
       ) : (
         <div className="space-y-8">
           {grouped &&
-            (Object.entries(grouped) as [string, any[]][]).map(([type, typeProviders]) => (
-              <div key={type}>
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">
-                    {providerTypeIcons[type] || "📋"}
-                  </span>
-                  <h2 className="text-2xl font-bold">
-                    {providerTypeLabels[type] || type}
-                  </h2>
-                  <Badge variant="secondary" className="ml-2">
-                    {typeProviders.length}
-                  </Badge>
-                </div>
+            (Object.entries(grouped) as [string, any[]][]).map(
+              ([type, typeProviders]) => (
+                <div key={type}>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-2xl">
+                      {providerTypeIcons[type] || "📋"}
+                    </span>
+                    <h2 className="text-2xl font-bold">
+                      {providerTypeLabels[type] || type}
+                    </h2>
+                    <Badge variant="secondary" className="ml-2">
+                      {typeProviders.length}
+                    </Badge>
+                  </div>
 
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {typeProviders.map((provider) => (
-                    <Card
-                      key={provider.id}
-                      className={
-                        provider.is_preferred ? "border-primary shadow-md" : ""
-                      }
-                    >
-                      <CardHeader>
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <CardTitle className="text-lg">
-                              {provider.company_name}
-                            </CardTitle>
-                            <CardDescription>
-                              {provider.contact_name}
-                            </CardDescription>
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {typeProviders.map((provider) => (
+                      <Card
+                        key={provider.id}
+                        className={
+                          provider.is_preferred
+                            ? "border-primary shadow-md"
+                            : ""
+                        }
+                      >
+                        <CardHeader>
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <CardTitle className="text-lg">
+                                {provider.company_name}
+                              </CardTitle>
+                              <CardDescription>
+                                {provider.contact_name}
+                              </CardDescription>
+                            </div>
+                            {provider.is_preferred && (
+                              <Badge className="bg-primary">
+                                <Star className="size-3 mr-1 fill-current" />
+                                Preferred
+                              </Badge>
+                            )}
                           </div>
-                          {provider.is_preferred && (
-                            <Badge className="bg-primary">
-                              <Star className="size-3 mr-1 fill-current" />
-                              Preferred
-                            </Badge>
-                          )}
-                        </div>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        {/* Contact Info */}
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2 text-sm">
-                            <Mail className="size-4 text-muted-foreground" />
-                            <a
-                              href={`mailto:${provider.email}`}
-                              className="text-primary hover:underline truncate"
-                            >
-                              {provider.email}
-                            </a>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm">
-                            <Phone className="size-4 text-muted-foreground" />
-                            <a
-                              href={`tel:${provider.phone}`}
-                              className="hover:underline"
-                            >
-                              {provider.phone}
-                            </a>
-                          </div>
-                          {provider.website && (
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          {/* Contact Info */}
+                          <div className="space-y-2">
                             <div className="flex items-center gap-2 text-sm">
-                              <Globe className="size-4 text-muted-foreground" />
+                              <Mail className="size-4 text-muted-foreground" />
                               <a
-                                href={provider.website}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                href={`mailto:${provider.email}`}
                                 className="text-primary hover:underline truncate"
                               >
-                                Visit website
+                                {provider.email}
                               </a>
                             </div>
-                          )}
-                        </div>
-
-                        {/* Specializations */}
-                        {provider.specializations &&
-                          provider.specializations.length > 0 && (
-                            <div>
-                              <div className="text-xs font-medium text-muted-foreground mb-2">
-                                Specializations
-                              </div>
-                              <div className="flex flex-wrap gap-1">
-                                {provider.specializations.map(
-                                  (spec: string) => (
-                                    <Badge key={spec} variant="outline">
-                                      {spec}
-                                    </Badge>
-                                  )
-                                )}
-                              </div>
+                            <div className="flex items-center gap-2 text-sm">
+                              <Phone className="size-4 text-muted-foreground" />
+                              <a
+                                href={`tel:${provider.phone}`}
+                                className="hover:underline"
+                              >
+                                {provider.phone}
+                              </a>
                             </div>
-                          )}
+                            {provider.website && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <Globe className="size-4 text-muted-foreground" />
+                                <a
+                                  href={provider.website}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-primary hover:underline truncate"
+                                >
+                                  Visit website
+                                </a>
+                              </div>
+                            )}
+                          </div>
 
-                        {/* Rating & Referrals */}
-                        <div className="flex items-center justify-between pt-2 border-t">
-                          <div className="flex items-center gap-1">
-                            <Star className="size-4 text-yellow-500 fill-yellow-500" />
-                            <span className="font-semibold">
-                              {provider.average_rating?.toFixed(1) || "N/A"}
-                            </span>
+                          {/* Specializations */}
+                          {provider.specializations &&
+                            provider.specializations.length > 0 && (
+                              <div>
+                                <div className="text-xs font-medium text-muted-foreground mb-2">
+                                  Specializations
+                                </div>
+                                <div className="flex flex-wrap gap-1">
+                                  {provider.specializations.map(
+                                    (spec: string) => (
+                                      <Badge key={spec} variant="outline">
+                                        {spec}
+                                      </Badge>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Rating & Referrals */}
+                          <div className="flex items-center justify-between pt-2 border-t">
+                            <div className="flex items-center gap-1">
+                              <Star className="size-4 text-yellow-500 fill-yellow-500" />
+                              <span className="font-semibold">
+                                {provider.average_rating?.toFixed(1) || "N/A"}
+                              </span>
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              {provider.total_referrals || 0} referrals
+                            </div>
                           </div>
-                          <div className="text-sm text-muted-foreground">
-                            {provider.total_referrals || 0} referrals
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
         </div>
       )}
 

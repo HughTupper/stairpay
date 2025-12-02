@@ -3,10 +3,10 @@ import { z } from "zod";
 
 /**
  * Type-safe environment variables for database tooling
- * 
+ *
  * Used by seed scripts and migration tools that need direct
  * database access via Supabase service role.
- * 
+ *
  * @see https://env.t3.gg/docs/core
  */
 export const env = createEnv({
@@ -14,8 +14,10 @@ export const env = createEnv({
     SUPABASE_URL: z
       .string()
       .url()
-      .describe("Supabase project URL (e.g., http://127.0.0.1:54321 for local)"),
-    
+      .describe(
+        "Supabase project URL (e.g., http://127.0.0.1:54321 for local)"
+      ),
+
     SUPABASE_SERVICE_ROLE_KEY: z
       .string()
       .min(1)
@@ -28,6 +30,6 @@ export const env = createEnv({
   },
 
   emptyStringAsUndefined: true,
-  
+
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });

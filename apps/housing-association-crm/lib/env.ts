@@ -3,10 +3,10 @@ import { z } from "zod";
 
 /**
  * Type-safe environment variables for the Housing Association CRM
- * 
+ *
  * This validates all environment variables at build time and runtime,
  * ensuring the application fails fast if configuration is missing or invalid.
- * 
+ *
  * @see https://env.t3.gg/docs/nextjs
  */
 export const env = createEnv({
@@ -18,7 +18,7 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "production", "test"])
       .default("development"),
-    
+
     // Optional: Service role key for server-side Supabase operations
     SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
   },
@@ -40,7 +40,7 @@ export const env = createEnv({
     // Server
     NODE_ENV: process.env.NODE_ENV,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-    
+
     // Client
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
