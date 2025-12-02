@@ -15,6 +15,10 @@ export const routes = {
     properties: "/dashboard/properties",
     tenants: "/dashboard/tenants",
     tenant: (id: string) => `/dashboard/tenants/${id}`,
+    valuations: "/dashboard/valuations",
+    campaigns: "/dashboard/campaigns",
+    providers: "/dashboard/providers",
+    feedback: "/dashboard/feedback",
   },
 
   // API routes

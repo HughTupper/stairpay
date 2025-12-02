@@ -33,13 +33,25 @@ export function OrganisationSwitcher({
   );
 
   const handleSwitch = async (orgId: string) => {
-    // Set cookie with selected organisation
-    await fetch(routes.api.organisationSwitch, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ organisationId: orgId }),
-    });
-    router.refresh();
+    if (orgId === currentOrganisationId) {
+      return; // Already selected
+    }
+
+    try {
+      // Set cookie with selected organisation
+      const response = await fetch(routes.api.organisationSwitch, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ organisationId: orgId }),
+      });
+
+      if (response.ok) {
+        // Force a full page reload to ensure cookie is properly read
+        window.location.href = routes.dashboard.root;
+      }
+    } catch (error) {
+      console.error("Failed to switch organisation:", error);
+    }
   };
 
   if (organisations.length === 0) {

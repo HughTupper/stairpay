@@ -50,6 +50,35 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // If user is logged in and accessing dashboard but has no org selected,
+  // automatically select their first organization
+  if (
+    user &&
+    request.nextUrl.pathname.startsWith(routes.dashboard.root) &&
+    !request.cookies.get("current_organisation_id")
+  ) {
+    const { data: userOrgs } = await supabase
+      .from("user_organisations")
+      .select("organisation_id")
+      .eq("user_id", user.id)
+      .limit(1)
+      .single();
+
+    if (userOrgs) {
+      supabaseResponse.cookies.set(
+        "current_organisation_id",
+        userOrgs.organisation_id,
+        {
+          path: "/",
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+        }
+      );
+    }
+  }
+
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:

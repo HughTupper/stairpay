@@ -17,10 +17,20 @@ export async function POST(request: Request) {
 
     const supabase = await createClient();
 
+    // Get current user
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
     // Verify user has access to this organisation
     const { data, error } = await supabase
       .from("user_organisations")
       .select("organisation_id")
+      .eq("user_id", user.id)
       .eq("organisation_id", organisationId)
       .single();
 
@@ -28,16 +38,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
-    // Set cookie with organisation ID
-    const cookieStore = await cookies();
-    cookieStore.set("current_organisation_id", organisationId, {
+    // Create response and set cookie
+    const response = NextResponse.json({ success: true });
+    response.cookies.set("current_organisation_id", organisationId, {
+      path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });
 
-    return NextResponse.json({ success: true });
+    return response;
   } catch {
     return NextResponse.json(
       { error: "Internal server error" },
@@ -55,24 +66,34 @@ export async function GET(request: Request) {
   if (organisationId) {
     const supabase = await createClient();
 
+    // Get current user
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
     // Verify user has access to this organisation
     const { data, error } = await supabase
       .from("user_organisations")
       .select("organisation_id")
+      .eq("user_id", user.id)
       .eq("organisation_id", organisationId)
       .single();
 
     if (!error && data) {
-      // Set cookie with organisation ID
-      const cookieStore = await cookies();
-      cookieStore.set("current_organisation_id", organisationId, {
+      // Create redirect response and set cookie
+      const response = NextResponse.redirect(new URL(returnUrl, request.url));
+      response.cookies.set("current_organisation_id", organisationId, {
+        path: "/",
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: 60 * 60 * 24 * 30, // 30 days
       });
-
-      redirect(returnUrl);
+      return response;
     }
   }
 

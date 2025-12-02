@@ -442,3 +442,10 @@ Why?
 - Add some colour
 - Link details on dashboard page
 - How does shadcn components work? Do they update? Does that mean we can restructure the folder and have tests and storybook files on each one? Or should we rely on the shadcn for testing?
+- Understand how types are being generated and shared
+- understand the Expand-Migrate-Contract pattern for zero-downtime deployments
+- is it better to do commands like `npx supabase stop` or should we install supabase locally?
+
+- Used AI to scan your site for:
+  - colours schemes (used your business pages)
+  - More understanding of your product, to then replicate similar functionality.

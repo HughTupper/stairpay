@@ -36,10 +36,37 @@ export async function signIn(
     });
 
     const supabase = await createClient();
-    const { error } = await supabase.auth.signInWithPassword(validatedData);
+    const { data, error } = await supabase.auth.signInWithPassword(
+      validatedData
+    );
 
     if (error) {
       return { error: error.message };
+    }
+
+    if (!data.user) {
+      return { error: "Failed to sign in" };
+    }
+
+    // Automatically select the first organization the user belongs to
+    const { data: userOrgs } = await supabase
+      .from("user_organisations")
+      .select("organisation_id")
+      .eq("user_id", data.user.id)
+      .limit(1)
+      .single();
+
+    if (userOrgs) {
+      // Set the organization cookie
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+      cookieStore.set("current_organisation_id", userOrgs.organisation_id, {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+      });
     }
 
     return { success: true };
@@ -101,6 +128,17 @@ export async function signUp(
     if (linkError) {
       return { error: "Failed to link user to organisation" };
     }
+
+    // Automatically select the newly created organization
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    cookieStore.set("current_organisation_id", orgData.id, {
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+    });
 
     return { success: true };
   } catch (error) {

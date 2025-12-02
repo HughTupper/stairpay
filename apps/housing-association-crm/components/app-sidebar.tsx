@@ -1,6 +1,14 @@
 "use client";
 
-import { Home, Building2, Users } from "lucide-react";
+import {
+  Home,
+  Building2,
+  Users,
+  TrendingUp,
+  Megaphone,
+  Briefcase,
+  MessageSquare,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { routes } from "@/lib/routes";
@@ -10,6 +18,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -29,7 +38,7 @@ type AppSidebarProps = {
   currentOrganisationId: string | null;
 };
 
-const navItems = [
+const coreNavItems = [
   {
     title: "Dashboard",
     url: routes.dashboard.root,
@@ -44,6 +53,29 @@ const navItems = [
     title: "Tenants",
     url: routes.dashboard.tenants,
     icon: Users,
+  },
+];
+
+const stairpayFeatures = [
+  {
+    title: "Valuations",
+    url: routes.dashboard.valuations,
+    icon: TrendingUp,
+  },
+  {
+    title: "Campaigns",
+    url: routes.dashboard.campaigns,
+    icon: Megaphone,
+  },
+  {
+    title: "Service Providers",
+    url: routes.dashboard.providers,
+    icon: Briefcase,
+  },
+  {
+    title: "Feedback",
+    url: routes.dashboard.feedback,
+    icon: MessageSquare,
   },
 ];
 
@@ -76,7 +108,27 @@ export function AppSidebar({
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => {
+              {coreNavItems.map((item) => {
+                const isActive = pathname === item.url;
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={isActive}>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>StairPay Features</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {stairpayFeatures.map((item) => {
                 const isActive = pathname === item.url;
                 return (
                   <SidebarMenuItem key={item.title}>
