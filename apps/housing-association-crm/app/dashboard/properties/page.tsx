@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { PropertyForm } from "@/components/property-form";
+import { PropertyForm } from "@/app/dashboard/properties/_components/property-form";
 import { routes } from "@/lib/routes";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import {

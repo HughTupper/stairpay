@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/app/dashboard/_components/app-sidebar";
 import {
   SidebarInset,
   SidebarProvider,

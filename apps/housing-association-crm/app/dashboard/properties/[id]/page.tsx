@@ -20,7 +20,7 @@ import {
   Phone,
 } from "lucide-react";
 import Link from "next/link";
-import { ValuationChart } from "@/components/valuation-chart";
+import { ValuationChart } from "@/app/dashboard/properties/[id]/_components/valuation-chart";
 
 async function getPropertyDetails(propertyId: string, orgId: string) {
   const supabase = await createClient();

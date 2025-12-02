@@ -25,7 +25,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/Sidebar";
-import { NavUser } from "@/components/nav-user";
+import { NavUser } from "@/app/dashboard/_components/nav-user";
 
 type Organisation = {
   id: string;

@@ -1,7 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { env } from "@/lib/env";
 

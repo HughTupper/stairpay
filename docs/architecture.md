@@ -539,3 +539,9 @@ Why?
   - More understanding of your product, to then replicate similar functionality.
 - Would need to implement pagination on lists
 - using T3 Env for validation of envionment variables and making them type safe. https://env.t3.gg/
+- Testing
+  - Unit testing with Vitest (function tests)
+  - Component testing with Vitest (user centric user tests) (basic implemented)
+  - Component Snapshot testing (component code output checks)
+  - Integration tests with Playwright (larger user centric user tests and mocked apis)
+  - E2E with Playwright (larger user centric user tests)
