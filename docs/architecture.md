@@ -527,6 +527,7 @@ Why?
 - How should rollback migrations be handled?
 - Implement colocation
 - check for any 'any' types
+- playwright tests
 
 - Use optimistic
 - Server action forms
