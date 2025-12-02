@@ -41,7 +41,7 @@ async function getPropertiesWithValuations(orgId: string) {
     .order("address");
 
   return properties?.map((property) => {
-    const valuations = (property.property_valuations as any[]) || [];
+    const valuations = property.property_valuations || [];
     const sortedValuations = valuations.sort(
       (a, b) =>
         new Date(b.valuation_date).getTime() -

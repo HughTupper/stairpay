@@ -665,7 +665,7 @@ async function seedDatabase() {
 
         // Calculate readiness score based on multiple factors
         let readinessScore = 0;
-        const factors: any = {
+        const factors = {
           current_equity: tenant.current_equity_percentage,
           property_value_trend: "increasing",
           time_as_tenant: 0,

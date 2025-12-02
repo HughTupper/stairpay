@@ -11,16 +11,21 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, Star, Mail, Phone, Globe, TrendingUp } from "lucide-react";
+import type { Database } from "@stairpay/database/types/database";
+
+type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
 
 async function getServiceProviders(orgId: string) {
   const supabase = await createClient();
 
-  const { data: providers } = await supabase
+  const { data: providers } = (await supabase
     .from("service_providers")
     .select("*")
     .eq("organisation_id", orgId)
     .order("is_preferred", { ascending: false })
-    .order("average_rating", { ascending: false });
+    .order("average_rating", { ascending: false })) as {
+    data: ServiceProvider[] | null;
+  };
 
   // Group by provider type
   const grouped = providers?.reduce((acc, provider) => {
@@ -29,7 +34,7 @@ async function getServiceProviders(orgId: string) {
     }
     acc[provider.provider_type].push(provider);
     return acc;
-  }, {} as Record<string, any[]>);
+  }, {} as Record<string, ServiceProvider[]>);
 
   return { providers, grouped };
 }
@@ -175,7 +180,7 @@ export default async function ProvidersPage() {
       ) : (
         <div className="space-y-8">
           {grouped &&
-            (Object.entries(grouped) as [string, any[]][]).map(
+            (Object.entries(grouped) as [string, ServiceProvider[]][]).map(
               ([type, typeProviders]) => (
                 <div key={type}>
                   <div className="flex items-center gap-2 mb-4">

@@ -96,7 +96,7 @@ export default async function PropertyDetailPage({
     notFound();
   }
 
-  const valuations = (property.property_valuations as any[]) || [];
+  const valuations = property.property_valuations || [];
   const sortedValuations = valuations.sort(
     (a, b) =>
       new Date(a.valuation_date).getTime() -
@@ -127,7 +127,7 @@ export default async function PropertyDetailPage({
     value: parseFloat(val.estimated_value),
   }));
 
-  const tenant = (property.tenants as any[])?.[0];
+  const tenant = property.tenants?.[0];
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

@@ -20,10 +20,25 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Star, MessageSquare, ThumbsUp, ThumbsDown, Minus } from "lucide-react";
 
+type FeedbackWithTenant = {
+  id: string;
+  nps_score: number | null;
+  satisfaction_score: number | null;
+  feedback_text: string | null;
+  category: string | null;
+  sentiment: string | null;
+  submitted_at: string | null;
+  tenants: {
+    first_name: string | null;
+    last_name: string | null;
+    email: string | null;
+  } | null;
+};
+
 async function getFeedback(orgId: string) {
   const supabase = await createClient();
 
-  const { data: feedback } = await supabase
+  const { data: feedback } = (await supabase
     .from("resident_feedback")
     .select(
       `
@@ -42,7 +57,9 @@ async function getFeedback(orgId: string) {
     `
     )
     .eq("organisation_id", orgId)
-    .order("submitted_at", { ascending: false });
+    .order("submitted_at", { ascending: false })) as {
+    data: FeedbackWithTenant[] | null;
+  };
 
   // Calculate metrics
   const avgNPS =
@@ -382,7 +399,7 @@ export default async function FeedbackPage() {
               </TableHeader>
               <TableBody>
                 {metrics.feedback.slice(0, 20).map((item) => {
-                  const tenant = item.tenants as any;
+                  const tenant = item.tenants;
                   return (
                     <TableRow key={item.id}>
                       <TableCell>

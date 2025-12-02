@@ -295,7 +295,7 @@ export default async function CampaignsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {campaigns?.map((campaign) => {
-              const triggers = (campaign.campaign_triggers as any[]) || [];
+              const triggers = campaign.campaign_triggers || [];
               return triggers.map((trigger) => (
                 <div
                   key={trigger.id}
@@ -325,9 +325,7 @@ export default async function CampaignsPage() {
             })}
             {(!campaigns ||
               campaigns.every(
-                (c) =>
-                  !(c.campaign_triggers as any[]) ||
-                  (c.campaign_triggers as any[]).length === 0
+                (c) => !c.campaign_triggers || c.campaign_triggers.length === 0
               )) && (
               <p className="text-sm text-muted-foreground text-center py-8">
                 No triggers configured yet
@@ -350,8 +348,8 @@ export default async function CampaignsPage() {
                 Equity Threshold Campaigns
               </div>
               <div className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                Target residents who reach 50% equity - they're most likely to
-                consider full staircasing. Average conversion: 16%.
+                Target residents who reach 50% equity - they&apos;re most likely
+                to consider full staircasing. Average conversion: 16%.
               </div>
             </div>
             <div className="rounded-lg bg-purple-50 dark:bg-purple-950 p-4">
@@ -360,7 +358,7 @@ export default async function CampaignsPage() {
                 Anniversary Timing
               </div>
               <div className="text-sm text-purple-700 dark:text-purple-300 mt-1">
-                Contact residents on move-in anniversaries when they're
+                Contact residents on move-in anniversaries when they&apos;re
                 reflecting on their journey. Engagement rates 2x higher.
               </div>
             </div>
