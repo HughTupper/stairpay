@@ -147,32 +147,32 @@ Rollback migrations safely remove changes if needed.
 
 ```bash
 # Start local Supabase
-supabase start
+npm run db:start
 
 # Reset database (drops all data, applies all migrations)
-supabase db reset
+npm run db:reset
 
-# Apply only new migrations
-supabase migration up
+# Apply only new migrations (handled by db:reset)
+npm run db:reset
 
 # Generate TypeScript types
-supabase gen types typescript --local > types/database.ts
+npm run db:types
 
 # Run seed script
-npm run seed
+npm run db:seed
 ```
 
 ### Production Deployment
 
 ```bash
 # Apply migrations to remote database
-supabase db push
+npm run db:push
 
 # Generate types from remote
-supabase gen types typescript > types/database.ts
+npm run db:types:remote
 
 # Rollback (apply rollback migration, then push)
-supabase db push
+npm run db:push
 ```
 
 ## The Expand-Migrate-Contract Pattern
@@ -214,7 +214,7 @@ ALTER TABLE tenants DROP COLUMN old_field;
 After running migrations, regenerate TypeScript types:
 
 ```bash
-supabase gen types typescript > packages/database/types/database.ts
+npm run db:types
 ```
 
 This creates type-safe interfaces for all tables:
@@ -233,6 +233,8 @@ type MarketingCampaign =
 - Autocomplete in IDE
 - Compile-time errors for invalid queries
 - Refactoring safety across apps
+
+**Note:** PostgreSQL `DECIMAL` and `NUMERIC` fields are typed as `number` in TypeScript, so no `parseFloat()` conversion is needed when working with generated types.
 
 ## Testing Migrations
 

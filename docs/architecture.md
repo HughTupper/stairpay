@@ -1,5 +1,3 @@
-<!-- TODO review  -->
-
 # StairPay Architecture
 
 ## Overview
@@ -83,6 +81,13 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 - Type generation published as package
 - Infrastructure for Supabase provisioning colocated
 
+**Type Usage Pattern**:
+
+- Auto-generated types in `packages/database/types/database.ts`
+- Type utilities in app-specific `lib/types.ts` (helper types, joined query types)
+- Explicit types for public APIs (Server Actions, page props)
+- Type inference for internal helpers
+
 ### Multi-Tenancy
 
 **Decision**: Session-based organization context + PostgreSQL RLS.
@@ -147,7 +152,7 @@ Main → Deploy → Health Check → Success/Rollback
 **`packages/`** - Reusable code libraries
 
 - `database/` - Supabase schema, migrations, types
-- `shared-types/` - Common TypeScript types
+- `shared-types/` - Application-level abstractions (ActionState)
 - Future: `ui/`, `utils/`, `config/`
 
 **Rationale**:
@@ -495,42 +500,3 @@ This architecture balances:
 - **Cost** - Efficient, pay-per-use model
 
 Built for a technical assessment but designed for production use at scale.
-
----
-
-Notes
-
-Why?
-
-- Supabase migrations, staging environments, pipelines
-- Ops as code look at supabase CLI.
-
-- Read into npm workspaces more
-- create an account that can access all orgs to show org switching
-
-- Check how migrations work, and rollback
-- Check RLS works with multi org
-- Check signup works
-- How does shadcn components work? Do they update? Does that mean we can restructure the folder and have tests and storybook files on each one? Or should we rely on the shadcn for testing?
-- Understand how types are being generated and shared
-- understand the Expand-Migrate-Contract pattern for zero-downtime deployments
-- is it better to do commands like `npx supabase stop` or should we install supabase locally?
-- How should rollback migrations be handled?
-
-- Used AI to scan your site for:
-  - colours schemes (used your business pages)
-  - grab your favicon and icon for reuse
-  - More understanding of your product, to then replicate similar functionality.
-- Would need to implement pagination on lists
-- using T3 Env for validation of envionment variables and making them type safe. https://env.t3.gg/
-- Testing
-  - Unit testing with Vitest (function tests)
-  - Component testing with Vitest (user centric user tests) (basic implemented)
-  - Component Snapshot testing (component code output checks)
-  - Integration tests with Playwright (larger user centric user tests and mocked apis)
-  - E2E with Playwright (larger user centric user tests)
-- Code Colocation (components, page components, infrastructure)
-- Relook at typing generated from DB. I dont like how its currently abstracted
-- Supabase auth. Cloudflare turnstile - https://supabase.com/docs/guides/auth/auth-captcha. cloudflare.com/application-services/products/turnstile/
-- Using CDK instead of Terraform
-- The Expand-Migrate-Contract Pattern - DB updates without downtime
