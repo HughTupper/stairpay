@@ -312,9 +312,7 @@ export default async function PropertyDetailPage({
                 <span className="text-sm text-muted-foreground">
                   Equity Ownership
                 </span>
-                <Badge variant="secondary">
-                  {tenant.current_equity_percentage}%
-                </Badge>
+                <Badge>{tenant.current_equity_percentage}%</Badge>
               </div>
             </div>
           ) : (

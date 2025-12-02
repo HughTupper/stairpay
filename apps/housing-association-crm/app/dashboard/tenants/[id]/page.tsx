@@ -85,9 +85,12 @@ export default async function TenantDetailPage({ params }: PageProps) {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Property</p>
-                  <p className="text-sm font-medium">
+                  <Link
+                    href={routes.dashboard.property(tenant.properties.id)}
+                    className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
+                  >
                     {tenant.properties.address}
-                  </p>
+                  </Link>
                   <p className="text-xs text-muted-foreground">
                     {tenant.properties.postcode}
                   </p>
