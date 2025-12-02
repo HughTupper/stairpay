@@ -63,7 +63,10 @@ describe("Input", () => {
       render(<Input disabled />);
       const input = screen.getByRole("textbox");
       expect(input).toBeDisabled();
-      expect(input).toHaveClass("disabled:pointer-events-none", "disabled:opacity-50");
+      expect(input).toHaveClass(
+        "disabled:pointer-events-none",
+        "disabled:opacity-50"
+      );
     });
 
     it("can be readonly", () => {
@@ -89,7 +92,7 @@ describe("Input", () => {
       const user = userEvent.setup();
       render(<Input />);
       const input = screen.getByRole("textbox");
-      
+
       await user.type(input, "Hello World");
       expect(input).toHaveValue("Hello World");
     });
@@ -135,7 +138,7 @@ describe("Input", () => {
     it("can be focused with keyboard", async () => {
       const user = userEvent.setup();
       render(<Input />);
-      
+
       await user.tab();
       expect(screen.getByRole("textbox")).toHaveFocus();
     });
@@ -165,7 +168,10 @@ describe("Input", () => {
           <Input aria-labelledby="email-label" />
         </>
       );
-      expect(screen.getByRole("textbox")).toHaveAttribute("aria-labelledby", "email-label");
+      expect(screen.getByRole("textbox")).toHaveAttribute(
+        "aria-labelledby",
+        "email-label"
+      );
     });
   });
 
@@ -175,16 +181,13 @@ describe("Input", () => {
       const ControlledInput = () => {
         const [value, setValue] = React.useState("");
         return (
-          <Input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-          />
+          <Input value={value} onChange={(e) => setValue(e.target.value)} />
         );
       };
 
       render(<ControlledInput />);
       const input = screen.getByRole("textbox");
-      
+
       await user.type(input, "controlled");
       expect(input).toHaveValue("controlled");
     });

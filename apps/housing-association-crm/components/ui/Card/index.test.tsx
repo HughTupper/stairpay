@@ -25,14 +25,23 @@ describe("Card", () => {
     });
 
     it("applies custom className", () => {
-      render(<Card className="custom-class" data-testid="card">Card</Card>);
+      render(
+        <Card className="custom-class" data-testid="card">
+          Card
+        </Card>
+      );
       expect(screen.getByTestId("card")).toHaveClass("custom-class");
     });
 
     it("has default styling classes", () => {
       render(<Card data-testid="card">Card</Card>);
       const card = screen.getByTestId("card");
-      expect(card).toHaveClass("bg-card", "text-card-foreground", "rounded-xl", "border");
+      expect(card).toHaveClass(
+        "bg-card",
+        "text-card-foreground",
+        "rounded-xl",
+        "border"
+      );
     });
   });
 
@@ -45,7 +54,11 @@ describe("Card", () => {
     });
 
     it("applies custom className to CardHeader", () => {
-      render(<CardHeader className="custom-header" data-testid="header">Header</CardHeader>);
+      render(
+        <CardHeader className="custom-header" data-testid="header">
+          Header
+        </CardHeader>
+      );
       expect(screen.getByTestId("header")).toHaveClass("custom-header");
     });
   });
@@ -73,8 +86,12 @@ describe("Card", () => {
     });
 
     it("has muted text styling", () => {
-      render(<CardDescription data-testid="description">Description</CardDescription>);
-      expect(screen.getByTestId("description")).toHaveClass("text-muted-foreground");
+      render(
+        <CardDescription data-testid="description">Description</CardDescription>
+      );
+      expect(screen.getByTestId("description")).toHaveClass(
+        "text-muted-foreground"
+      );
     });
   });
 
@@ -161,7 +178,10 @@ describe("Card", () => {
           Content
         </Card>
       );
-      expect(screen.getByTestId("card")).toHaveAttribute("aria-label", "User profile card");
+      expect(screen.getByTestId("card")).toHaveAttribute(
+        "aria-label",
+        "User profile card"
+      );
     });
 
     it("supports role attribute", () => {

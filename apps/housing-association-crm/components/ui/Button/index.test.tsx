@@ -7,7 +7,9 @@ describe("Button", () => {
   describe("Rendering", () => {
     it("renders with children", () => {
       render(<Button>Click me</Button>);
-      expect(screen.getByRole("button", { name: "Click me" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Click me" })
+      ).toBeInTheDocument();
     });
 
     it("renders as a child component when asChild is true", () => {
@@ -90,19 +92,31 @@ describe("Button", () => {
     });
 
     it("renders icon size", () => {
-      render(<Button size="icon" aria-label="Icon button">🔍</Button>);
+      render(
+        <Button size="icon" aria-label="Icon button">
+          🔍
+        </Button>
+      );
       const button = screen.getByRole("button");
       expect(button).toHaveClass("size-9");
     });
 
     it("renders icon-sm size", () => {
-      render(<Button size="icon-sm" aria-label="Small icon">🔍</Button>);
+      render(
+        <Button size="icon-sm" aria-label="Small icon">
+          🔍
+        </Button>
+      );
       const button = screen.getByRole("button");
       expect(button).toHaveClass("size-8");
     });
 
     it("renders icon-lg size", () => {
-      render(<Button size="icon-lg" aria-label="Large icon">🔍</Button>);
+      render(
+        <Button size="icon-lg" aria-label="Large icon">
+          🔍
+        </Button>
+      );
       const button = screen.getByRole("button");
       expect(button).toHaveClass("size-10");
     });
@@ -113,7 +127,10 @@ describe("Button", () => {
       render(<Button disabled>Disabled</Button>);
       const button = screen.getByRole("button");
       expect(button).toBeDisabled();
-      expect(button).toHaveClass("disabled:pointer-events-none", "disabled:opacity-50");
+      expect(button).toHaveClass(
+        "disabled:pointer-events-none",
+        "disabled:opacity-50"
+      );
     });
 
     it("supports aria-invalid attribute", () => {
@@ -144,7 +161,11 @@ describe("Button", () => {
         clicked = true;
       };
 
-      render(<Button onClick={handleClick} disabled>Disabled</Button>);
+      render(
+        <Button onClick={handleClick} disabled>
+          Disabled
+        </Button>
+      );
       await user.click(screen.getByRole("button"));
       expect(clicked).toBe(false);
     });
@@ -152,7 +173,7 @@ describe("Button", () => {
     it("can be focused with keyboard", async () => {
       const user = userEvent.setup();
       render(<Button>Focus me</Button>);
-      
+
       await user.tab();
       expect(screen.getByRole("button")).toHaveFocus();
     });
@@ -194,7 +215,9 @@ describe("Button", () => {
 
     it("supports aria-label", () => {
       render(<Button aria-label="Close dialog">×</Button>);
-      expect(screen.getByRole("button", { name: "Close dialog" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Close dialog" })
+      ).toBeInTheDocument();
     });
 
     it("supports custom type attribute", () => {

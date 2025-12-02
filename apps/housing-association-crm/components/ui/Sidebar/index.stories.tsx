@@ -223,7 +223,9 @@ export const Collapsible: Story = {
           <h1 className="text-xl font-semibold">Collapsible Sidebar</h1>
         </header>
         <div className="flex-1 p-4">
-          <p>Click the trigger to toggle the sidebar between icon and full width</p>
+          <p>
+            Click the trigger to toggle the sidebar between icon and full width
+          </p>
         </div>
       </SidebarInset>
     </SidebarProvider>

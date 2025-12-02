@@ -6,7 +6,9 @@ describe("Skeleton", () => {
   describe("Rendering", () => {
     it("renders without crashing", () => {
       const { container } = render(<Skeleton />);
-      expect(container.querySelector('[data-slot="skeleton"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="skeleton"]')
+      ).toBeInTheDocument();
     });
 
     it("applies custom className", () => {
@@ -17,7 +19,9 @@ describe("Skeleton", () => {
 
     it("includes data-slot attribute", () => {
       const { container } = render(<Skeleton />);
-      expect(container.querySelector('[data-slot="skeleton"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="skeleton"]')
+      ).toBeInTheDocument();
     });
 
     it("has default styling classes", () => {

@@ -48,8 +48,10 @@ describe("Label", () => {
         </>
       );
       const label = screen.getByText("Clickable");
-      const input = document.getElementById("clickable-input") as HTMLInputElement;
-      
+      const input = document.getElementById(
+        "clickable-input"
+      ) as HTMLInputElement;
+
       await user.click(label);
       expect(input).toHaveFocus();
     });
@@ -64,7 +66,10 @@ describe("Label", () => {
         </div>
       );
       const label = screen.getByTestId("label");
-      expect(label).toHaveClass("peer-disabled:cursor-not-allowed", "peer-disabled:opacity-50");
+      expect(label).toHaveClass(
+        "peer-disabled:cursor-not-allowed",
+        "peer-disabled:opacity-50"
+      );
     });
   });
 
@@ -77,7 +82,10 @@ describe("Label", () => {
 
     it("supports aria-label", () => {
       render(<Label aria-label="Custom aria label">Label</Label>);
-      expect(screen.getByText("Label")).toHaveAttribute("aria-label", "Custom aria label");
+      expect(screen.getByText("Label")).toHaveAttribute(
+        "aria-label",
+        "Custom aria label"
+      );
     });
   });
 

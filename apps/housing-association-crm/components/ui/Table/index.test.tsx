@@ -23,7 +23,9 @@ describe("Table", () => {
           </TableBody>
         </Table>
       );
-      expect(container.querySelector('[data-slot="table"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="table"]')
+      ).toBeInTheDocument();
     });
 
     it("renders with custom className", () => {
@@ -50,7 +52,9 @@ describe("Table", () => {
           </TableBody>
         </Table>
       );
-      expect(container.querySelector('[data-slot="table-container"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="table-container"]')
+      ).toBeInTheDocument();
     });
   });
 
@@ -65,7 +69,9 @@ describe("Table", () => {
           </TableHeader>
         </Table>
       );
-      expect(container.querySelector('[data-slot="table-header"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="table-header"]')
+      ).toBeInTheDocument();
     });
 
     it("renders table head cells", () => {
@@ -109,7 +115,9 @@ describe("Table", () => {
           </TableBody>
         </Table>
       );
-      expect(container.querySelector('[data-slot="table-body"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="table-body"]')
+      ).toBeInTheDocument();
     });
 
     it("renders multiple rows", () => {
@@ -158,7 +166,9 @@ describe("Table", () => {
           </TableFooter>
         </Table>
       );
-      expect(container.querySelector('[data-slot="table-footer"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="table-footer"]')
+      ).toBeInTheDocument();
     });
 
     it("applies footer styling", () => {
@@ -187,7 +197,9 @@ describe("Table", () => {
           </TableBody>
         </Table>
       );
-      expect(container.querySelector('[data-slot="table-row"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="table-row"]')
+      ).toBeInTheDocument();
     });
 
     it("supports selected state", () => {
@@ -325,7 +337,7 @@ describe("Table", () => {
           </TableBody>
         </Table>
       );
-      
+
       expect(screen.getByRole("table")).toBeInTheDocument();
       expect(screen.getAllByRole("rowgroup")).toHaveLength(2); // thead and tbody
       expect(screen.getAllByRole("row")).toHaveLength(2);
@@ -390,7 +402,9 @@ describe("Table", () => {
           </TableBody>
         </Table>
       );
-      const tableContainer = container.querySelector('[data-slot="table-container"]');
+      const tableContainer = container.querySelector(
+        '[data-slot="table-container"]'
+      );
       expect(tableContainer).toHaveClass("overflow-x-auto");
     });
   });

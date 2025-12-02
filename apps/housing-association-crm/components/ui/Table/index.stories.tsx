@@ -323,7 +323,7 @@ export const LargeDataset: Story = {
       <TableBody>
         {Array.from({ length: 10 }).map((_, i) => (
           <TableRow key={i}>
-            <TableCell>{String(i + 1).padStart(3, '0')}</TableCell>
+            <TableCell>{String(i + 1).padStart(3, "0")}</TableCell>
             <TableCell>Employee {i + 1}</TableCell>
             <TableCell>employee{i + 1}@example.com</TableCell>
             <TableCell>Department {(i % 3) + 1}</TableCell>

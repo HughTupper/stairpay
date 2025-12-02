@@ -68,14 +68,16 @@ describe("DropdownMenu", () => {
     it("calls onSelect when item is clicked", async () => {
       const user = userEvent.setup();
       const handleSelect = vi.fn();
-      
+
       render(
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button>Open</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onSelect={handleSelect}>Click me</DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleSelect}>
+              Click me
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -189,14 +191,14 @@ describe("DropdownMenu", () => {
     it("toggles checkbox state", async () => {
       const user = userEvent.setup();
       const handleChange = vi.fn();
-      
+
       render(
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button>Menu</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuCheckboxItem 
+            <DropdownMenuCheckboxItem
               checked={false}
               onCheckedChange={handleChange}
             >
@@ -338,7 +340,7 @@ describe("DropdownMenu", () => {
 
       const trigger = screen.getByRole("button");
       expect(trigger).toHaveAttribute("aria-haspopup");
-      
+
       await user.click(trigger);
       expect(trigger).toHaveAttribute("aria-expanded", "true");
     });
@@ -359,7 +361,7 @@ describe("DropdownMenu", () => {
 
       const trigger = screen.getByRole("button");
       await user.click(trigger);
-      
+
       // Menu should be open
       expect(screen.getByText("First")).toBeInTheDocument();
     });

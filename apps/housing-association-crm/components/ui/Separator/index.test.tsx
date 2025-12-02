@@ -6,7 +6,9 @@ describe("Separator", () => {
   describe("Rendering", () => {
     it("renders without crashing", () => {
       const { container } = render(<Separator />);
-      expect(container.querySelector('[data-slot="separator"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="separator"]')
+      ).toBeInTheDocument();
     });
 
     it("applies custom className", () => {
@@ -17,7 +19,9 @@ describe("Separator", () => {
 
     it("includes data-slot attribute", () => {
       const { container } = render(<Separator />);
-      expect(container.querySelector('[data-slot="separator"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="separator"]')
+      ).toBeInTheDocument();
     });
   });
 
@@ -106,7 +110,9 @@ describe("Separator", () => {
           <div>Content 2</div>
         </div>
       );
-      expect(container.querySelector('[data-slot="separator"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="separator"]')
+      ).toBeInTheDocument();
     });
 
     it("renders in flex container with vertical orientation", () => {
@@ -122,9 +128,7 @@ describe("Separator", () => {
     });
 
     it("applies custom styling", () => {
-      const { container } = render(
-        <Separator className="bg-red-500 h-1" />
-      );
+      const { container } = render(<Separator className="bg-red-500 h-1" />);
       const separator = container.querySelector('[data-slot="separator"]');
       expect(separator).toHaveClass("bg-red-500", "h-1");
     });

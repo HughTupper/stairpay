@@ -16,15 +16,15 @@ import {
   DropdownMenuShortcut,
 } from "./index";
 import { Button } from "../Button";
-import { 
-  UserIcon, 
-  Settings2Icon, 
-  LogOutIcon, 
+import {
+  UserIcon,
+  Settings2Icon,
+  LogOutIcon,
   CreditCardIcon,
   UserPlusIcon,
   MailIcon,
   MessageSquareIcon,
-  PlusCircleIcon
+  PlusCircleIcon,
 } from "lucide-react";
 import { useState } from "react";
 

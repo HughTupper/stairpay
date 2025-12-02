@@ -33,7 +33,9 @@ describe("Sidebar", () => {
           </Sidebar>
         </SidebarProvider>
       );
-      expect(container.querySelector('[data-slot="sidebar-wrapper"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="sidebar-wrapper"]')
+      ).toBeInTheDocument();
     });
 
     it("renders sidebar content", () => {
@@ -57,7 +59,9 @@ describe("Sidebar", () => {
           </Sidebar>
         </SidebarProvider>
       );
-      const sidebar = container.querySelector('[data-slot="sidebar-container"]');
+      const sidebar = container.querySelector(
+        '[data-slot="sidebar-container"]'
+      );
       expect(sidebar).toHaveClass("custom-sidebar");
     });
   });
@@ -172,7 +176,9 @@ describe("Sidebar", () => {
           </Sidebar>
         </SidebarProvider>
       );
-      expect(container.querySelector('[data-slot="sidebar-header"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="sidebar-header"]')
+      ).toBeInTheDocument();
       expect(screen.getByText("Header Content")).toBeInTheDocument();
     });
 
@@ -184,7 +190,9 @@ describe("Sidebar", () => {
           </Sidebar>
         </SidebarProvider>
       );
-      expect(container.querySelector('[data-slot="sidebar-footer"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="sidebar-footer"]')
+      ).toBeInTheDocument();
       expect(screen.getByText("Footer Content")).toBeInTheDocument();
     });
 
@@ -200,7 +208,9 @@ describe("Sidebar", () => {
           </Sidebar>
         </SidebarProvider>
       );
-      expect(container.querySelector('[data-slot="sidebar-separator"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="sidebar-separator"]')
+      ).toBeInTheDocument();
     });
   });
 
@@ -219,7 +229,9 @@ describe("Sidebar", () => {
           </Sidebar>
         </SidebarProvider>
       );
-      expect(container.querySelector('[data-slot="sidebar-menu"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="sidebar-menu"]')
+      ).toBeInTheDocument();
     });
 
     it("renders menu items", () => {
@@ -257,7 +269,9 @@ describe("Sidebar", () => {
           </Sidebar>
         </SidebarProvider>
       );
-      const button = container.querySelector('[data-slot="sidebar-menu-button"]');
+      const button = container.querySelector(
+        '[data-slot="sidebar-menu-button"]'
+      );
       expect(button).toHaveAttribute("data-active", "true");
     });
 
@@ -275,7 +289,9 @@ describe("Sidebar", () => {
           </Sidebar>
         </SidebarProvider>
       );
-      expect(container.querySelector('[data-slot="sidebar-menu-skeleton"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="sidebar-menu-skeleton"]')
+      ).toBeInTheDocument();
     });
   });
 
@@ -293,7 +309,9 @@ describe("Sidebar", () => {
           </Sidebar>
         </SidebarProvider>
       );
-      expect(container.querySelector('[data-slot="sidebar-group"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="sidebar-group"]')
+      ).toBeInTheDocument();
       expect(screen.getByText("Group Label")).toBeInTheDocument();
       expect(screen.getByText("Group Content")).toBeInTheDocument();
     });
@@ -310,7 +328,9 @@ describe("Sidebar", () => {
           </Sidebar>
         </SidebarProvider>
       );
-      expect(container.querySelector('[data-slot="sidebar-group-label"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="sidebar-group-label"]')
+      ).toBeInTheDocument();
     });
   });
 
@@ -336,7 +356,7 @@ describe("Sidebar", () => {
     it("calls onClick when menu button is clicked", async () => {
       const user = userEvent.setup();
       const handleClick = vi.fn();
-      
+
       render(
         <SidebarProvider>
           <Sidebar>
@@ -365,7 +385,9 @@ describe("Sidebar", () => {
           <SidebarTrigger />
         </SidebarProvider>
       );
-      expect(screen.getByRole("button", { name: /toggle sidebar/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /toggle sidebar/i })
+      ).toBeInTheDocument();
     });
 
     it("supports keyboard navigation", async () => {

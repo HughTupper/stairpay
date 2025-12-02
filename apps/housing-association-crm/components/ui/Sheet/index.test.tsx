@@ -28,7 +28,9 @@ describe("Sheet", () => {
           </SheetContent>
         </Sheet>
       );
-      expect(screen.getByRole("button", { name: "Open Sheet" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Open Sheet" })
+      ).toBeInTheDocument();
     });
 
     it("does not show content initially", () => {
@@ -93,7 +95,7 @@ describe("Sheet", () => {
     it("calls onOpenChange when opened", async () => {
       const user = userEvent.setup();
       const handleOpenChange = vi.fn();
-      
+
       render(
         <Sheet onOpenChange={handleOpenChange}>
           <SheetTrigger asChild>
@@ -221,7 +223,9 @@ describe("Sheet", () => {
       );
 
       await user.click(screen.getByRole("button", { name: "Open" }));
-      expect(screen.getByRole("button", { name: "Action" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Action" })
+      ).toBeInTheDocument();
     });
 
     it("renders SheetDescription", async () => {

@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Alert, AlertTitle, AlertDescription } from "./index";
-import { AlertCircleIcon, CheckCircleIcon, InfoIcon, TriangleAlertIcon } from "lucide-react";
+import {
+  AlertCircleIcon,
+  CheckCircleIcon,
+  InfoIcon,
+  TriangleAlertIcon,
+} from "lucide-react";
 
 const meta = {
   title: "UI/Alert",
@@ -95,16 +100,12 @@ export const MultipleAlerts: Story = {
       <Alert>
         <InfoIcon />
         <AlertTitle>Info</AlertTitle>
-        <AlertDescription>
-          This is an informational alert.
-        </AlertDescription>
+        <AlertDescription>This is an informational alert.</AlertDescription>
       </Alert>
       <Alert>
         <CheckCircleIcon />
         <AlertTitle>Success</AlertTitle>
-        <AlertDescription>
-          Operation completed successfully.
-        </AlertDescription>
+        <AlertDescription>Operation completed successfully.</AlertDescription>
       </Alert>
       <Alert variant="destructive">
         <AlertCircleIcon />
@@ -124,12 +125,12 @@ export const LongContent: Story = {
       <AlertTitle>Important Information</AlertTitle>
       <AlertDescription>
         <p>
-          This alert contains multiple paragraphs of content to demonstrate how the
-          component handles longer text.
+          This alert contains multiple paragraphs of content to demonstrate how
+          the component handles longer text.
         </p>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
       </AlertDescription>
     </Alert>

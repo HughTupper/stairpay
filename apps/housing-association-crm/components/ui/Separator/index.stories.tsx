@@ -105,13 +105,21 @@ export const WithText: Story = {
 export const InNavigation: Story = {
   render: () => (
     <div className="flex h-10 items-center space-x-4 text-sm">
-      <a href="#" className="hover:underline">Home</a>
+      <a href="#" className="hover:underline">
+        Home
+      </a>
       <Separator orientation="vertical" />
-      <a href="#" className="hover:underline">About</a>
+      <a href="#" className="hover:underline">
+        About
+      </a>
       <Separator orientation="vertical" />
-      <a href="#" className="hover:underline">Services</a>
+      <a href="#" className="hover:underline">
+        Services
+      </a>
       <Separator orientation="vertical" />
-      <a href="#" className="hover:underline">Contact</a>
+      <a href="#" className="hover:underline">
+        Contact
+      </a>
     </div>
   ),
 };
@@ -164,7 +172,11 @@ export const NonDecorative: Story = {
         <h4 className="text-sm font-medium leading-none">Section 1</h4>
         <p className="text-sm text-muted-foreground">Content for section 1</p>
       </div>
-      <Separator decorative={false} aria-label="Content separator" className="my-4" />
+      <Separator
+        decorative={false}
+        aria-label="Content separator"
+        className="my-4"
+      />
       <div className="space-y-1">
         <h4 className="text-sm font-medium leading-none">Section 2</h4>
         <p className="text-sm text-muted-foreground">Content for section 2</p>

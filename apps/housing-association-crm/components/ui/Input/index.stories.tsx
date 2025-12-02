@@ -99,9 +99,7 @@ export const WithHelperText: Story = {
     <div className="grid w-full max-w-sm items-center gap-1.5">
       <Label htmlFor="username">Username</Label>
       <Input id="username" placeholder="johndoe" />
-      <p className="text-sm text-muted-foreground">
-        Your public display name
-      </p>
+      <p className="text-sm text-muted-foreground">Your public display name</p>
     </div>
   ),
 };

@@ -55,7 +55,10 @@ describe("Alert", () => {
 
     it("includes data-slot attribute for AlertTitle", () => {
       render(<AlertTitle>Title</AlertTitle>);
-      expect(screen.getByText("Title")).toHaveAttribute("data-slot", "alert-title");
+      expect(screen.getByText("Title")).toHaveAttribute(
+        "data-slot",
+        "alert-title"
+      );
     });
 
     it("applies custom className to AlertTitle", () => {
@@ -80,7 +83,9 @@ describe("Alert", () => {
     });
 
     it("applies custom className to AlertDescription", () => {
-      render(<AlertDescription className="text-xs">Description</AlertDescription>);
+      render(
+        <AlertDescription className="text-xs">Description</AlertDescription>
+      );
       expect(screen.getByText("Description")).toHaveClass("text-xs");
     });
 
@@ -131,13 +136,17 @@ describe("Alert", () => {
         <Alert variant="destructive">
           <AlertCircleIcon data-testid="icon" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>Something went wrong. Please try again.</AlertDescription>
+          <AlertDescription>
+            Something went wrong. Please try again.
+          </AlertDescription>
         </Alert>
       );
       expect(screen.getByRole("alert")).toHaveClass("text-destructive");
       expect(screen.getByTestId("icon")).toBeInTheDocument();
       expect(screen.getByText("Error")).toBeInTheDocument();
-      expect(screen.getByText("Something went wrong. Please try again.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Something went wrong. Please try again.")
+      ).toBeInTheDocument();
     });
 
     it("renders success alert composition", () => {
