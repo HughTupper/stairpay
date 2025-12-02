@@ -2,54 +2,269 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { PropertyForm, PropertyList } from "@/components/property-form";
+import { PropertyForm } from "@/components/property-form";
 import { routes } from "@/lib/routes";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { TrendingUp, TrendingDown } from "lucide-react";
+import Link from "next/link";
 
-async function getProperties() {
+async function getPropertiesWithValuations(orgId: string) {
   const supabase = await createClient();
-  const cookieStore = await cookies();
-  const organisationId = cookieStore.get("current_organisation_id")?.value;
 
-  if (!organisationId) {
-    return [];
-  }
-
-  const { data, error } = await supabase
+  const { data: properties } = await supabase
     .from("properties")
-    .select("*")
-    .eq("organisation_id", organisationId)
-    .order("created_at", { ascending: false });
+    .select(
+      `
+      id,
+      address,
+      postcode,
+      property_value,
+      property_valuations (
+        id,
+        valuation_date,
+        estimated_value,
+        value_change_percent,
+        hpi_index
+      )
+    `
+    )
+    .eq("organisation_id", orgId)
+    .order("address");
 
-  if (error) {
-    console.error("Error fetching properties:", error);
-    return [];
-  }
+  return properties?.map((property) => {
+    const valuations = (property.property_valuations as any[]) || [];
+    const sortedValuations = valuations.sort(
+      (a, b) =>
+        new Date(b.valuation_date).getTime() -
+        new Date(a.valuation_date).getTime()
+    );
+    const latestValuation = sortedValuations[0];
 
-  return data || [];
+    // Calculate 12-month trend
+    const oldestValuation = valuations.sort(
+      (a, b) =>
+        new Date(a.valuation_date).getTime() -
+        new Date(b.valuation_date).getTime()
+    )[0];
+    const yearChange = oldestValuation
+      ? (
+          ((latestValuation?.estimated_value -
+            oldestValuation.estimated_value) /
+            oldestValuation.estimated_value) *
+          100
+        ).toFixed(2)
+      : "0";
+
+    return {
+      id: property.id,
+      address: property.address,
+      postcode: property.postcode,
+      originalValue: property.property_value,
+      currentValue: latestValuation?.estimated_value || property.property_value,
+      valuationDate: latestValuation?.valuation_date,
+      monthlyChange: latestValuation?.value_change_percent || 0,
+      yearlyChange: yearChange,
+    };
+  });
 }
 
 function PropertiesLoading() {
   return (
-    <div className="mt-8">
-      <div className="animate-pulse">
-        <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-32 mb-4"></div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="h-48 bg-gray-200 dark:bg-gray-800 rounded-lg"
-            ></div>
-          ))}
-        </div>
+    <div className="space-y-8 mt-8">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="h-32 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse"
+          ></div>
+        ))}
       </div>
+      <div className="h-96 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse"></div>
     </div>
   );
 }
 
-async function PropertiesContent() {
-  const properties = await getProperties();
+async function PropertiesContent({ orgId }: { orgId: string }) {
+  const properties = await getPropertiesWithValuations(orgId);
 
-  return <PropertyList initialProperties={properties} />;
+  if (!properties || properties.length === 0) {
+    return (
+      <div className="mt-8">
+        <Card>
+          <CardContent className="text-center py-12">
+            <p className="text-muted-foreground">
+              No properties found. Add your first property to get started.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  const totalValue = properties.reduce(
+    (sum, p) => sum + parseFloat(p.currentValue),
+    0
+  );
+  const averageValue = totalValue / properties.length;
+  const averageGrowth =
+    properties.reduce((sum, p) => sum + parseFloat(p.yearlyChange), 0) /
+    properties.length;
+
+  return (
+    <>
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 mt-8">
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium">
+              Total Portfolio Value
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              £
+              {totalValue.toLocaleString("en-GB", { maximumFractionDigits: 0 })}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              {properties.length} properties
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium">
+              Average Property Value
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              £
+              {averageValue.toLocaleString("en-GB", {
+                maximumFractionDigits: 0,
+              })}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Based on latest HPI data
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium">
+              Average 12-Month Growth
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold flex items-center gap-2">
+              {averageGrowth.toFixed(2)}%
+              {averageGrowth >= 0 ? (
+                <TrendingUp className="size-5 text-green-600 dark:text-green-400" />
+              ) : (
+                <TrendingDown className="size-5 text-red-600 dark:text-red-400" />
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              {averageGrowth >= 0 ? "Positive" : "Negative"} market trend
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Properties Table */}
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle>All Properties</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Address</TableHead>
+                <TableHead>Postcode</TableHead>
+                <TableHead>Current Value</TableHead>
+                <TableHead>Monthly Change</TableHead>
+                <TableHead>12-Month Growth</TableHead>
+                <TableHead>Last Updated</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {properties.map((property) => (
+                <TableRow key={property.id}>
+                  <TableCell>
+                    <Link
+                      href={routes.dashboard.property(property.id)}
+                      className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
+                    >
+                      {property.address}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{property.postcode}</TableCell>
+                  <TableCell className="font-semibold">
+                    £
+                    {parseFloat(property.currentValue).toLocaleString("en-GB", {
+                      maximumFractionDigits: 0,
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      {parseFloat(property.monthlyChange) >= 0 ? (
+                        <TrendingUp className="size-4 text-green-600 dark:text-green-400" />
+                      ) : (
+                        <TrendingDown className="size-4 text-red-600 dark:text-red-400" />
+                      )}
+                      <span
+                        className={
+                          parseFloat(property.monthlyChange) >= 0
+                            ? "text-green-600 dark:text-green-400"
+                            : "text-red-600 dark:text-red-400"
+                        }
+                      >
+                        {property.monthlyChange}%
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        parseFloat(property.yearlyChange) >= 5
+                          ? "default"
+                          : "secondary"
+                      }
+                      className={
+                        parseFloat(property.yearlyChange) >= 5
+                          ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100"
+                          : ""
+                      }
+                    >
+                      +{property.yearlyChange}%
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-sm text-muted-foreground">
+                    {property.valuationDate
+                      ? new Date(property.valuationDate).toLocaleDateString(
+                          "en-GB"
+                        )
+                      : "N/A"}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </>
+  );
 }
 
 export default async function PropertiesPage() {
@@ -82,14 +297,19 @@ export default async function PropertiesPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Properties
-        </h1>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Properties
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            Portfolio overview and property valuations
+          </p>
+        </div>
         <PropertyForm />
       </div>
 
       <Suspense fallback={<PropertiesLoading />}>
-        <PropertiesContent />
+        <PropertiesContent orgId={currentOrgId} />
       </Suspense>
     </div>
   );

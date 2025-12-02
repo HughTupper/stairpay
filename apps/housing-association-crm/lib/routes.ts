@@ -13,9 +13,9 @@ export const routes = {
   dashboard: {
     root: "/dashboard",
     properties: "/dashboard/properties",
+    property: (id: string) => `/dashboard/properties/${id}`,
     tenants: "/dashboard/tenants",
     tenant: (id: string) => `/dashboard/tenants/${id}`,
-    valuations: "/dashboard/valuations",
     campaigns: "/dashboard/campaigns",
     providers: "/dashboard/providers",
     feedback: "/dashboard/feedback",

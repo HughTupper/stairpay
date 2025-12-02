@@ -4,7 +4,6 @@ import {
   Home,
   Building2,
   Users,
-  TrendingUp,
   Megaphone,
   Briefcase,
   MessageSquare,
@@ -57,11 +56,6 @@ const coreNavItems = [
 ];
 
 const stairpayFeatures = [
-  {
-    title: "Valuations",
-    url: routes.dashboard.valuations,
-    icon: TrendingUp,
-  },
   {
     title: "Campaigns",
     url: routes.dashboard.campaigns,
@@ -125,7 +119,7 @@ export function AppSidebar({
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>StairPay Features</SidebarGroupLabel>
+          <SidebarGroupLabel>Engagement & Growth</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {stairpayFeatures.map((item) => {

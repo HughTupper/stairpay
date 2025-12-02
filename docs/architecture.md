@@ -446,6 +446,7 @@ Why?
 - understand the Expand-Migrate-Contract pattern for zero-downtime deployments
 - is it better to do commands like `npx supabase stop` or should we install supabase locally?
 - How should rollback migrations be handled?
+- Implement colocation
 
 - Used AI to scan your site for:
   - colours schemes (used your business pages)
