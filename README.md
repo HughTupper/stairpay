@@ -21,6 +21,7 @@ stairpay/
 
 - [`apps/housing-association-crm/README.md`](apps/housing-association-crm/README.md) - CRM app details
 - [`packages/database/README.md`](packages/database/README.md) - Database management
+- [`packages/shared-types/README.md`](packages/shared-types/README.md) - Shared types
 - [`docs/architecture.md`](docs/architecture.md) - Architecture decisions and system design
 
 ## 🚀 Quick Start
@@ -65,6 +66,7 @@ After seeding, you can log in with these test accounts:
 - **Thames Valley Housing**: `admin@thamesvalley.com` / `password123`
 - **London & Quadrant**: `admin@londonquadrant.com` / `password123`
 - **Clarion Housing**: `admin@clarion.com` / `password123`
+- **All Organizations**: `admin@all.com` / `password123` (access to all orgs)
 
 Each account has admin access to their respective organisation's data.
 
