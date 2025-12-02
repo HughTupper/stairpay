@@ -7,8 +7,8 @@ import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/ui/Sidebar";
+import { Separator } from "@/components/ui/Separator";
 
 async function getUserOrganisations() {
   const supabase = await createClient();

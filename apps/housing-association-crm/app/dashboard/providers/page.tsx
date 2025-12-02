@@ -8,8 +8,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+} from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
 import { Briefcase, Star, Mail, Phone, Globe, TrendingUp } from "lucide-react";
 import type { Database } from "@stairpay/database/types/database";
 

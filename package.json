@@ -13,6 +13,8 @@
     "build:crm": "turbo run build --filter=@stairpay/housing-association-crm",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:coverage": "turbo run test:coverage",
     "clean": "turbo run clean && rm -rf node_modules .turbo",
     "db:start": "turbo run db:start --filter=@stairpay/database",
     "db:stop": "turbo run db:stop --filter=@stairpay/database",

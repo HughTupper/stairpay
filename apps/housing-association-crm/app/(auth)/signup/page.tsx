@@ -5,10 +5,10 @@ import { signUp } from "@/actions/auth";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { routes } from "@/lib/routes";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Alert, AlertDescription } from "@/components/ui/Alert";
 import Link from "next/link";
 
 export default function SignUpPage() {

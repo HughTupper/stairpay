@@ -3,11 +3,11 @@ import { cookies } from "next/headers";
 import { redirect, notFound } from "next/navigation";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Progress } from "@/components/ui/Progress";
+import { Separator } from "@/components/ui/Separator";
+import { Button } from "@/components/ui/Button";
 
 type PageProps = {
   params: Promise<{ id: string }>;

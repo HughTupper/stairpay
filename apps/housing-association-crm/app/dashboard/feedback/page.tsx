@@ -8,7 +8,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/Card";
 import {
   Table,
   TableBody,
@@ -16,8 +16,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+} from "@/components/ui/Table";
+import { Badge } from "@/components/ui/Badge";
 import { Star, MessageSquare, ThumbsUp, ThumbsDown, Minus } from "lucide-react";
 
 type FeedbackWithTenant = {
