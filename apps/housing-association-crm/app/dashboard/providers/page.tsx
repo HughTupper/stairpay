@@ -175,7 +175,7 @@ export default async function ProvidersPage() {
       ) : (
         <div className="space-y-8">
           {grouped &&
-            Object.entries(grouped).map(([type, typeProviders]) => (
+            (Object.entries(grouped) as [string, any[]][]).map(([type, typeProviders]) => (
               <div key={type}>
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-2xl">

@@ -32,6 +32,19 @@ jobs:
       - name: Build shared packages
         run: npm run build --filter=@stairpay/shared-types
 
+      - name: Validate environment variables
+        run: |
+          # Check required secrets are present
+          if [ -z "${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" ]; then
+            echo "❌ Error: NEXT_PUBLIC_SUPABASE_URL secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}" ]; then
+            echo "❌ Error: NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY secret is not set"
+            exit 1
+          fi
+          echo "✅ All required environment variables are present"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -40,9 +53,10 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION || 'eu-west-2' }}
 
       - name: Deploy CDK stack
-        working-directory: apps/housing-association-crm
+        working-directory: apps/housing-association-crm/infrastructure
         run: npm run deploy
         env:
+          CDK_DEFAULT_REGION: ${{ secrets.AWS_REGION || 'eu-west-2' }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
 
@@ -91,9 +105,10 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION || 'eu-west-2' }}
 
       - name: Rollback deployment
-        working-directory: apps/housing-association-crm
+        working-directory: apps/housing-association-crm/infrastructure
         run: npm run deploy
         env:
+          CDK_DEFAULT_REGION: ${{ secrets.AWS_REGION || 'eu-west-2' }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
 

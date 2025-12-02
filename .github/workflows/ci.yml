@@ -67,3 +67,56 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-turbo-
+
+  validate-env:
+    name: Validate Environment Variables
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate CRM app env schema
+        working-directory: apps/housing-association-crm
+        run: |
+          # Validate env schema compiles and exports correctly
+          npx tsc --noEmit lib/env.ts
+          echo "✅ CRM app environment schema is valid"
+
+      - name: Validate Infrastructure env schema
+        working-directory: apps/housing-association-crm/infrastructure
+        run: |
+          # Validate env schema compiles and exports correctly
+          npx tsc --noEmit lib/env.ts
+          echo "✅ Infrastructure environment schema is valid"
+
+      - name: Validate Database env schema
+        working-directory: packages/database
+        run: |
+          # Test that env module can be imported successfully
+          node -e "const { env } = require('./lib/env'); console.log('✅ Database environment schema is valid');"
+
+      - name: Check .env.example files exist
+        run: |
+          if [ ! -f "apps/housing-association-crm/.env.example" ]; then
+            echo "❌ Missing apps/housing-association-crm/.env.example"
+            exit 1
+          fi
+          if [ ! -f "apps/housing-association-crm/infrastructure/.env.example" ]; then
+            echo "❌ Missing apps/housing-association-crm/infrastructure/.env.example"
+            exit 1
+          fi
+          if [ ! -f "packages/database/.env.example" ]; then
+            echo "❌ Missing packages/database/.env.example"
+            exit 1
+          fi
+          echo "✅ All .env.example files present"

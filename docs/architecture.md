@@ -157,6 +157,86 @@ Main → Deploy → Health Check → Success/Rollback
 - Packages enable code reuse without duplication
 - Easy to add new apps consuming same packages
 
+### Environment Variable Management
+
+**Decision**: T3 Env with per-app/package validation schemas.
+
+**Rationale**:
+
+- **Type Safety**: Environment variables are typed and auto-completed in IDE
+- **Runtime Validation**: Fails fast at startup if vars are missing or invalid
+- **Build-Time Checks**: Catches configuration errors before deployment
+- **Clear Error Messages**: Developers see exactly which vars are missing
+- **Per-App Isolation**: Each app/package validates only what it needs
+- **CI/CD Integration**: Blocks deployments with invalid configuration
+
+**Alternative Considered**: Manual validation with TypeScript assertions
+
+- ✅ No dependencies
+- ❌ Error-prone (easy to forget to validate)
+- ❌ No type inference
+- ❌ Poor error messages
+- ❌ Must manually check every `process.env` access
+
+**Schema Locations**:
+
+```
+apps/housing-association-crm/lib/env.ts          # Next.js app (client + server)
+apps/housing-association-crm/infrastructure/lib/env.ts  # CDK deployment
+packages/database/lib/env.ts                     # Database tooling
+```
+
+**Example Schema** (CRM app):
+
+```typescript
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
+
+export const env = createEnv({
+  server: {
+    NODE_ENV: z
+      .enum(["development", "production", "test"])
+      .default("development"),
+  },
+  client: {
+    NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
+  },
+  runtimeEnv: {
+    NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  },
+  emptyStringAsUndefined: true,
+});
+```
+
+**Usage**:
+
+```typescript
+// Before: Unsafe, no validation
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL!; // Could be undefined!
+
+// After: Type-safe, validated
+import { env } from "@/lib/env";
+const url = env.NEXT_PUBLIC_SUPABASE_URL; // Guaranteed to be a valid URL string
+```
+
+**Infrastructure Migration**:
+
+- Infrastructure package migrated from CommonJS to ESM for consistency
+- CDK supports ESM via `ts-node --esm` flag
+- All imports updated with `.js` extensions as required by ESM
+
+**CI/CD Validation**:
+
+- Dedicated validation job in CI pipeline
+- Checks env schemas compile and are valid TypeScript
+- Verifies `.env.example` files exist for all apps/packages
+- Deployment workflows fail if required secrets are missing
+- No deployments with invalid or missing configuration
+
 ## System Architecture
 
 ```
@@ -245,18 +325,20 @@ Main → Deploy → Health Check → Success/Rollback
 2. **Application**: Supabase Auth (JWT validation)
 3. **Authorization**: Role-based access (admin/viewer)
 4. **Data**: PostgreSQL RLS (tenant isolation)
-5. **Secrets**: Environment variables (never in code)
+5. **Configuration**: T3 Env validation (prevents misconfiguration)
+6. **Secrets**: Environment variables (never in code)
 
 ### Threat Model
 
-| Threat                 | Mitigation                      |
-| ---------------------- | ------------------------------- |
-| Unauthorized access    | Supabase Auth + JWT             |
-| Cross-tenant data leak | PostgreSQL RLS policies         |
-| SQL injection          | Supabase client (parameterized) |
-| XSS                    | Next.js auto-escaping           |
-| CSRF                   | HTTP-only cookies               |
-| Secrets exposure       | Env vars, AWS Secrets Manager   |
+| Threat                 | Mitigation                          |
+| ---------------------- | ----------------------------------- |
+| Unauthorized access    | Supabase Auth + JWT                 |
+| Cross-tenant data leak | PostgreSQL RLS policies             |
+| SQL injection          | Supabase client (parameterized)     |
+| XSS                    | Next.js auto-escaping               |
+| CSRF                   | HTTP-only cookies                   |
+| Secrets exposure       | Env vars, AWS Secrets Manager       |
+| Misconfiguration       | T3 Env validation (build + runtime) |
 
 ## Scalability
 
@@ -394,6 +476,7 @@ apps/infrastructure/
 - ✅ CDK provided type-safe infrastructure
 - ✅ Turborepo sped up builds significantly
 - ✅ Auto-deploy with rollback gave confidence
+- ✅ T3 Env caught configuration errors before deployment
 
 ### What We'd Do Differently
 
@@ -431,7 +514,6 @@ Why?
 - Supabase auth. Cloudflare turnstile - https://supabase.com/docs/guides/auth/auth-captcha. cloudflare.com/application-services/products/turnstile/
 - Client side Supabase
 - Implement env - theo
-- Centralising routes
 - Read into npm workspaces more
 - create an account that can access all orgs to show org switching
 
@@ -445,6 +527,8 @@ Why?
 - is it better to do commands like `npx supabase stop` or should we install supabase locally?
 - How should rollback migrations be handled?
 - Implement colocation
+- check for any 'any' types
+
 - Use optimistic
 - Server action forms
 - Error handling
@@ -453,4 +537,5 @@ Why?
   - colours schemes (used your business pages)
   - grab your favicon and icon for reuse
   - More understanding of your product, to then replicate similar functionality.
-- Would need to implement pagination
+- Would need to implement pagination on lists
+- using T3 Env for validation of envionment variables and making them type safe. https://env.t3.gg/

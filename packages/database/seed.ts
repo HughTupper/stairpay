@@ -1,29 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
-import { config } from "dotenv";
-import { resolve } from "path";
-
-// Load environment variables from .env.local
-config({ path: resolve(__dirname, ".env.local") });
+import { env } from "./lib/env";
 
 // This script should be run manually to seed the database
-// Usage: npm run seed
+// Usage: npm run db:seed
 // Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables
+// These are validated by T3 Env - the script will fail fast if they're missing
+// Environment variables are loaded from .env.local via tsx --env-file flag
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  console.error("❌ Error: Missing environment variables");
-  console.error("Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY");
-  console.error(
-    "\nFor local development, create packages/database/.env.local with:"
-  );
-  console.error("  SUPABASE_URL=http://127.0.0.1:54321");
-  console.error("  SUPABASE_SERVICE_ROLE_KEY=<get from 'supabase status'>");
-  process.exit(1);
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY);
 
 const organisations = [
   { name: "Thames Valley Housing" },

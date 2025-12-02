@@ -1,6 +1,7 @@
 import * as cdk from "aws-cdk-lib";
 import * as amplify from "aws-cdk-lib/aws-amplify";
 import { Construct } from "constructs";
+import { env } from "./env.js";
 
 export class AmplifyStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -16,11 +17,11 @@ export class AmplifyStack extends cdk.Stack {
       environmentVariables: [
         {
           name: "NEXT_PUBLIC_SUPABASE_URL",
-          value: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+          value: env.NEXT_PUBLIC_SUPABASE_URL,
         },
         {
           name: "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
-          value: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",
+          value: env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
         },
         {
           name: "_LIVE_UPDATES",

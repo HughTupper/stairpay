@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { ActionState } from "@stairpay/shared-types";
 import { routes } from "@/lib/routes";
+import { env } from "@/lib/env";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -63,7 +64,7 @@ export async function signIn(
       cookieStore.set("current_organisation_id", userOrgs.organisation_id, {
         path: "/",
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: 60 * 60 * 24 * 30, // 30 days
       });
@@ -135,7 +136,7 @@ export async function signUp(
     cookieStore.set("current_organisation_id", orgData.id, {
       path: "/",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });

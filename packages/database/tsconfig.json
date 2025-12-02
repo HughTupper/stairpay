@@ -4,7 +4,10 @@
     "outDir": "./dist",
     "rootDir": "./",
     "composite": true,
-    "declaration": true
+    "declaration": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist", "supabase"]
