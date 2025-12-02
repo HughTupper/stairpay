@@ -545,3 +545,4 @@ Why?
   - Component Snapshot testing (component code output checks)
   - Integration tests with Playwright (larger user centric user tests and mocked apis)
   - E2E with Playwright (larger user centric user tests)
+- Code Colocation (components, page components, infrastructure)

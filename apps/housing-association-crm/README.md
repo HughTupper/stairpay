@@ -20,28 +20,32 @@ Multi-tenant shared ownership property management platform for housing associati
 - **Validation**: Zod
 - **Infrastructure**: AWS CDK (Amplify deployment)
 
-## Development
+## Quick Start
 
 ```bash
 # Install dependencies (from monorepo root)
 npm install
 
+# Start local Supabase
+npm run db:start
+
+# Apply migrations and seed demo data
+npm run db:seed
+
 # Start development server
 npm run dev:crm
 
-# Open browser
-open http://localhost:3000
+# Open http://localhost:3000
 ```
 
 ### Test Accounts
 
-If you've run the database seed (`npm run db:seed`), you can log in with:
+After running `npm run db:seed`:
 
-- Thames Valley Housing: `admin@thamesvalley.com` / `password123`
-- London & Quadrant: `admin@londonquadrant.com` / `password123`
-- Clarion Housing: `admin@clarion.com` / `password123`
-
-Each account is an admin for their respective organisation.
+- **Thames Valley Housing**: `admin@thamesvalley.com` / `password123`
+- **London & Quadrant**: `admin@londonquadrant.com` / `password123`
+- **Clarion Housing**: `admin@clarion.com` / `password123`
+- **All Organizations**: `admin@all.com` / `password123` (access to all orgs)
 
 ## Environment Variables
 
@@ -52,24 +56,23 @@ NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
 ```
 
-Get these from your Supabase project settings.
-
-## Database Setup
-
-The database is managed in the `@stairpay/database` package.
-
-From monorepo root:
+## Testing
 
 ```bash
-# Start local Supabase
-npm run db:start
+# Run tests
+npm run test
 
-# Apply migrations
-npm run db:reset
+# Run tests with coverage
+npm run test:coverage
 
-# Seed demo data
-npm run db:seed
+# Run tests with UI
+npm run test:ui
+
+# Run Storybook
+npm run storybook
 ```
+
+All UI components have comprehensive test coverage (80%+) and Storybook stories.
 
 ## Building
 
@@ -77,7 +80,7 @@ npm run db:seed
 # Build for production
 npm run build:crm
 
-# Build this app only
+# Or from this directory
 cd apps/housing-association-crm && npm run build
 ```
 
@@ -87,9 +90,6 @@ Deploy to AWS Amplify using CDK:
 
 ```bash
 # Deploy infrastructure
-npm run deploy:crm
-
-# Or from this directory
 cd apps/housing-association-crm && npm run deploy
 ```
 
@@ -99,34 +99,12 @@ cd apps/housing-association-crm && npm run deploy
 apps/housing-association-crm/
 ├── app/                       # Next.js App Router
 │   ├── (auth)/               # Authentication pages
-│   ├── (dashboard)/          # Protected dashboard
+│   ├── dashboard/            # Protected dashboard
 │   ├── api/                  # API routes
-│   ├── layout.tsx            # Root layout
 │   └── globals.css           # Global styles
-├── components/               # React components
+├── components/
+│   └── ui/                   # Tested UI components
 ├── actions/                  # Server Actions
-├── utils/                    # Utilities (Supabase clients)
-├── lib/                      # Libraries
-├── public/                   # Static assets
-├── infrastructure/           # AWS CDK (Amplify)
-└── middleware.ts             # Auth middleware
+├── utils/                    # Supabase clients
+└── infrastructure/           # AWS CDK stack
 ```
-
-## Multi-Tenancy
-
-The app uses session-based organization context:
-
-1. User logs in
-2. Selects organization (if member of multiple)
-3. Organization ID stored in HTTP-only cookie
-4. All queries automatically filtered by RLS
-
-## Deployment Architecture
-
-- **Hosting**: AWS Amplify (SSR Next.js)
-- **Database**: Supabase (managed PostgreSQL)
-- **Auth**: Supabase Auth
-- **CDN**: CloudFront (via Amplify)
-- **CI/CD**: GitHub Actions → Amplify
-
-See `infrastructure/` folder for CDK stack definitions.
