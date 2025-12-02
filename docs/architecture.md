@@ -546,3 +546,4 @@ Why?
   - Integration tests with Playwright (larger user centric user tests and mocked apis)
   - E2E with Playwright (larger user centric user tests)
 - Code Colocation (components, page components, infrastructure)
+- Relook at typing generated from DB
