@@ -183,85 +183,81 @@ async function PropertiesContent({ orgId }: { orgId: string }) {
 
       {/* Properties Table */}
       <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>All Properties</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Address</TableHead>
-                <TableHead>Postcode</TableHead>
-                <TableHead>Current Value</TableHead>
-                <TableHead>Monthly Change</TableHead>
-                <TableHead>12-Month Growth</TableHead>
-                <TableHead>Last Updated</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {properties.map((property) => (
-                <TableRow key={property.id}>
-                  <TableCell>
-                    <Link
-                      href={routes.dashboard.property(property.id)}
-                      className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      {property.address}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{property.postcode}</TableCell>
-                  <TableCell className="font-semibold">
-                    £
-                    {parseFloat(property.currentValue).toLocaleString("en-GB", {
-                      maximumFractionDigits: 0,
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      {parseFloat(property.monthlyChange) >= 0 ? (
-                        <TrendingUp className="size-4 text-green-600 dark:text-green-400" />
-                      ) : (
-                        <TrendingDown className="size-4 text-red-600 dark:text-red-400" />
-                      )}
-                      <span
-                        className={
-                          parseFloat(property.monthlyChange) >= 0
-                            ? "text-green-600 dark:text-green-400"
-                            : "text-red-600 dark:text-red-400"
-                        }
-                      >
-                        {property.monthlyChange}%
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        parseFloat(property.yearlyChange) >= 5
-                          ? "default"
-                          : "secondary"
-                      }
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Property</TableHead>
+              <TableHead>Current Value</TableHead>
+              <TableHead>Monthly Change</TableHead>
+              <TableHead>12-Month Growth</TableHead>
+              <TableHead>Last Updated</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {properties.map((property) => (
+              <TableRow key={property.id}>
+                <TableCell>
+                  <Link
+                    href={routes.dashboard.property(property.id)}
+                    className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    {property.address}
+                  </Link>
+                  <div className="text-sm text-muted-foreground">
+                    {property.postcode}
+                  </div>
+                </TableCell>
+                <TableCell className="font-semibold">
+                  £
+                  {parseFloat(property.currentValue).toLocaleString("en-GB", {
+                    maximumFractionDigits: 0,
+                  })}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-1">
+                    {parseFloat(property.monthlyChange) >= 0 ? (
+                      <TrendingUp className="size-4 text-green-600 dark:text-green-400" />
+                    ) : (
+                      <TrendingDown className="size-4 text-red-600 dark:text-red-400" />
+                    )}
+                    <span
                       className={
-                        parseFloat(property.yearlyChange) >= 5
-                          ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100"
-                          : ""
+                        parseFloat(property.monthlyChange) >= 0
+                          ? "text-green-600 dark:text-green-400"
+                          : "text-red-600 dark:text-red-400"
                       }
                     >
-                      +{property.yearlyChange}%
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {property.valuationDate
-                      ? new Date(property.valuationDate).toLocaleDateString(
-                          "en-GB"
-                        )
-                      : "N/A"}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
+                      {property.monthlyChange}%
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      parseFloat(property.yearlyChange) >= 5
+                        ? "default"
+                        : "secondary"
+                    }
+                    className={
+                      parseFloat(property.yearlyChange) >= 5
+                        ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100"
+                        : ""
+                    }
+                  >
+                    +{property.yearlyChange}%
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {property.valuationDate
+                    ? new Date(property.valuationDate).toLocaleDateString(
+                        "en-GB"
+                      )
+                    : "N/A"}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </Card>
     </>
   );

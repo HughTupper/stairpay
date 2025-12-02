@@ -69,7 +69,6 @@ export default async function TenantsPage() {
                 <TableHead>Property</TableHead>
                 <TableHead>Equity %</TableHead>
                 <TableHead>Monthly Total</TableHead>
-                <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -82,9 +81,12 @@ export default async function TenantsPage() {
                 return (
                   <TableRow key={tenant.id}>
                     <TableCell>
-                      <div className="font-medium">
+                      <Link
+                        href={routes.dashboard.tenant(tenant.id)}
+                        className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
+                      >
                         {tenant.first_name} {tenant.last_name}
-                      </div>
+                      </Link>
                       <div className="text-sm text-muted-foreground">
                         {tenant.email}
                       </div>
@@ -101,13 +103,6 @@ export default async function TenantsPage() {
                       </span>
                     </TableCell>
                     <TableCell>£{monthlyTotal.toFixed(2)}</TableCell>
-                    <TableCell>
-                      <Button variant="link" asChild className="p-0">
-                        <Link href={routes.dashboard.tenant(tenant.id)}>
-                          View Details
-                        </Link>
-                      </Button>
-                    </TableCell>
                   </TableRow>
                 );
               })}

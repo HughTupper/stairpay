@@ -312,7 +312,7 @@ export default async function DashboardPage() {
           </CardContent>
           <CardFooter>
             <Link
-              href={routes.dashboard.valuations}
+              href={routes.dashboard.properties}
               className="text-sm font-medium text-primary hover:underline"
             >
               View opportunities →
