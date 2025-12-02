@@ -453,4 +453,5 @@ Why?
 
 - Used AI to scan your site for:
   - colours schemes (used your business pages)
+  - grab your favicon and icon for reuse
   - More understanding of your product, to then replicate similar functionality.
