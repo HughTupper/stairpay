@@ -435,11 +435,9 @@ Why?
 - Read into npm workspaces more
 - create an account that can access all orgs to show org switching
 
-- Colour scheme of Stairpay
-- Check how migrations work
+- Check how migrations work, and rollback
 - Check RLS works with multi org
 - Check signup works
-- Add some colour
 - Link details on dashboard page
 - How does shadcn components work? Do they update? Does that mean we can restructure the folder and have tests and storybook files on each one? Or should we rely on the shadcn for testing?
 - Understand how types are being generated and shared
@@ -455,3 +453,4 @@ Why?
   - colours schemes (used your business pages)
   - grab your favicon and icon for reuse
   - More understanding of your product, to then replicate similar functionality.
+- Would need to implement pagination
