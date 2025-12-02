@@ -152,6 +152,12 @@ async function seedDatabase() {
         org: "Clarion Housing",
         role: "admin",
       },
+      {
+        email: "admin@all.com",
+        password: "password123",
+        org: "all", // Special flag for multi-org user
+        role: "admin",
+      },
     ];
 
     const userOrgs = new Map<
@@ -204,7 +210,7 @@ async function seedDatabase() {
 
       // Link test user to organisation
       for (const [email, userData] of userOrgs.entries()) {
-        if (userData.orgName === org.name) {
+        if (userData.orgName === org.name || userData.orgName === "all") {
           await supabase.from("user_organisations").insert({
             user_id: userData.userId,
             organisation_id: data.id,
@@ -350,6 +356,7 @@ async function seedDatabase() {
     console.log("   Email: admin@thamesvalley.com | Password: password123");
     console.log("   Email: admin@londonquadrant.com | Password: password123");
     console.log("   Email: admin@clarion.com | Password: password123");
+    console.log("   Email: admin@all.com | Password: password123 (Access to all orgs)");
   } catch (error) {
     console.error("❌ Error seeding database:", error);
     process.exit(1);

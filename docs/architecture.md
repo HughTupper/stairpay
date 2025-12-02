@@ -434,3 +434,11 @@ Why?
 - Centralising routes
 - Read into npm workspaces more
 - create an account that can access all orgs to show org switching
+
+- Colour scheme of Stairpay
+- Check how migrations work
+- Check RLS works with multi org
+- Check signup works
+- Add some colour
+- Link details on dashboard page
+-
