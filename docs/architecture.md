@@ -441,4 +441,4 @@ Why?
 - Check signup works
 - Add some colour
 - Link details on dashboard page
--
+- How does shadcn components work? Do they update? Does that mean we can restructure the folder and have tests and storybook files on each one? Or should we rely on the shadcn for testing?

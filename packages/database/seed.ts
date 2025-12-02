@@ -356,7 +356,9 @@ async function seedDatabase() {
     console.log("   Email: admin@thamesvalley.com | Password: password123");
     console.log("   Email: admin@londonquadrant.com | Password: password123");
     console.log("   Email: admin@clarion.com | Password: password123");
-    console.log("   Email: admin@all.com | Password: password123 (Access to all orgs)");
+    console.log(
+      "   Email: admin@all.com | Password: password123 (Access to all orgs)"
+    );
   } catch (error) {
     console.error("❌ Error seeding database:", error);
     process.exit(1);

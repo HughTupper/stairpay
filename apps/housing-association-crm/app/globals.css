@@ -49,71 +49,82 @@ html {
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.147 0.004 49.25);
+  /* Stairpay Brand Colors - Light Mode */
+  --background: oklch(0.99 0.005 280);
+  --foreground: oklch(0.2 0.02 280);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.147 0.004 49.25);
+  --card-foreground: oklch(0.2 0.02 280);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.147 0.004 49.25);
-  --primary: oklch(0.216 0.006 56.043);
-  --primary-foreground: oklch(0.985 0.001 106.423);
-  --secondary: oklch(0.97 0.001 106.424);
-  --secondary-foreground: oklch(0.216 0.006 56.043);
-  --muted: oklch(0.97 0.001 106.424);
-  --muted-foreground: oklch(0.553 0.013 58.071);
-  --accent: oklch(0.97 0.001 106.424);
-  --accent-foreground: oklch(0.216 0.006 56.043);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.923 0.003 48.717);
-  --input: oklch(0.923 0.003 48.717);
-  --ring: oklch(0.709 0.01 56.259);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0.001 106.423);
-  --sidebar-foreground: oklch(0.147 0.004 49.25);
-  --sidebar-primary: oklch(0.216 0.006 56.043);
-  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-accent: oklch(0.97 0.001 106.424);
-  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
-  --sidebar-border: oklch(0.923 0.003 48.717);
-  --sidebar-ring: oklch(0.709 0.01 56.259);
+  --popover-foreground: oklch(0.2 0.02 280);
+  /* Primary Purple - Stairpay brand color */
+  --primary: oklch(0.55 0.24 285);
+  --primary-foreground: oklch(0.99 0.005 280);
+  /* Secondary Blue/Cyan accent */
+  --secondary: oklch(0.75 0.15 220);
+  --secondary-foreground: oklch(0.2 0.02 280);
+  --muted: oklch(0.96 0.005 280);
+  --muted-foreground: oklch(0.5 0.02 280);
+  /* Accent - subtle purple variation */
+  --accent: oklch(0.92 0.03 285);
+  --accent-foreground: oklch(0.2 0.02 280);
+  --destructive: oklch(0.6 0.22 25);
+  --border: oklch(0.9 0.01 280);
+  --input: oklch(0.9 0.01 280);
+  --ring: oklch(0.55 0.24 285);
+  /* Chart colors - vibrant Stairpay palette */
+  --chart-1: oklch(0.55 0.24 285);
+  --chart-2: oklch(0.75 0.15 220);
+  --chart-3: oklch(0.65 0.2 160);
+  --chart-4: oklch(0.6 0.18 320);
+  --chart-5: oklch(0.7 0.12 250);
+  /* Sidebar - light with purple accents */
+  --sidebar: oklch(0.99 0.005 280);
+  --sidebar-foreground: oklch(0.2 0.02 280);
+  --sidebar-primary: oklch(0.55 0.24 285);
+  --sidebar-primary-foreground: oklch(0.99 0.005 280);
+  --sidebar-accent: oklch(0.96 0.01 285);
+  --sidebar-accent-foreground: oklch(0.2 0.02 280);
+  --sidebar-border: oklch(0.9 0.01 280);
+  --sidebar-ring: oklch(0.55 0.24 285);
 }
 
 .dark {
-  --background: oklch(0.147 0.004 49.25);
-  --foreground: oklch(0.985 0.001 106.423);
-  --card: oklch(0.216 0.006 56.043);
-  --card-foreground: oklch(0.985 0.001 106.423);
-  --popover: oklch(0.216 0.006 56.043);
-  --popover-foreground: oklch(0.985 0.001 106.423);
-  --primary: oklch(0.923 0.003 48.717);
-  --primary-foreground: oklch(0.216 0.006 56.043);
-  --secondary: oklch(0.268 0.007 34.298);
-  --secondary-foreground: oklch(0.985 0.001 106.423);
-  --muted: oklch(0.268 0.007 34.298);
-  --muted-foreground: oklch(0.709 0.01 56.259);
-  --accent: oklch(0.268 0.007 34.298);
-  --accent-foreground: oklch(0.985 0.001 106.423);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.553 0.013 58.071);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.216 0.006 56.043);
-  --sidebar-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-accent: oklch(0.268 0.007 34.298);
-  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.553 0.013 58.071);
+  /* Stairpay Brand Colors - Dark Mode */
+  --background: oklch(0.15 0.04 285);
+  --foreground: oklch(0.95 0.01 280);
+  --card: oklch(0.2 0.05 285);
+  --card-foreground: oklch(0.95 0.01 280);
+  --popover: oklch(0.2 0.05 285);
+  --popover-foreground: oklch(0.95 0.01 280);
+  /* Primary - brighter purple for dark mode */
+  --primary: oklch(0.7 0.22 285);
+  --primary-foreground: oklch(0.15 0.04 285);
+  --secondary: oklch(0.35 0.08 285);
+  --secondary-foreground: oklch(0.95 0.01 280);
+  --muted: oklch(0.25 0.05 285);
+  --muted-foreground: oklch(0.7 0.02 280);
+  /* Accent - subtle lighter purple for dark mode */
+  --accent: oklch(0.3 0.08 285);
+  --accent-foreground: oklch(0.95 0.01 280);
+  --destructive: oklch(0.65 0.22 25);
+  --border: oklch(0.35 0.06 285);
+  --input: oklch(0.35 0.06 285);
+  --ring: oklch(0.7 0.22 285);
+  /* Chart colors for dark mode */
+  --chart-1: oklch(0.65 0.22 285);
+  --chart-2: oklch(0.7 0.15 220);
+  --chart-3: oklch(0.7 0.18 160);
+  --chart-4: oklch(0.65 0.18 320);
+  --chart-5: oklch(0.6 0.12 250);
+  /* Sidebar - dark with purple tint */
+  --sidebar: oklch(0.18 0.04 285);
+  --sidebar-foreground: oklch(0.95 0.01 280);
+  --sidebar-primary: oklch(0.7 0.22 285);
+  --sidebar-primary-foreground: oklch(0.95 0.01 280);
+  --sidebar-accent: oklch(0.25 0.06 285);
+  --sidebar-accent-foreground: oklch(0.95 0.01 280);
+  --sidebar-border: oklch(0.35 0.06 285);
+  --sidebar-ring: oklch(0.7 0.22 285);
 }
 
 @layer base {
