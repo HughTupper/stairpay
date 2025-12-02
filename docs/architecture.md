@@ -447,6 +447,9 @@ Why?
 - is it better to do commands like `npx supabase stop` or should we install supabase locally?
 - How should rollback migrations be handled?
 - Implement colocation
+- Use optimistic
+- Server action forms
+- Error handling
 
 - Used AI to scan your site for:
   - colours schemes (used your business pages)

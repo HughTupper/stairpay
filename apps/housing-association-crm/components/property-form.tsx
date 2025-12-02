@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useOptimistic, useState } from "react";
+import { useActionState, useOptimistic, useState, useEffect } from "react";
 import { createProperty } from "@/actions/properties";
 import { Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 type Property = {
   id: string;
@@ -19,77 +27,84 @@ type Property = {
 
 export function PropertyForm() {
   const [state, formAction, isPending] = useActionState(createProperty, {});
-  const [showForm, setShowForm] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  // Close the sheet when property is successfully created
+  useEffect(() => {
+    if (state.success) {
+      setOpen(false);
+    }
+  }, [state.success]);
 
   return (
-    <div>
-      {!showForm ? (
-        <Button onClick={() => setShowForm(true)}>Add Property</Button>
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>Add New Property</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form action={formAction} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="address">Address</Label>
-                <Input
-                  type="text"
-                  name="address"
-                  id="address"
-                  required
-                  placeholder="123 High Street, London"
-                />
-              </div>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button>Add Property</Button>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Add New Property</SheetTitle>
+          <SheetDescription>
+            Enter the property details to add it to your portfolio.
+          </SheetDescription>
+        </SheetHeader>
+        <form action={formAction} className="space-y-4 mt-6 px-4">
+          <div className="space-y-2">
+            <Label htmlFor="address">Address</Label>
+            <Input
+              type="text"
+              name="address"
+              id="address"
+              required
+              placeholder="123 High Street, London"
+            />
+          </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="postcode">Postcode</Label>
-                <Input
-                  type="text"
-                  name="postcode"
-                  id="postcode"
-                  required
-                  placeholder="SW1A 1AA"
-                />
-              </div>
+          <div className="space-y-2">
+            <Label htmlFor="postcode">Postcode</Label>
+            <Input
+              type="text"
+              name="postcode"
+              id="postcode"
+              required
+              placeholder="SW1A 1AA"
+            />
+          </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="propertyValue">Property Value (£)</Label>
-                <Input
-                  type="number"
-                  name="propertyValue"
-                  id="propertyValue"
-                  required
-                  step="0.01"
-                  min="0"
-                  placeholder="250000"
-                />
-              </div>
+          <div className="space-y-2">
+            <Label htmlFor="propertyValue">Property Value (£)</Label>
+            <Input
+              type="number"
+              name="propertyValue"
+              id="propertyValue"
+              required
+              step="0.01"
+              min="0"
+              placeholder="250000"
+            />
+          </div>
 
-              {state.error && (
-                <Alert variant="destructive">
-                  <AlertDescription>{state.error}</AlertDescription>
-                </Alert>
-              )}
+          {state.error && (
+            <Alert variant="destructive">
+              <AlertDescription>{state.error}</AlertDescription>
+            </Alert>
+          )}
 
-              <div className="flex gap-3">
-                <Button type="submit" disabled={isPending}>
-                  {isPending ? "Creating..." : "Create Property"}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setShowForm(false)}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+          <div className="flex gap-3">
+            <Button type="submit" disabled={isPending} className="flex-1">
+              {isPending ? "Creating..." : "Create Property"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </SheetContent>
+    </Sheet>
   );
 }
 
