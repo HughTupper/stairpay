@@ -455,9 +455,10 @@ export default async function FeedbackPage() {
                         <p className="text-sm truncate">{item.feedback_text}</p>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
-                        {new Date(item.submitted_at).toLocaleDateString(
-                          "en-GB"
-                        )}
+                        {item.submitted_at &&
+                          new Date(item.submitted_at).toLocaleDateString(
+                            "en-GB"
+                          )}
                       </TableCell>
                     </TableRow>
                   );
