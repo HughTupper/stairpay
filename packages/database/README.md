@@ -105,7 +105,29 @@ npm run db:push           # Deploy to production
 npm run db:pull           # Pull remote schema
 
 # Type Generation
+
+**Types are committed to Git for reliable builds.**
+
+```bash
+# Generate types from production (after schema changes)
+npm run db:types:remote
+
+# Then commit the generated types
+git add types/database.ts
+git commit -m "chore: update database types"
+git push
+```
+
+For local development, you can generate types from your local instance:
+
+```bash
 npm run db:types          # Generate from local database
+```
+
+**Important:** Always generate and commit types from production after deploying schema changes. This ensures:
+- Build reliability (no dependency on Supabase API during builds)
+- Version control (types match the schema for that commit)
+- Faster CI/CD (no type generation overhead)
 
 # Seeding
 npm run db:seed           # Run seed script

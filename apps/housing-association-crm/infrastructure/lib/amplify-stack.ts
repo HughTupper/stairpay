@@ -63,13 +63,14 @@ export class AmplifyStack extends cdk.Stack {
             frontend: {
               phases: {
                 preBuild: {
-                  commands: ["cd ../..", "npm ci"],
+                  commands: [
+                    "cd ../..",
+                    "npm ci",
+                    "cd apps/housing-association-crm",
+                  ],
                 },
                 build: {
-                  commands: [
-                    "cd apps/housing-association-crm",
-                    "npm run build",
-                  ],
+                  commands: ["npm run build"],
                 },
               },
               artifacts: {
