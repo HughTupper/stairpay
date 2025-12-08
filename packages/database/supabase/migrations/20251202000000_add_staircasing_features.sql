@@ -8,7 +8,7 @@ CREATE TYPE trigger_type AS ENUM ('equity_threshold', 'move_in_anniversary', 'pr
 
 -- Property valuations table (monthly HPI tracking)
 CREATE TABLE property_valuations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   organisation_id UUID NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
   property_id UUID NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
   valuation_date DATE NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE property_valuations (
 
 -- Service providers directory
 CREATE TABLE service_providers (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   organisation_id UUID NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
   provider_type provider_type NOT NULL,
   company_name TEXT NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE service_providers (
 
 -- Marketing campaigns
 CREATE TABLE marketing_campaigns (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   organisation_id UUID NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   description TEXT,
@@ -60,7 +60,7 @@ CREATE TABLE marketing_campaigns (
 
 -- Campaign triggers (automation rules)
 CREATE TABLE campaign_triggers (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   organisation_id UUID NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
   campaign_id UUID NOT NULL REFERENCES marketing_campaigns(id) ON DELETE CASCADE,
   trigger_type trigger_type NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE campaign_triggers (
 
 -- Resident feedback
 CREATE TABLE resident_feedback (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   organisation_id UUID NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
   tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   nps_score INTEGER CHECK (nps_score >= 0 AND nps_score <= 10),
@@ -87,7 +87,7 @@ CREATE TABLE resident_feedback (
 
 -- Financial insights (staircasing readiness scores)
 CREATE TABLE financial_insights (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   organisation_id UUID NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
   tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   property_id UUID NOT NULL REFERENCES properties(id) ON DELETE CASCADE,

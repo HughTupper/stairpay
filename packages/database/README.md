@@ -9,8 +9,9 @@ Manages the Supabase database schema, migrations, and type generation for the St
 - 🔄 **Type generation** - Auto-generate TypeScript types from schema
 - 🌱 **Seeding** - Realistic demo data for development
 - 🔒 **Row Level Security** - Multi-tenant data isolation
+- 🚀 **Remote deployment** - Deploy to staging with safety checks
 
-## Quick Start
+## Quick Start (Local Development)
 
 ```bash
 # Start local Supabase (requires Docker Desktop)
@@ -34,7 +35,63 @@ After `npm run db:seed`:
 - **Clarion Housing**: `admin@clarion.com` / `password123`
 - **All Organizations**: `admin@all.com` / `password123` (access to all orgs)
 
-## Commands
+## Remote Deployment
+
+````bash
+# Local Development
+npm run db:start          # Start local Supabase
+npm run db:stop           # Stop local Supabase
+npm run db:reset          # Reset and reapply migrations
+
+# Migrations
+npm run db:migration      # Create new migration
+npm run db:push           # Deploy migrations to remote
+npm run db:pull           # Pull remote schema
+
+# Type Generation
+npm run db:types          # Generate from local database
+npm run db:types:remote   # Generate from remote database
+
+# Seeding
+npm run db:seed           # Seed local database
+npm run db:seed:staging   # Seed staging database
+```Edit `.env.staging`:
+   ```bash
+   SUPABASE_URL=https://rnsfmlijruywbaxldpvk.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY=your-staging-service-role-key
+````
+
+> **Get your keys from:** Supabase Dashboard → Project Settings → API → `service_role` key
+
+### Deploying Migrations
+
+```bash
+# Deploy to remote
+npm run db:push
+
+# Pull remote schema changes
+npm run db:pull
+
+# Generate types from remote database
+npm run db:types:remote
+```
+
+### Seeding Remote Databases
+
+**⚠️ WARNING: Seeding will create test data in your database!**
+
+````bash
+# Seed staging environment
+npm run db:seed:staging
+
+## Environment Files
+
+- `.env.local` - Local development (gitignored)
+- `.env.staging` - Staging environment (gitignored)
+- `.env.example` - Template with all required variables
+
+**Never commit environment files containing secrets!**
+
 
 ```bash
 # Local Development
@@ -52,7 +109,7 @@ npm run db:types          # Generate from local database
 
 # Seeding
 npm run db:seed           # Run seed script
-```
+````
 
 ## Creating Migrations
 
@@ -83,11 +140,37 @@ type Tenant = Database["public"]["Tables"]["tenants"]["Insert"];
 
 ## Multi-Tenant Architecture
 
-Row Level Security (RLS) enforces multi-tenancy:
+- **API URL**: `http://localhost:54321`
+- **Studio**: `http://localhost:54323`
+- **Database**: `postgresql://postgres:postgres@localhost:54322/postgres`
 
-- **Organisations** - Top-level tenant
-- **User Organisations** - Many-to-many with roles (admin/viewer)
-- **Properties** - Belong to organisations
+Check terminal output for anon/service_role keys.
+
+### Remote:
+
+- **Project ID**: `rnsfmlijruywbaxldpvk`
+- **API URL**: `https://rnsfmlijruywbaxldpvk.supabase.co`
+- **Studio**: Visit Supabase Dashboard
+- **Keys**: Get from Project Settings → API
+
+## Troubleshooting
+
+**Migrations fail on remote:**
+
+- Ensure you've run `supabase link` first
+- Check that your service role key is correct
+- Verify migrations work locally with `npm run db:reset`
+
+**Seed script fails:**
+
+- Verify environment variables are set correctly
+- Check that migrations have been applied (`npm run db:push`)
+- Ensure service role key has admin privileges
+
+**Type generation fails:**
+
+- For local: ensure database is running (`npm run db:start`)
+- For remote: ensure you're linked to the project
 - **Tenants** - Shared ownership residents
 - **Staircasing Applications** - Equity purchase requests
 

@@ -1,6 +1,3 @@
--- Enable UUID extension
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 -- Create private schema for security definer functions
 CREATE SCHEMA IF NOT EXISTS private;
 
@@ -10,7 +7,7 @@ CREATE TYPE staircasing_status AS ENUM ('pending', 'approved', 'completed', 'rej
 
 -- Organisations table
 CREATE TABLE organisations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -27,7 +24,7 @@ CREATE TABLE user_organisations (
 
 -- Properties table
 CREATE TABLE properties (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   organisation_id UUID NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
   address TEXT NOT NULL,
   postcode TEXT NOT NULL,
@@ -38,7 +35,7 @@ CREATE TABLE properties (
 
 -- Tenants table
 CREATE TABLE tenants (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   organisation_id UUID NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
   property_id UUID NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
   first_name TEXT NOT NULL,
@@ -56,7 +53,7 @@ CREATE TABLE tenants (
 
 -- Staircasing applications table
 CREATE TABLE staircasing_applications (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   organisation_id UUID NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
   tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   property_id UUID NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
