@@ -88,7 +88,8 @@ async function getFeedback(orgId: string) {
       acc[cat].count++;
       acc[cat].scores.push(f.satisfaction_score || 0);
       acc[cat].avgScore =
-        acc[cat].scores.reduce((sum, s) => sum + s, 0) / acc[cat].scores.length;
+        acc[cat].scores.reduce((sum: number, s: number) => sum + s, 0) /
+        acc[cat].scores.length;
       return acc;
     }, {} as Record<string, { count: number; avgScore: number; scores: number[] }>) ||
     {};

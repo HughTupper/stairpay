@@ -1,11 +1,22 @@
 import * as cdk from "aws-cdk-lib";
 import * as amplify from "aws-cdk-lib/aws-amplify";
+import * as iam from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 import { env } from "./env.js";
 
 export class AmplifyStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    // Create service role FIRST before the app
+    const serviceRole = new iam.Role(this, "AmplifyRole", {
+      assumedBy: new iam.ServicePrincipal("amplify.amazonaws.com"),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName(
+          "AdministratorAccess-Amplify"
+        ),
+      ],
+    });
 
     // Create Amplify App
     const amplifyApp = new amplify.CfnApp(this, "StairPropertyApp", {
@@ -17,6 +28,9 @@ export class AmplifyStack extends cdk.Stack {
       repository: `https://github.com/HughTupper/stairpay`,
       accessToken: env.GITHUB_TOKEN,
       oauthToken: env.GITHUB_TOKEN,
+
+      // IAM service role
+      iamServiceRole: serviceRole.roleArn,
 
       // Environment variables
       environmentVariables: [
@@ -49,13 +63,12 @@ export class AmplifyStack extends cdk.Stack {
             frontend: {
               phases: {
                 preBuild: {
-                  commands: [
-                    `npm ci --prefix ../.. --workspace=${env.APP_ROOT}`,
-                  ],
+                  commands: ["cd ../..", "npm ci"],
                 },
                 build: {
                   commands: [
-                    "npm run build --prefix ../.. --workspace=@stairpay/housing-association-crm",
+                    "cd apps/housing-association-crm",
+                    "npm run build",
                   ],
                 },
               },
@@ -74,9 +87,6 @@ export class AmplifyStack extends cdk.Stack {
           },
         ],
       }),
-
-      // IAM service role for Amplify
-      iamServiceRole: this.createAmplifyServiceRole().roleArn,
 
       // Custom rewrites and redirects
       customRules: [
@@ -113,17 +123,10 @@ export class AmplifyStack extends cdk.Stack {
       value: `https://main.${amplifyApp.attrAppId}.amplifyapp.com`,
       description: "Production URL",
     });
-  }
 
-  private createAmplifyServiceRole(): cdk.aws_iam.Role {
-    return new cdk.aws_iam.Role(this, "AmplifyServiceRole", {
-      assumedBy: new cdk.aws_iam.ServicePrincipal("amplify.amazonaws.com"),
-      description: "Service role for AWS Amplify",
-      managedPolicies: [
-        cdk.aws_iam.ManagedPolicy.fromAwsManagedPolicyName(
-          "AdministratorAccess-Amplify"
-        ),
-      ],
+    new cdk.CfnOutput(this, "ServiceRoleArn", {
+      value: serviceRole.roleArn,
+      description: "Amplify Service Role ARN",
     });
   }
 }
