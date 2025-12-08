@@ -51,7 +51,7 @@ const coreNavItems = [
   },
 ];
 
-const stairpayFeatures = [
+const engagement = [
   {
     title: "Campaigns",
     url: routes.dashboard.campaigns,
@@ -61,11 +61,6 @@ const stairpayFeatures = [
     title: "Service Providers",
     url: routes.dashboard.providers,
     icon: Briefcase,
-  },
-  {
-    title: "Feedback",
-    url: routes.dashboard.feedback,
-    icon: MessageSquare,
   },
 ];
 
@@ -124,7 +119,7 @@ export function AppSidebar({
           <SidebarGroupLabel>Engagement & Growth</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {stairpayFeatures.map((item) => {
+              {engagement.map((item) => {
                 const isActive = pathname === item.url;
                 return (
                   <SidebarMenuItem key={item.title}>

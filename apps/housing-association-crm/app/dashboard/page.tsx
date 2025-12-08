@@ -7,7 +7,6 @@ import {
   Users,
   FileText,
   TrendingUp,
-  TrendingDown,
   Star,
   Megaphone,
 } from "lucide-react";
@@ -254,7 +253,7 @@ export default async function DashboardPage() {
           </CardContent>
           <CardFooter>
             <Link
-              href={routes.dashboard.feedback}
+              href="#feedback"
               className="text-sm font-medium text-primary hover:underline"
             >
               View all feedback →

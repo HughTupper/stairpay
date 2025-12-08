@@ -18,7 +18,6 @@ export const routes = {
     tenant: (id: string) => `/dashboard/tenants/${id}`,
     campaigns: "/dashboard/campaigns",
     providers: "/dashboard/providers",
-    feedback: "/dashboard/feedback",
   },
 
   // API routes
