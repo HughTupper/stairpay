@@ -330,7 +330,7 @@ export default async function FeedbackPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {Object.entries(metrics.byCategory).map(([category, data]) => (
+            {Object.entries(metrics.byCategory).map(([category, data]: [string, { count: number; avgScore: number; scores: number[] }]) => (
               <div key={category} className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-medium">
