@@ -1,4 +1,4 @@
 .env
 .env.local
-.env.staging
+.env.production
 types/database.ts

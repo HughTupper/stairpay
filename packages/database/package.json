@@ -12,7 +12,7 @@
     "db:types": "mkdir -p types && supabase gen types typescript --local > types/database.ts",
     "db:types:remote": "mkdir -p types && supabase gen types typescript --project-id rnsfmlijruywbaxldpvk > types/database.ts",
     "db:seed": "tsx --env-file=.env.local seed.ts",
-    "db:seed:staging": "tsx --env-file=.env.staging seed.ts",
+    "db:seed:production": "tsx --env-file=.env.production seed.ts",
     "build": "mkdir -p types && touch types/database.ts"
   },
   "dependencies": {

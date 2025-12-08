@@ -9,7 +9,7 @@ Manages the Supabase database schema, migrations, and type generation for the St
 - 🔄 **Type generation** - Auto-generate TypeScript types from schema
 - 🌱 **Seeding** - Realistic demo data for development
 - 🔒 **Row Level Security** - Multi-tenant data isolation
-- 🚀 **Remote deployment** - Deploy to staging with safety checks
+- 🚀 **Remote deployment** - Deploy to production with safety checks
 
 ## Quick Start (Local Development)
 
@@ -54,11 +54,11 @@ npm run db:types:remote   # Generate from remote database
 
 # Seeding
 npm run db:seed           # Seed local database
-npm run db:seed:staging   # Seed staging database
-```Edit `.env.staging`:
+npm run db:seed:production   # Seed production database
+```Edit `.env.production`:
    ```bash
    SUPABASE_URL=https://rnsfmlijruywbaxldpvk.supabase.co
-   SUPABASE_SERVICE_ROLE_KEY=your-staging-service-role-key
+   SUPABASE_SERVICE_ROLE_KEY=your-production-service-role-key
 ````
 
 > **Get your keys from:** Supabase Dashboard → Project Settings → API → `service_role` key
@@ -81,13 +81,13 @@ npm run db:types:remote
 **⚠️ WARNING: Seeding will create test data in your database!**
 
 ````bash
-# Seed staging environment
-npm run db:seed:staging
+# Seed production environment
+npm run db:seed:production
 
 ## Environment Files
 
 - `.env.local` - Local development (gitignored)
-- `.env.staging` - Staging environment (gitignored)
+- `.env.production` - production environment (gitignored)
 - `.env.example` - Template with all required variables
 
 **Never commit environment files containing secrets!**

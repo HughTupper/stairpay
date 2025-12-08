@@ -1,5 +1,13 @@
+import { config } from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
+
+// Load environment variables from .env.production in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+config({ path: resolve(__dirname, "../.env.production") });
 
 /**
  * Type-safe environment variables for AWS CDK infrastructure
@@ -22,7 +30,19 @@ export const env = createEnv({
       .default("eu-west-2")
       .describe("AWS region for deployment"),
 
-    // Supabase configuration to pass to Amplify
+    // GitHub repository configuration
+    GITHUB_TOKEN: z
+      .string()
+      .min(1)
+      .describe("GitHub personal access token for Amplify"),
+
+    // Monorepo configuration
+    APP_ROOT: z
+      .string()
+      .default("apps/housing-association-crm")
+      .describe("Path to the app within the monorepo"),
+
+    // Supabase configuration for Next.js app
     NEXT_PUBLIC_SUPABASE_URL: z
       .string()
       .url()
@@ -37,6 +57,8 @@ export const env = createEnv({
   runtimeEnv: {
     CDK_DEFAULT_ACCOUNT: process.env.CDK_DEFAULT_ACCOUNT,
     CDK_DEFAULT_REGION: process.env.CDK_DEFAULT_REGION,
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+    APP_ROOT: process.env.APP_ROOT,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,

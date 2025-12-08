@@ -13,6 +13,11 @@ export class AmplifyStack extends cdk.Stack {
       description: "Multi-tenant shared ownership property management platform",
       platform: "WEB_COMPUTE",
 
+      // GitHub repository connection
+      repository: `https://github.com/HughTupper/stairpay`,
+      accessToken: env.GITHUB_TOKEN,
+      oauthToken: env.GITHUB_TOKEN,
+
       // Environment variables
       environmentVariables: [
         {
@@ -35,34 +40,40 @@ export class AmplifyStack extends cdk.Stack {
         },
       ],
 
-      // Build settings for Next.js 15
-      buildSpec: cdk.Fn.sub(
-        JSON.stringify({
-          version: "1.0",
-          applications: [
-            {
-              appRoot: ".",
-              frontend: {
-                phases: {
-                  preBuild: {
-                    commands: ["npm ci"],
-                  },
-                  build: {
-                    commands: ["npm run build"],
-                  },
+      // Build settings for Next.js 15 in monorepo
+      buildSpec: JSON.stringify({
+        version: "1.0",
+        applications: [
+          {
+            appRoot: env.APP_ROOT,
+            frontend: {
+              phases: {
+                preBuild: {
+                  commands: [
+                    `npm ci --prefix ../.. --workspace=${env.APP_ROOT}`,
+                  ],
                 },
-                artifacts: {
-                  baseDirectory: ".next",
-                  files: ["**/*"],
-                },
-                cache: {
-                  paths: ["node_modules/**/*", ".next/cache/**/*"],
+                build: {
+                  commands: [
+                    "npm run build --prefix ../.. --workspace=@stairpay/housing-association-crm",
+                  ],
                 },
               },
+              artifacts: {
+                baseDirectory: ".next",
+                files: ["**/*"],
+              },
+              cache: {
+                paths: [
+                  "../../node_modules/**/*",
+                  "node_modules/**/*",
+                  ".next/cache/**/*",
+                ],
+              },
             },
-          ],
-        })
-      ),
+          },
+        ],
+      }),
 
       // IAM service role for Amplify
       iamServiceRole: this.createAmplifyServiceRole().roleArn,
@@ -90,46 +101,29 @@ export class AmplifyStack extends cdk.Stack {
       enableAutoBuild: true,
       enablePullRequestPreview: false,
       stage: "PRODUCTION",
-      framework: "Next.js - SSR",
-    });
-
-    // Feature branch for preview environments
-    new amplify.CfnBranch(this, "FeatureBranch", {
-      appId: amplifyApp.attrAppId,
-      branchName: "feature/*",
-      enableAutoBuild: true,
-      enablePullRequestPreview: true,
-      stage: "DEVELOPMENT",
-      framework: "Next.js - SSR",
     });
 
     // Outputs
     new cdk.CfnOutput(this, "AmplifyAppId", {
       value: amplifyApp.attrAppId,
       description: "Amplify App ID",
-      exportName: "StairPropertyAmplifyAppId",
     });
 
     new cdk.CfnOutput(this, "AmplifyAppUrl", {
-      value: `https://main.${amplifyApp.attrDefaultDomain}`,
-      description: "Amplify App URL",
-      exportName: "StairPropertyAmplifyAppUrl",
+      value: `https://main.${amplifyApp.attrAppId}.amplifyapp.com`,
+      description: "Production URL",
     });
   }
 
   private createAmplifyServiceRole(): cdk.aws_iam.Role {
-    const role = new cdk.aws_iam.Role(this, "AmplifyServiceRole", {
+    return new cdk.aws_iam.Role(this, "AmplifyServiceRole", {
       assumedBy: new cdk.aws_iam.ServicePrincipal("amplify.amazonaws.com"),
-      description: "IAM role for Amplify to deploy Next.js app",
+      description: "Service role for AWS Amplify",
+      managedPolicies: [
+        cdk.aws_iam.ManagedPolicy.fromAwsManagedPolicyName(
+          "AdministratorAccess-Amplify"
+        ),
+      ],
     });
-
-    // Add necessary permissions for Amplify
-    role.addManagedPolicy(
-      cdk.aws_iam.ManagedPolicy.fromAwsManagedPolicyName(
-        "AdministratorAccess-Amplify"
-      )
-    );
-
-    return role;
   }
 }
