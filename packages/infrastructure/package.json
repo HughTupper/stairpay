@@ -1,7 +1,7 @@
 {
-  "name": "stair-property-infrastructure",
-  "version": "1.0.0",
-  "description": "AWS CDK infrastructure for StairProperty",
+  "name": "@stairpay/crm-infrastructure",
+  "version": "0.1.0",
+  "description": "AWS CDK infrastructure for @stairpay/housing-association-crm",
   "private": true,
   "type": "module",
   "scripts": {

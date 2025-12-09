@@ -128,7 +128,7 @@ jobs:
           echo "✅ CRM app environment schema is valid"
 
       - name: Validate Infrastructure env schema
-        working-directory: apps/housing-association-crm/infrastructure
+        working-directory: packages/infrastructure
         run: |
           # Validate env schema compiles and exports correctly
           npx tsc --noEmit lib/env.ts
@@ -146,8 +146,8 @@ jobs:
             echo "❌ Missing apps/housing-association-crm/.env.example"
             exit 1
           fi
-          if [ ! -f "apps/housing-association-crm/infrastructure/.env.example" ]; then
-            echo "❌ Missing apps/housing-association-crm/infrastructure/.env.example"
+          if [ ! -f "packages/infrastructure/.env.example" ]; then
+            echo "❌ Missing packages/infrastructure/.env.example"
             exit 1
           fi
           if [ ! -f "packages/database/.env.example" ]; then

@@ -52,9 +52,26 @@ export class AmplifyStack extends cdk.Stack {
             },
           ]),
         },
+        {
+          name: "AMPLIFY_MONOREPO_APP_ROOT",
+          value: env.APP_ROOT,
+        },
+        {
+          name: "AMPLIFY_DIFF_DEPLOY",
+          value: "false", // Set to 'true' to enable differential deploys
+        },
+        // Optional: Turborepo Remote Caching
+        // {
+        //   name: "TURBO_TOKEN",
+        //   value: env.TURBO_TOKEN,
+        // },
+        // {
+        //   name: "TURBO_TEAM",
+        //   value: env.TURBO_TEAM,
+        // },
       ],
 
-      // Build settings for Next.js 15 in monorepo
+      // Turborepo-optimized build settings for Next.js 15
       buildSpec: JSON.stringify({
         version: "1.0",
         applications: [
@@ -64,24 +81,47 @@ export class AmplifyStack extends cdk.Stack {
               phases: {
                 preBuild: {
                   commands: [
+                    // Navigate to monorepo root
                     "cd ../..",
+
+                    // Install all dependencies (npm workspaces)
                     "npm ci",
-                    "cd apps/housing-association-crm",
+
+                    // Optional: Verify environment
+                    "node --version",
+                    "npm --version",
+                    "npx turbo --version",
                   ],
                 },
                 build: {
-                  commands: ["npm run build"],
+                  commands: [
+                    // Use Turborepo to build with dependency graph
+                    // The '...' suffix includes @stairpay/database and any other deps
+                    "npx turbo run build --filter=@stairpay/housing-association-crm...",
+
+                    // Alternative for more verbose logging (debugging):
+                    // "npx turbo run build --filter=@stairpay/housing-association-crm... --verbosity=2",
+                  ],
                 },
               },
               artifacts: {
-                baseDirectory: ".next",
+                baseDirectory: env.APP_ROOT,
                 files: ["**/*"],
               },
               cache: {
                 paths: [
-                  "../../node_modules/**/*",
+                  // Root level node_modules (npm workspaces)
                   "node_modules/**/*",
-                  ".next/cache/**/*",
+
+                  // Turborepo cache directory - CRITICAL for speed
+                  ".turbo/**/*",
+
+                  // Next.js build cache
+                  `${env.APP_ROOT}/.next/cache/**/*`,
+
+                  // Database package (already built/types committed)
+                  "packages/database/dist/**/*",
+                  "packages/database/types/**/*",
                 ],
               },
             },

@@ -4,14 +4,16 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", "cdk.out/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "cdk.out/**"],
+      "env": ["NEXT_PUBLIC_*", "NODE_ENV"]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "lint": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": []
     },
     "typecheck": {
       "dependsOn": ["^build"],
@@ -30,7 +32,8 @@
     },
     "deploy": {
       "dependsOn": ["build"],
-      "cache": false
+      "cache": false,
+      "env": ["AWS_*", "CDK_*"]
     },
     "db:start": {
       "cache": false,
@@ -52,9 +55,11 @@
       "cache": false
     },
     "db:types": {
-      "outputs": ["types/**"],
-      "cache": false
+      "outputs": ["types/**", "dist/**", "src/types/**", "generated/**"],
+      "cache": true,
+      "inputs": ["schema.prisma", "supabase/migrations/**"]
     },
+
     "db:seed": {
       "cache": false
     }

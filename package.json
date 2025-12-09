@@ -25,7 +25,7 @@
     "db:types": "turbo run db:types --filter=@stairpay/database",
     "db:seed": "turbo run db:seed --filter=@stairpay/database",
     "deploy:crm": "turbo run deploy --filter=@stairpay/housing-association-crm",
-    "deploy:infra": "turbo run deploy --filter=@stairpay/infrastructure"
+    "deploy:infra": "turbo run deploy --filter=@stairpay/crm-infrastructure"
   },
   "devDependencies": {
     "@types/node": "^22",
