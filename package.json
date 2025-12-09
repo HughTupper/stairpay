@@ -11,6 +11,7 @@
     "dev:crm": "turbo run dev --filter=@stairpay/housing-association-crm",
     "build": "turbo run build",
     "build:crm": "turbo run build --filter=@stairpay/housing-association-crm",
+    "start:crm": "turbo run start --filter=@stairpay/housing-association-crm",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",

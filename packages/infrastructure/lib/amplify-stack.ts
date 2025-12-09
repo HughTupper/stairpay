@@ -105,7 +105,7 @@ export class AmplifyStack extends cdk.Stack {
                 },
               },
               artifacts: {
-                baseDirectory: env.APP_ROOT,
+                baseDirectory: `packages/${env.APP_ROOT}/.next`,
                 files: ["**/*"],
               },
               cache: {
