@@ -34,7 +34,6 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 - **Type Safety**: Same language as application code
 - **IDE Support**: Auto-complete, inline docs
 - **Amplify Constructs**: Built-in Next.js SSR support
-- **Familiarity**: Team already uses TypeScript
 
 **Alternative Considered**: Terraform
 
@@ -42,15 +41,6 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 - ❌ HCL learning curve
 - ❌ Less type-safe
 - ❌ Weaker Amplify support
-
-**Decision**: Colocate app-specific infrastructure with apps.
-
-**Rationale**:
-
-- Amplify deployment lives in `apps/housing-association-crm/infrastructure/`
-- Keeps deployment context close to code
-- Changes to app infrastructure don't affect other apps
-- Global infrastructure (VPCs, monitoring) in separate `apps/infrastructure/`
 
 ### Database Management
 
@@ -63,14 +53,6 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 - **Type Generation**: Auto-generate TypeScript types
 - **Multi-Tenant**: Built-in RLS for data isolation
 - **Auth**: Integrated authentication system
-
-**Alternative Considered**: Prisma
-
-- ✅ Better TypeScript integration
-- ✅ Migrations as code
-- ❌ No built-in auth
-- ❌ RLS requires raw SQL anyway
-- ❌ Less multi-tenant focused
 
 **Decision**: Database lives in `packages/database/`.
 
@@ -106,13 +88,6 @@ StairPay is built as a **monorepo platform** designed to scale from a single CRM
 3. User selects organization → stored in HTTP-only cookie
 4. Server reads cookie → passes to RLS via `set_config()`
 5. Database enforces access automatically
-
-**Alternative Considered**: App-level filtering
-
-- ✅ More flexible
-- ❌ Error-prone (easy to miss filter)
-- ❌ No DB-level guarantees
-- ❌ Harder to audit
 
 ### Deployment Strategy
 
@@ -183,65 +158,6 @@ Main → Deploy → Health Check → Success/Rollback
 - ❌ Poor error messages
 - ❌ Must manually check every `process.env` access
 
-**Schema Locations**:
-
-```
-apps/housing-association-crm/lib/env.ts          # Next.js app (client + server)
-apps/housing-association-crm/infrastructure/lib/env.ts  # CDK deployment
-packages/database/lib/env.ts                     # Database tooling
-```
-
-**Example Schema** (CRM app):
-
-```typescript
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
-
-export const env = createEnv({
-  server: {
-    NODE_ENV: z
-      .enum(["development", "production", "test"])
-      .default("development"),
-  },
-  client: {
-    NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
-  },
-  runtimeEnv: {
-    NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-  },
-  emptyStringAsUndefined: true,
-});
-```
-
-**Usage**:
-
-```typescript
-// Before: Unsafe, no validation
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL!; // Could be undefined!
-
-// After: Type-safe, validated
-import { env } from "@/lib/env";
-const url = env.NEXT_PUBLIC_SUPABASE_URL; // Guaranteed to be a valid URL string
-```
-
-**Infrastructure Migration**:
-
-- Infrastructure package migrated from CommonJS to ESM for consistency
-- CDK supports ESM via `ts-node --esm` flag
-- All imports updated with `.js` extensions as required by ESM
-
-**CI/CD Validation**:
-
-- Dedicated validation job in CI pipeline
-- Checks env schemas compile and are valid TypeScript
-- Verifies `.env.example` files exist for all apps/packages
-- Deployment workflows fail if required secrets are missing
-- No deployments with invalid or missing configuration
-
 ## System Architecture
 
 ```
@@ -304,24 +220,6 @@ const url = env.NEXT_PUBLIC_SUPABASE_URL; // Guaranteed to be a valid URL string
 6. Only user's org data returned
 ```
 
-### Deployment Flow
-
-```
-1. Developer pushes to feature branch
-2. CI runs lint/type/build checks
-3. PR review
-4. Merge to main
-5. GitHub Action triggers:
-   a. Database migrations (if changed)
-   b. Build shared packages
-   c. Build CRM app
-   d. Deploy CDK stack to AWS
-   e. Amplify builds and deploys Next.js
-6. Health check
-7. Success → done
-   Failure → rollback to previous version
-```
-
 ## Security Model
 
 ### Layers of Security
@@ -332,27 +230,6 @@ const url = env.NEXT_PUBLIC_SUPABASE_URL; // Guaranteed to be a valid URL string
 4. **Data**: PostgreSQL RLS (tenant isolation)
 5. **Configuration**: T3 Env validation (prevents misconfiguration)
 6. **Secrets**: Environment variables (never in code)
-
-### Threat Model
-
-| Threat                 | Mitigation                          |
-| ---------------------- | ----------------------------------- |
-| Unauthorized access    | Supabase Auth + JWT                 |
-| Cross-tenant data leak | PostgreSQL RLS policies             |
-| SQL injection          | Supabase client (parameterized)     |
-| XSS                    | Next.js auto-escaping               |
-| CSRF                   | HTTP-only cookies                   |
-| Secrets exposure       | Env vars, AWS Secrets Manager       |
-| Misconfiguration       | T3 Env validation (build + runtime) |
-
-## Scalability
-
-### Current Scale
-
-- **Users**: <1000
-- **Orgs**: <100
-- **Properties**: <10,000
-- **Tenants**: <10,000
 
 ### Scaling Strategy
 
@@ -385,6 +262,9 @@ const url = env.NEXT_PUBLIC_SUPABASE_URL; // Guaranteed to be a valid URL string
 - Request counts, error rates
 - Response times
 - Build failures
+- Future:
+  - Google analytics
+  - Datadog/ Sentry
 
 ### Database Metrics
 
@@ -398,105 +278,3 @@ const url = env.NEXT_PUBLIC_SUPABASE_URL; // Guaranteed to be a valid URL string
 - Build failures → GitHub notifications
 - Error rate spikes → CloudWatch alarms
 - Database slow queries → Supabase alerts
-
-## Cost Analysis
-
-### Current Infrastructure
-
-| Service        | Monthly Cost (estimate) |
-| -------------- | ----------------------- |
-| Supabase (Pro) | $25                     |
-| AWS Amplify    | ~$15 (low traffic)      |
-| CloudFormation | Free                    |
-| GitHub Actions | Free (public repo)      |
-| **Total**      | **~$40/month**          |
-
-### Scaling Costs
-
-- +1000 users: +$50/month (Amplify bandwidth)
-- +10k database rows: Included in Supabase Pro
-- Production monitoring: +$10/month (CloudWatch)
-
-## Trade-offs
-
-### What We Optimized For
-
-✅ **Developer Experience** - Fast iteration, type safety
-✅ **Type Safety** - End-to-end TypeScript
-✅ **Security** - Multi-tenant isolation, RLS
-✅ **Scalability** - Managed services, auto-scaling
-✅ **Cost** - Serverless, pay-per-use
-
-### What We Sacrificed
-
-❌ **Vendor Lock-in** - Tied to AWS + Supabase
-❌ **Self-hosting** - No on-premise option
-❌ **Complex Queries** - RLS adds overhead
-❌ **Full Control** - Managed services limit customization
-
-## Future Architecture
-
-### Phase 2: Mobile App
-
-```
-apps/mobile/
-├── React Native app
-└── Uses @stairpay/database types
-```
-
-### Phase 3: Admin Portal
-
-```
-apps/admin/
-├── Super-admin dashboard
-├── Cross-org analytics
-└── System configuration
-```
-
-### Phase 4: API Service
-
-```
-apps/api/
-├── GraphQL API
-├── Third-party integrations
-└── Webhooks
-```
-
-### Phase 5: Shared Infrastructure
-
-```
-apps/infrastructure/
-├── Shared VPC
-├── Global monitoring
-├── API Gateway
-└── Service mesh
-```
-
-## Lessons Learned
-
-### What Worked Well
-
-- ✅ Monorepo enabled rapid iteration
-- ✅ Supabase RLS eliminated tenant leak bugs
-- ✅ CDK provided type-safe infrastructure
-- ✅ Turborepo sped up builds significantly
-- ✅ Auto-deploy with rollback gave confidence
-- ✅ T3 Env caught configuration errors before deployment
-
-### What We'd Do Differently
-
-- Consider Prisma for better type generation
-- Add E2E tests earlier in project
-- Set up staging environment from day 1
-- Document API contracts before building
-
-## Conclusion
-
-This architecture balances:
-
-- **Speed** - Fast development, quick deployments
-- **Safety** - Type safety, data isolation, rollbacks
-- **Scale** - Managed services, auto-scaling
-- **Cost** - Efficient, pay-per-use model
-
-Built for a technical assessment but designed for production use at scale.
